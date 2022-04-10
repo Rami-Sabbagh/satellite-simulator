@@ -10,11 +10,9 @@
   ],
   "license": "MIT",
   "private": true,
-  "dependencies": {
-    "three": "^0.139.2"
-  },
   "devDependencies": {
     "@types/three": "^0.139.0",
+    "three": "^0.139.2",
     "ts-loader": "^9.2.8",
     "typescript": "^4.6.3",
     "webpack": "^5.72.0",
