@@ -2,7 +2,7 @@
   "name": "satellite-simulator",
   "version": "0.0.1",
   "description": "A university physics project for simulating satellites in orbit.",
-  "main": " ",
+  "main": "src/index.ts",
   "repository": "git@codeberg.org:rami/satellite-simulator.git",
   "author": "Rami Sabbagh <rami.sab07@gmail.com>",
   "contributors": [
@@ -12,8 +12,13 @@
   ],
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "start": "webpack serve --open",
+    "build": "webpack"
+  },
   "devDependencies": {
     "@types/three": "^0.139.0",
+    "html-webpack-plugin": "^5.5.0",
     "three": "^0.139.2",
     "ts-loader": "^9.2.8",
     "typescript": "^4.6.3",
