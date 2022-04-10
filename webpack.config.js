@@ -15,10 +15,15 @@ module.exports = {
                 use: 'ts-loader',
                 exclude: /node_modules/,
             },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
         ],
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     },
     output: {
         filename: 'bundle.js',
