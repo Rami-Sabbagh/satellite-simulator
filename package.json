@@ -5,7 +5,15 @@
   "main": " ",
   "repository": "git@codeberg.org:rami/satellite-simulator.git",
   "author": "Rami Sabbagh <rami.sab07@gmail.com>",
-  "contributors": ["Yaman Qassas <@gmail.com>"],
+  "contributors": [
+    "Yaman Qassas <@gmail.com>"
+  ],
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "three": "^0.139.2"
+  },
+  "devDependencies": {
+    "@types/three": "^0.139.0"
+  }
 }
