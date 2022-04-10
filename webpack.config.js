@@ -6,7 +6,7 @@ const path = require('path');
 /** @type {import('webpack').Configuration} */
 module.exports = {
     mode: 'development',
-    devtool: 'inline-source-map',
+    devtool: 'eval-source-map',
     entry: './src/index.ts',
     module: {
         rules: [
