@@ -37,7 +37,7 @@ Runs by default at port 3000 and so can be accessed at http://localhost:3000/ (s
 
 ### Live Reload
 
-When using the development server you'll have the benifit of automatic live reload whenever changes are made.
+When using the development server you'll have the benefit of automatic live reload whenever changes are made.
 
 ### Hot Module Reload
 
