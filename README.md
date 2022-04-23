@@ -7,7 +7,7 @@ A university physics project for simulating satellites in orbit.
 
 1. Clone the git repository locally or download the source-code and extract it.
 2. Install [Node.js](https://nodejs.org/) 16 or later on your system.
-3. Install Yarn 1.x globally on the system. (command works cross-paltform).
+3. Install Yarn 1.x globally on the system. (command works cross-platform).
 
 ```
 npm install -g yarn
@@ -33,7 +33,7 @@ It's a webserver provided by [webpack](http://webpack.js.org/) that serves the p
 
 You can read more about it [here](https://webpack.js.org/configuration/dev-server/), [here](https://webpack.js.org/guides/development/#using-webpack-dev-server) and [here](https://github.com/webpack/webpack-dev-server).
 
-Runs by default at port 3000 and so can be accessed at http://localhost:3000/ (should automatically open when starting the dev server).
+Runs by default on port 3000 and so can be accessed at http://localhost:3000/ (should automatically open when starting the dev server).
 
 ### Live Reload
 
@@ -43,7 +43,7 @@ When using the development server you'll have the benefit of automatic live relo
 
 The HMR support is enabled in the project, but the code has to support it.
 
-Which means writing code that accepts the module replacements and does any adjustements needed.
+Which means writing code that accepts the module replacements and does any adjustments needed.
 
 That is implemented for `src/scene.ts` in `src/index.ts`.
 
@@ -63,4 +63,4 @@ After following the installation instructions run:
 yarn build
 ```
 
-The build can be then accessed at `/dist` and could be served as a static page content.
+The build can be then accessed at `/dist` and could be served as static page content.
