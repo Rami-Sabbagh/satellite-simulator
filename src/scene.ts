@@ -1,13 +1,9 @@
 import * as THREE from 'three';
 
+import DebugCube from 'components/debug-cube';
+
 const scene = new THREE.Scene();
 export default scene;
 
-const geometry = new THREE.BoxGeometry();
-const meterial = new THREE.MeshBasicMaterial({
-    color: 0x00ff00,
-    wireframe: true,
-});
-
-const cube = new THREE.Mesh(geometry, meterial);
+const cube = new DebugCube();
 scene.add(cube);
