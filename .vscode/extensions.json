@@ -1,6 +1,5 @@
 {
     "recommendations": [
-        "fabiospampinato.vscode-todo-plus",
         "eamodio.gitlens"
     ]
 }
