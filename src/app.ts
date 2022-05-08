@@ -13,8 +13,8 @@ export default class Application {
     
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-    private _scene = new World();
-    get scene() { return this._scene; }
+    private _world = new World();
+    get world() { return this._world; }
 
     protected resizeCallback: () => void;
 
@@ -39,7 +39,7 @@ export default class Application {
     private acceptHotModulesReplacement() {
         if (module.hot) {
             module.hot.accept('./world', () => {
-                this._scene = new World();
+                this._world = new World();
             });
         }
     }
@@ -52,8 +52,9 @@ export default class Application {
     }
 
     protected render() {
+        this.world.update();
         this.controls.update();
-        this.renderer.render(this.scene, this.camera);
+        this.renderer.render(this.world, this.camera);
     }
 
     destroy() {
