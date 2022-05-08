@@ -1,36 +1,24 @@
 import 'styles/index.css';
+import Application from 'app';
 
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+/**
+ * Spawns a fullscreen instance of the THREE.js application.
+ */
+function spawnApplication() {
+    const container = document.createElement('div');
 
-import scene from './scene';
+    container.style.width = '100%';
+    container.style.height = '100%';
 
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 2;
-
-const renderer = new THREE.WebGLRenderer();
-renderer.physicallyCorrectLights = true;
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
-
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-
-function render(time: number) {
-    time /= 1000; // convert time to seconds.
-
-    controls.update();
-    renderer.render(scene, camera);
+    document.body.appendChild(container);
+    return new Application(container);
 }
 
-renderer.setAnimationLoop(render);
-
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-}, false);
+let application = spawnApplication();
 
 if (module.hot) {
-    module.hot.accept('./scene');
+    module.hot.accept('./app', () => {
+        application.container.remove();
+        application = spawnApplication();
+    });
 }
