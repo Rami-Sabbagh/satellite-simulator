@@ -8,13 +8,15 @@ import World from 'world';
  */
 export default class Application {
     readonly renderer = new THREE.WebGLRenderer();
-
+    
     readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
-
+    
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     private _scene = new World();
     get scene() { return this._scene; }
+
+    protected resizeCallback: () => void;
 
     constructor(public readonly container: HTMLElement) {
         // configure application components.
@@ -25,8 +27,10 @@ export default class Application {
         this.updateResolution();
 
         // integrate with the browser DOM.
+        this.resizeCallback = this.updateResolution.bind(this);
+
         container.appendChild(this.renderer.domElement);
-        container.addEventListener('resize', this.updateResolution.bind(this));
+        container.addEventListener('resize', this.resizeCallback);
 
         this.renderer.setAnimationLoop(this.render.bind(this));
         this.acceptHotModulesReplacement();
@@ -47,10 +51,15 @@ export default class Application {
         this.camera.updateProjectionMatrix();
     }
 
-    protected render(time: number) {
-        time /= 1000; // convert time to seconds.
-
+    protected render() {
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
+    }
+
+    destroy() {
+        this.renderer.domElement.remove();
+        this.renderer.setAnimationLoop(null);
+
+        this.container.removeEventListener('resize', this.resizeCallback);
     }
 }
