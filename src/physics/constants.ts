@@ -1,0 +1,1 @@
+export const GRAVITATION_CONSTANT = 1;//6.674e-11;
