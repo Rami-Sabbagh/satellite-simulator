@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-import DebugCube from 'components/debug-cube';
+import DebugSphere from 'components/debug-sphere';
 
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
@@ -8,7 +8,7 @@ export default class World extends THREE.Scene {
     constructor() {
         super();
 
-        this.add(new DebugCube());
+        this.add(new DebugSphere());
     }
 
     update() {
