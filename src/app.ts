@@ -20,9 +20,7 @@ export default class Application {
 
     constructor(public readonly container: HTMLElement) {
         // configure application components.
-        this.renderer.physicallyCorrectLights = true;
-        this.camera.position.z = 2;
-        this.controls.enableDamping = true;
+        this.setupComponents();
 
         this.updateResolution();
 
@@ -34,6 +32,12 @@ export default class Application {
 
         this.renderer.setAnimationLoop(this.render.bind(this));
         this.acceptHotModulesReplacement();
+    }
+
+    private setupComponents() {
+        this.renderer.physicallyCorrectLights = true;
+        this.camera.position.z = 2;
+        this.controls.enableDamping = true;
     }
 
     private acceptHotModulesReplacement() {
