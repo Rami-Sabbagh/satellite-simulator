@@ -10,7 +10,10 @@ let application = new Application(container);
 
 if (module.hot) {
     module.hot.accept('./app', () => {
-        application.destroy();
+        const oldApplication = application;
+        oldApplication.destroy();
+
         application = new Application(container);
+        application.restoreState(oldApplication);
     });
 }

@@ -1,3 +1,4 @@
+import GUI from 'lil-gui';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -8,9 +9,7 @@ import World from 'world';
  */
 export default class Application {
     readonly renderer = new THREE.WebGLRenderer();
-    
     readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
-    
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     readonly gui = new GUI({
@@ -37,6 +36,19 @@ export default class Application {
 
         this.renderer.setAnimationLoop(this.render.bind(this));
         this.provideHotModulesReplacement();
+    }
+
+    /**
+     * Restore the state from a previous instance of the application.
+     * This facilitates HMR (Hot Module Replacement).
+     */
+    restoreState(application: Application) {
+        this.camera.position.copy(application.camera.position);
+        this.camera.rotation.copy(application.camera.rotation);
+        this.camera.zoom = application.camera.zoom;
+
+        this.controls.target.copy(application.controls.target);
+        this.controls.update();
     }
 
     private setupComponents() {
