@@ -22,22 +22,6 @@ export default class Satellite extends SimulatedObject {
         const satellite = new Satellite();
         satellite.position.copy(position);
         satellite.velocity.copy(velocity);
-
-        const orbitalElements = calculateOrbitalElements({
-            velocity, position,
-        }, 1 + 1_000_000);
-
-        console.info('Calculated Orbital Elements:');
-        console.table(orbitalElements);
-
-        const stateVectors = calculateStateVectors(orbitalElements, 1 + 1_000_000);
-
-        console.info('Calculated State Vectors:');
-        console.table(stateVectors);
-
-        // satellite.position.copy(stateVectors.position);
-        // satellite.velocity.copy(stateVectors.velocity);
-
         return satellite;
     }
 }
