@@ -60,7 +60,20 @@ export default class Application {
     }
 
     private constructGUI() {
+        this.constructCreationGUI();
         this.constructCameraGUI();
+    }
+
+    private constructCreationGUI() {
+        const folder = this.gui.addFolder('Satellite Creation');
+
+        // gui.add( this.orbitalElements, 'eccentricity').name('Eccentricity').min(0).max(1);
+        // gui.add( this.orbitalElements, 'semiMajorAxis').name('Semi-Major Axis').min(0).max(5);
+        // gui.add( this.orbitalElements, 'inclination').name('Inclination').min(0).max(Math.PI);
+        // gui.add( this.orbitalElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI);
+        // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
+        // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
+
     }
 
     private constructCameraGUI() {
