@@ -13,6 +13,11 @@ export default class Application {
     
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
 
+    readonly gui = new GUI({
+        title: 'Satellites Simulator VI: Deluxe Edition',
+        width: 500,
+    });
+
     private _world = new World();
     get world() { return this._world; }
 
@@ -31,7 +36,7 @@ export default class Application {
         container.addEventListener('resize', this.resizeCallback);
 
         this.renderer.setAnimationLoop(this.render.bind(this));
-        this.acceptHotModulesReplacement();
+        this.provideHotModulesReplacement();
     }
 
     private setupComponents() {
@@ -40,11 +45,13 @@ export default class Application {
         this.controls.enableDamping = true;
     }
 
-    private acceptHotModulesReplacement() {
+    private provideHotModulesReplacement() {
         if (module.hot) {
             module.hot.accept('./world', () => {
                 this._world = new World();
             });
+
+            module.hot.addDisposeHandler(() => this.gui.destroy());
         }
     }
 

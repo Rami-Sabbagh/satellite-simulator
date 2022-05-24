@@ -35,8 +35,6 @@ export default class World extends THREE.Scene {
         const {position, velocity} = calculateStateVectors(this.orbitalElements, 1 + 1_000_000);
         this.satellite = Satellite.spawn(position, velocity)
         this.simulatedSpace.add(this.satellite);
-
-        this.showGUI();
     }
 
     showGUI() {
