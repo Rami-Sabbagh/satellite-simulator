@@ -10,19 +10,6 @@ export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
     protected simulatedSpace = new SimulatedSpace(1e-6);
 
-    protected orbitalElements: OrbitalElements = {
-        trueAnomaly: 0,
-        argumentOfPeriapsis: 0,
-
-        eccentricity: 0,
-        semiMajorAxis: 1,
-
-        inclination: 0,
-        longitudeOfAscendingNode: 0,
-    };
-
-    protected satellite: Satellite;
-
     constructor() {
         super();
 
@@ -30,10 +17,6 @@ export default class World extends THREE.Scene {
         this.add(this.simulatedSpace.scene);
 
         this.simulatedSpace.add(new Planet());
-
-        const {position, velocity} = calculateStateVectors(this.orbitalElements, 1 + 1_000_000);
-        this.satellite = Satellite.spawn(position, velocity)
-        this.simulatedSpace.add(this.satellite);
     }
 
     update() {
