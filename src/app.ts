@@ -65,6 +65,7 @@ export default class Application {
 
     private constructCameraGUI() {
         const folder = this.gui.addFolder('Camera');
+        folder.open(false);
 
         const actions = {
             reset: () => {
