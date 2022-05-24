@@ -36,6 +36,8 @@ export default class Application {
 
         this.renderer.setAnimationLoop(this.render.bind(this));
         this.provideHotModulesReplacement();
+
+        this.constructGUI();
     }
 
     /**
@@ -55,6 +57,46 @@ export default class Application {
         this.renderer.physicallyCorrectLights = true;
         this.camera.position.z = 2;
         this.controls.enableDamping = true;
+    }
+
+    private constructGUI() {
+        this.constructCameraGUI();
+    }
+
+    private constructCameraGUI() {
+        const folder = this.gui.addFolder('Camera');
+
+        const actions = {
+            reset: () => {
+                this.controls.reset();
+                this.camera.position.z = 2;
+            },
+            lookAtOrigin: () => {
+                this.controls.target.set(0, 0, 0);
+                this.controls.update();
+            },
+            lookAtX: () => {
+                const distance = this.camera.position.length();
+                this.camera.position.set(distance, 0, 0);
+                this.controls.update();
+            },
+            lookAtY: () => {
+                const distance = this.camera.position.length();
+                this.camera.position.set(0, distance, 0);
+                this.controls.update();
+            },
+            lookAtZ: () => {
+                const distance = this.camera.position.length();
+                this.camera.position.set(0, 0, distance);
+                this.controls.update();
+            },
+        };
+
+        folder.add(actions, 'lookAtX').name('Look at X axis');
+        folder.add(actions, 'lookAtY').name('Look at Y axis');
+        folder.add(actions, 'lookAtZ').name('Look at Z axis');
+        folder.add(actions, 'lookAtOrigin').name('Look at origin (planet)');
+        folder.add(actions, 'reset').name('Reset');
     }
 
     private provideHotModulesReplacement() {
