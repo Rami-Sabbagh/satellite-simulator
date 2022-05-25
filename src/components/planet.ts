@@ -29,8 +29,5 @@ export default class Planet extends SimulatedObject implements ExertsForce {
         force.normalize().multiplyScalar((GRAVITATION_CONSTANT * this.mass * body.mass) / distanceSq);
 
         // the force is now calculated properly and ready to use.
-
-        // This should be in a method that gets called every frame
-        mesh.material.color = new THREE.Color(planetProperties.color);
     }
 }
