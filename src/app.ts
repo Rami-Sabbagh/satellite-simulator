@@ -80,7 +80,12 @@ export default class Application {
     private constructPlanetGUI() {
         const folder = this.gui.addFolder('Planet');
 
-        folder.addColor(planetProperties, 'color').name('Color');
+        const properties = {
+            color: this.world.planet.color.toArray(),
+        };
+
+        folder.addColor(properties, 'color').name('Color')
+            .onChange((value: number[]) => this.world.planet.color.fromArray(value));
     }
 
     private constructCameraGUI() {
