@@ -1,12 +1,13 @@
 import * as THREE from 'three';
 
+import earthImage from 'assets/earth.jpg';
+
 import SimulatedObject from 'components/simulated-object';
 import { Body, BodyType, ExertsForce } from 'physics/body';
 import { GRAVITATION_CONSTANT } from 'physics/constants';
 
 const geometry = new THREE.SphereGeometry(.5, 16, 16);
-
-const texture = new THREE.TextureLoader().load('earth.jpg');
+const texture = new THREE.TextureLoader().load(earthImage);
 
 export default class Planet extends SimulatedObject implements ExertsForce {
     private readonly material = new THREE.MeshBasicMaterial({
