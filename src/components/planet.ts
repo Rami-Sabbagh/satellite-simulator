@@ -11,7 +11,8 @@ const texture = new THREE.TextureLoader().load(earthImage);
 
 export default class Planet extends SimulatedObject implements ExertsForce {
     private readonly material = new THREE.MeshBasicMaterial({
-        map: texture
+        map: texture,
+        wireframe: true,
     });
 
     private readonly mesh = new THREE.Mesh(geometry, this.material);
@@ -23,6 +24,14 @@ export default class Planet extends SimulatedObject implements ExertsForce {
 
     get color() {
         return this.material.color;
+    }
+
+    get wireframe() {
+        return this.material.wireframe;
+    }
+
+    set wireframe(value: boolean) {
+        this.material.wireframe = value;
     }
 
     exertForce(body: Body, force: THREE.Vector3): void {

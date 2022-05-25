@@ -82,10 +82,13 @@ export default class Application {
 
         const properties = {
             color: this.world.planet.color.toArray(),
+            wireframe: this.world.planet.wireframe,
         };
 
         folder.addColor(properties, 'color').name('Color')
             .onChange((value: number[]) => this.world.planet.color.fromArray(value));
+        folder.add(properties, 'wireframe').name('Wireframe')
+            .onChange((value: boolean) => this.world.planet.wireframe = value);
     }
 
     private constructCameraGUI() {
