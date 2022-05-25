@@ -6,7 +6,7 @@ import SimulatedObject from 'components/simulated-object';
 import { Body, BodyType, ExertsForce } from 'physics/body';
 import { GRAVITATION_CONSTANT } from 'physics/constants';
 
-const geometry = new THREE.SphereGeometry(.5, 16, 16);
+const geometry = new THREE.SphereGeometry(.5, 64, 64);
 const texture = new THREE.TextureLoader().load(earthImage);
 
 export default class Planet extends SimulatedObject implements ExertsForce {
