@@ -7,13 +7,15 @@ export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
     protected simulatedSpace = new SimulatedSpace(1e-6);
 
+    readonly planet = new Planet();
+
     constructor() {
         super();
 
         this.add(new AxesHelper(.2));
         this.add(this.simulatedSpace.scene);
 
-        this.simulatedSpace.add(new Planet());
+        this.simulatedSpace.add(this.planet);
     }
 
     update() {
