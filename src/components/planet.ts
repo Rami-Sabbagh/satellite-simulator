@@ -6,10 +6,11 @@ import { GRAVITATION_CONSTANT } from 'physics/constants';
 
 const geometry = new THREE.SphereGeometry(.5, 16, 16);
 
+const texture = new THREE.TextureLoader().load('earth.jpg');
+
 export default class Planet extends SimulatedObject implements ExertsForce {
     private readonly material = new THREE.MeshBasicMaterial({
-        color: 0xffffff,
-        wireframe: true,
+        map: texture
     });
 
     private readonly mesh = new THREE.Mesh(geometry, this.material);
