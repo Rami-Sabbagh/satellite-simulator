@@ -32,7 +32,7 @@ export default class Application {
         this.resizeCallback = this.updateResolution.bind(this);
 
         container.appendChild(this.renderer.domElement);
-        container.addEventListener('resize', this.resizeCallback);
+        window.addEventListener('resize', this.resizeCallback);
 
         this.renderer.setAnimationLoop(this.render.bind(this));
         this.provideHotModulesReplacement();
@@ -132,6 +132,7 @@ export default class Application {
             });
 
             module.hot.addDisposeHandler(() => this.gui.destroy());
+            module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
         }
     }
 
