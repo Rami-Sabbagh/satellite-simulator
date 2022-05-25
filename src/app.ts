@@ -60,6 +60,7 @@ export default class Application {
     }
 
     private constructGUI() {
+        this.constructPlanetGUI();
         this.constructCreationGUI();
         this.constructCameraGUI();
     }
@@ -74,6 +75,17 @@ export default class Application {
         // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
 
+    }
+
+    private constructPlanetGUI() {
+        const folder = this.gui.addFolder('Planet');
+
+        const properties = {
+            color: this.world.planet.color.toArray(),
+        };
+
+        folder.addColor(properties, 'color').name('Color')
+            .onChange((value: number[]) => this.world.planet.color.fromArray(value));
     }
 
     private constructCameraGUI() {
