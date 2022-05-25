@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import World from 'world';
+import { planetProperties } from 'components/planet';
 
 /**
  * THREE.js Application.
@@ -60,6 +61,7 @@ export default class Application {
     }
 
     private constructGUI() {
+        this.constructPlanetGUI();
         this.constructCreationGUI();
         this.constructCameraGUI();
     }
@@ -74,6 +76,12 @@ export default class Application {
         // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
 
+    }
+
+    private constructPlanetGUI() {
+        const folder = this.gui.addFolder('Planet');
+
+        folder.addColor(planetProperties, 'color').name('Color');
     }
 
     private constructCameraGUI() {

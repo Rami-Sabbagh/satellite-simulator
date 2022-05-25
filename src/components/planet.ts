@@ -4,9 +4,11 @@ import SimulatedObject from 'components/simulated-object';
 import { Body, BodyType, ExertsForce } from 'physics/body';
 import { GRAVITATION_CONSTANT } from 'physics/constants';
 
+export const planetProperties = { color: 0xFFF };
+
 const geometry = new THREE.SphereGeometry(.5, 16, 16);
 const material = new THREE.MeshBasicMaterial({
-    color: 0x0000ff,
+    color: planetProperties.color,
     wireframe: true,
 });
 
@@ -26,5 +28,8 @@ export default class Planet extends SimulatedObject implements ExertsForce {
         force.normalize().multiplyScalar((GRAVITATION_CONSTANT * this.mass * body.mass) / distanceSq);
 
         // the force is now calculated properly and ready to use.
+
+        // This should be in a method that gets called every frame
+        mesh.material.color = new THREE.Color(planetProperties.color);
     }
 }
