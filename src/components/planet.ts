@@ -7,17 +7,18 @@ import { GRAVITATION_CONSTANT } from 'physics/constants';
 export const planetProperties = { color: 0xFFF };
 
 const geometry = new THREE.SphereGeometry(.5, 16, 16);
-const material = new THREE.MeshBasicMaterial({
-    color: planetProperties.color,
-    wireframe: true,
-});
-
-const mesh = new THREE.Mesh(geometry, material);
 
 export default class Planet extends SimulatedObject implements ExertsForce {
+    private readonly material = new THREE.MeshBasicMaterial({
+        color: 0xffffff,
+        wireframe: true,
+    });
+
+    private readonly mesh = new THREE.Mesh(geometry, this.material);
+
     constructor() {
         super(BodyType.Static, 1_000_000);
-        this.add(mesh);
+        this.add(this.mesh);
     }
 
     exertForce(body: Body, force: THREE.Vector3): void {
