@@ -6,14 +6,14 @@ import { GRAVITATION_CONSTANT } from 'physics/constants';
 
 const geometry = new THREE.SphereGeometry(.5, 16, 16);
 
-const texture = new THREE.TextureLoader().load('earth.jpg');
+// const texture = new THREE.TextureLoader().load('./earth.jpg');
 
 export default class Planet extends SimulatedObject implements ExertsForce {
-    private readonly material = new THREE.MeshBasicMaterial({
-        map: texture
-    });
+    // public texture = new THREE.TextureLoader().load('./earth.jpg');
 
-    private readonly mesh = new THREE.Mesh(geometry, this.material);
+    private material = new THREE.MeshStandardMaterial();
+
+    private mesh = new THREE.Mesh(geometry, this.material);
 
     constructor() {
         super(BodyType.Static, 1_000_000);
@@ -32,5 +32,17 @@ export default class Planet extends SimulatedObject implements ExertsForce {
         force.normalize().multiplyScalar((GRAVITATION_CONSTANT * this.mass * body.mass) / distanceSq);
 
         // the force is now calculated properly and ready to use.
+    }
+
+    setTexture(texturePack:any) {
+        this.material = new THREE.MeshStandardMaterial({
+            map: texturePack.colorMap.image ? texturePack.colorMap : undefined,
+            bumpMap: texturePack.colorMap.image ? texturePack.bumpMap : undefined,
+            aoMap: texturePack.colorMap.image ? texturePack.aoMap : undefined,
+            emissiveMap: texturePack.colorMap.image ? texturePack.emissiveMap : undefined,
+            metalnessMap: texturePack.colorMap.image ? texturePack.metalnessMap : undefined,
+
+        });
+        this.mesh.material =  this.material;
     }
 }

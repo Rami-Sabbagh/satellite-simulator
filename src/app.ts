@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import World from 'world';
+import Singleton from "./singleton";
 
 /**
  * THREE.js Application.
@@ -18,6 +19,9 @@ export default class Application {
     });
 
     private _world = new World();
+
+    readonly singleton = new Singleton();
+
     get world() { return this._world; }
 
     protected resizeCallback: () => void;
@@ -86,6 +90,25 @@ export default class Application {
 
         folder.addColor(properties, 'color').name('Color')
             .onChange((value: number[]) => this.world.planet.color.fromArray(value));
+
+        //could change planet physics in addition of texture (presets)
+        const planet_selectors = {
+            earth: () => {
+                this.world.planet.setTexture(this.singleton.texturePacks.earth);
+            },
+            mars: () => {
+                this.world.planet.setTexture(this.singleton.texturePacks.mars);
+            },
+            jupiter: () => {
+                this.world.planet.setTexture(this.singleton.texturePacks.jupiter);
+            },
+        };
+
+        const textures_folder = folder.addFolder('textures');
+        textures_folder.add( planet_selectors, 'earth').name('Earth Texture');
+        textures_folder.add( planet_selectors, 'mars').name('Mars Texture');
+        textures_folder.add( planet_selectors, 'jupiter').name('Jupiter Texture');
+
     }
 
     private constructCameraGUI() {

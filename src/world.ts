@@ -12,8 +12,14 @@ export default class World extends THREE.Scene {
     constructor() {
         super();
 
+        const light = new THREE.PointLight( 0xffffff, 1000, 100 ,2);
+        light.position.set( 1, 10, 10 );
+        this.simulatedSpace.scene.add( light );
+
         this.add(new AxesHelper(.2));
         this.add(this.simulatedSpace.scene);
+
+
 
         this.simulatedSpace.add(this.planet);
     }
