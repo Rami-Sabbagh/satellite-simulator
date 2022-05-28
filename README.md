@@ -1,4 +1,3 @@
-
 # satellite-simulator
 
 A university physics project for simulating satellites in orbit.
@@ -6,22 +5,23 @@ A university physics project for simulating satellites in orbit.
 ## Installation instructions
 
 1. Clone the git repository locally or download the source-code and extract it.
-2. Install [Node.js](https://nodejs.org/) 16 or later on your system.
-3. Install Yarn 1.x globally on the system. (command works cross-platform).
+2. Install [Node.js](https://nodejs.org/) 16.x on your system.
+3. Enable Yarn through `corepack`, which ships with Node 16.x.
 
-```
-npm install -g yarn
+```sh
+# Use an elevated shell (Administrator shell on Windows, sudo on Unix).
+corepack enable
 ```
 
 4. Open a terminal in the root of the repository and install the project's dependencies.
 
-```
+```sh
 yarn
 ```
 
 5. Start the development server.
 
-```
+```sh
 yarn start
 ```
 
@@ -33,7 +33,7 @@ It's a webserver provided by [webpack](http://webpack.js.org/) that serves the p
 
 You can read more about it [here](https://webpack.js.org/configuration/dev-server/), [here](https://webpack.js.org/guides/development/#using-webpack-dev-server) and [here](https://github.com/webpack/webpack-dev-server).
 
-Runs by default on port 3000 and so can be accessed at http://localhost:3000/ (should automatically open when starting the dev server).
+Runs by default on port 9000 and so can be accessed at http://localhost:9000/ (should automatically open when starting the dev server).
 
 ### Live Reload
 
@@ -45,11 +45,11 @@ The HMR support is enabled in the project, but the code has to support it.
 
 Which means writing code that accepts the module replacements and does any adjustments needed.
 
-That is implemented for `src/scene.ts` in `src/index.ts`.
+That is implemented for `src/app.ts` in `src/index.ts`.
 
-So when `scene.ts` is modified it's hot reloaded without reloading the whole page, by replacing the old scene instance by a new one.
+So when `app.ts` is modified it's hot reloaded without reloading the whole page, by replacing the old scene instance by a new one.
 
-But when files such as `index.ts` are modified with no HMR support, a whole page reload is automatically performed.
+But when files such as `src/physics/kepler-math.ts` are modified with no HMR support, a whole page reload is automatically performed.
 
 During the project development you might wish to implement HMR support for other sub-modules, for example to avoid losing the state of created scene objects.
 
@@ -59,7 +59,7 @@ You can read more at [webpack's documentation page](https://webpack.js.org/conce
 
 After following the installation instructions run:
 
-```
+```sh
 yarn build
 ```
 
