@@ -13,8 +13,8 @@ export default class World extends THREE.Scene {
         super();
 
         this.add(new AxesHelper(.2));
-        this.add(this.simulatedSpace.scene);
-
+        this.simulatedSpace.addToScene(this);
+        
         this.simulatedSpace.add(this.planet);
     }
 
