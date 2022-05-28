@@ -5,7 +5,7 @@ import { Simulation } from 'physics/simulation';
 import SimulatedObject from 'components/simulated-object';
 
 export default class SimulatedSpace {
-    readonly scene = new THREE.Scene();
+    protected readonly scene = new THREE.Scene();
     protected simulation: Simulation;
 
     constructor(timeResolution?: number) {
@@ -23,5 +23,19 @@ export default class SimulatedSpace {
      */
     run(delta: number) {
         this.simulation.run(delta);
+    }
+
+    /**
+     * Adds the scene of the simulated space into the given scene.
+     */
+    addToScene(scene: THREE.Scene) {
+        scene.add(this.scene);
+    }
+
+    /**
+     * Removes the scene of the simulated space from the given scene.
+     */
+    removeFromScene(scene: THREE.Scene) {
+        scene.remove(this.scene);
     }
 }
