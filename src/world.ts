@@ -12,6 +12,10 @@ export default class World extends THREE.Scene {
     constructor() {
         super();
 
+        const light = new THREE.PointLight(0xffffff, 1000, 100, 2);
+        light.position.set(1, 10, 10);
+        this.add(light);
+
         this.add(new AxesHelper(.2));
         this.simulatedSpace.addToScene(this);
         
@@ -20,6 +24,6 @@ export default class World extends THREE.Scene {
 
     update() {
         const dt = this.clock.getDelta();
-        this.simulatedSpace.run(dt/1000);
+        this.simulatedSpace.run(dt / 1000);
     }
 }

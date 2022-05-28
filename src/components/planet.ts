@@ -1,21 +1,18 @@
 import * as THREE from 'three';
 
-import earthImage from 'assets/earth.jpg';
+import { TexturePack } from 'textures';
 
 import SimulatedObject from 'components/simulated-object';
+
 import { Body, BodyType, ExertsForce } from 'physics/body';
 import { GRAVITATION_CONSTANT } from 'physics/constants';
 
 const geometry = new THREE.SphereGeometry(.5, 64, 64);
-const texture = new THREE.TextureLoader().load(earthImage);
 
 export default class Planet extends SimulatedObject implements ExertsForce {
-    private readonly material = new THREE.MeshBasicMaterial({
-        map: texture,
-        wireframe: true,
-    });
+    private readonly material = new THREE.MeshStandardMaterial();
 
-    private readonly mesh = new THREE.Mesh(geometry, this.material);
+    private mesh = new THREE.Mesh(geometry, this.material);
 
     constructor() {
         super(BodyType.Static, 1_000_000);
@@ -33,7 +30,17 @@ export default class Planet extends SimulatedObject implements ExertsForce {
     set wireframe(value: boolean) {
         this.material.wireframe = value;
     }
+    
+    set texture(pack: Partial<TexturePack>) {
+        this.material.map = pack.colorMap ?? null;
+        this.material.bumpMap = pack.bumpMap ?? null;
+        this.material.aoMap = pack.aoMap ?? null;
+        this.material.emissiveMap = pack.emissiveMap ?? null;
+        this.material.metalnessMap = pack.metalnessMap ?? null;
 
+        this.material.needsUpdate = true;
+    }
+    
     exertForce(body: Body, force: THREE.Vector3): void {
         // set (temporary) the force to be the distance vector between the 2 objects.
         force.subVectors(this.position, body.position);
@@ -43,4 +50,5 @@ export default class Planet extends SimulatedObject implements ExertsForce {
 
         // the force is now calculated properly and ready to use.
     }
+
 }
