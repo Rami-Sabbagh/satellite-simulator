@@ -148,7 +148,7 @@ export default class Application {
 
     private provideHotModulesReplacement() {
         if (module.hot) {
-            module.hot.accept('./world', () => {
+            module.hot.accept('components/world', () => {
                 this._world = new World();
             });
 
