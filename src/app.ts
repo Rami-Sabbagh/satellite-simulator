@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import World from 'world';
-import { earthTexture, jupiterTexture, marsTexture } from 'textures';
+import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
 
 /**
  * THREE.js Application.
@@ -82,29 +82,31 @@ export default class Application {
     private constructPlanetGUI() {
         const folder = this.gui.addFolder('Planet');
 
+        const textures: Record<string, Partial<TexturePack>> = {
+            none: {},
+            earth: earthTexture,
+            jupiter: jupiterTexture,
+            mars: marsTexture,
+        };
+
+        const texturesOptions = Object.keys(textures).map(key => `${key.charAt(0).toUpperCase()}${key.slice(1)}`);
+
         const properties = {
             color: this.world.planet.color.toArray(),
             wireframe: this.world.planet.wireframe,
+            texture: texturesOptions[0],
         };
+
+        // TODO: could change planet physics in addition of texture (presets).
+        folder.add(properties, 'texture', texturesOptions).name('Texture')
+        .onChange((value: string) => this.world.planet.setTexture(textures[`${value.charAt(0).toLowerCase()}${value.slice(1)}`]));
 
         folder.addColor(properties, 'color').name('Color')
             .onChange((value: number[]) => this.world.planet.color.fromArray(value));
 
         folder.add(properties, 'wireframe').name('Wireframe')
             .onChange((value: boolean) => this.world.planet.wireframe = value);
-
-        // TODO: could change planet physics in addition of texture (presets).
-        const texturesFolder = folder.addFolder('textures');
-
-        const texturesOptions = {
-            earth: () => this.world.planet.setTexture(earthTexture),
-            mars: () => this.world.planet.setTexture(marsTexture),
-            jupiter: () => this.world.planet.setTexture(jupiterTexture),
-        };
-
-        texturesFolder.add(texturesOptions, 'earth').name('Earth Texture');
-        texturesFolder.add(texturesOptions, 'mars').name('Mars Texture');
-        texturesFolder.add(texturesOptions, 'jupiter').name('Jupiter Texture');
+        
     }
 
     private constructCameraGUI() {
