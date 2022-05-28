@@ -99,7 +99,7 @@ export default class Application {
 
         // TODO: could change planet physics in addition of texture (presets).
         folder.add(properties, 'texture', texturesOptions).name('Texture')
-        .onChange((value: string) => this.world.planet.setTexture(textures[`${value.charAt(0).toLowerCase()}${value.slice(1)}`]));
+            .onChange((value: string) => this.world.planet.texture = textures[`${value.charAt(0).toLowerCase()}${value.slice(1)}`]);
 
         folder.addColor(properties, 'color').name('Color')
             .onChange((value: number[]) => this.world.planet.color.fromArray(value));

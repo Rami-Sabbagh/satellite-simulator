@@ -30,7 +30,17 @@ export default class Planet extends SimulatedObject implements ExertsForce {
     set wireframe(value: boolean) {
         this.material.wireframe = value;
     }
+    
+    set texture(pack: Partial<TexturePack>) {
+        this.material.map = pack.colorMap ?? null;
+        this.material.bumpMap = pack.bumpMap ?? null;
+        this.material.aoMap = pack.aoMap ?? null;
+        this.material.emissiveMap = pack.emissiveMap ?? null;
+        this.material.metalnessMap = pack.metalnessMap ?? null;
 
+        this.material.needsUpdate = true;
+    }
+    
     exertForce(body: Body, force: THREE.Vector3): void {
         // set (temporary) the force to be the distance vector between the 2 objects.
         force.subVectors(this.position, body.position);
@@ -41,13 +51,4 @@ export default class Planet extends SimulatedObject implements ExertsForce {
         // the force is now calculated properly and ready to use.
     }
 
-    setTexture(pack: Partial<TexturePack>) {
-        this.material.map = pack.colorMap ?? null;
-        this.material.bumpMap = pack.bumpMap ?? null;
-        this.material.aoMap = pack.aoMap ?? null;
-        this.material.emissiveMap = pack.emissiveMap ?? null;
-        this.material.metalnessMap = pack.metalnessMap ?? null;
-
-        this.material.needsUpdate = true;
-    }
 }
