@@ -28,14 +28,14 @@ export default class SimulatedSpace {
     /**
      * Adds the scene of the simulated space into the given scene.
      */
-    addToScene(scene: THREE.Scene) {
+    addTo(scene: THREE.Scene) {
         scene.add(this.scene);
     }
 
     /**
      * Removes the scene of the simulated space from the given scene.
      */
-    removeFromScene(scene: THREE.Scene) {
+    removeFrom(scene: THREE.Scene) {
         scene.remove(this.scene);
     }
 }
