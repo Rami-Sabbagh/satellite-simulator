@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import World from 'world';
-import Singleton from "./textures";
+import { earthTexture, jupiterTexture, marsTexture } from 'textures';
 
 /**
  * THREE.js Application.
@@ -19,8 +19,6 @@ export default class Application {
     });
 
     private _world = new World();
-
-    readonly singleton = new Singleton();
 
     get world() { return this._world; }
 
@@ -94,24 +92,19 @@ export default class Application {
 
         folder.add(properties, 'wireframe').name('Wireframe')
             .onChange((value: boolean) => this.world.planet.wireframe = value);
-        
-        //could change planet physics in addition of texture (presets)
+
+        // TODO: could change planet physics in addition of texture (presets).
+        const texturesFolder = folder.addFolder('textures');
+
         const texturesOptions = {
-            earth: () => {
-                this.world.planet.setTexture(this.singleton.texturePacks.earth);
-            },
-            mars: () => {
-                this.world.planet.setTexture(this.singleton.texturePacks.mars);
-            },
-            jupiter: () => {
-                this.world.planet.setTexture(this.singleton.texturePacks.jupiter);
-            },
+            earth: () => this.world.planet.setTexture(earthTexture),
+            mars: () => this.world.planet.setTexture(marsTexture),
+            jupiter: () => this.world.planet.setTexture(jupiterTexture),
         };
 
-        const texturesFolder = folder.addFolder('textures');
-        texturesFolder.add( texturesOptions, 'earth').name('Earth Texture');
-        texturesFolder.add( texturesOptions, 'mars').name('Mars Texture');
-        texturesFolder.add( texturesOptions, 'jupiter').name('Jupiter Texture');
+        texturesFolder.add(texturesOptions, 'earth').name('Earth Texture');
+        texturesFolder.add(texturesOptions, 'mars').name('Mars Texture');
+        texturesFolder.add(texturesOptions, 'jupiter').name('Jupiter Texture');
     }
 
     private constructCameraGUI() {
