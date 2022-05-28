@@ -47,5 +47,7 @@ export default class Planet extends SimulatedObject implements ExertsForce {
         this.material.aoMap = pack.aoMap ?? null;
         this.material.emissiveMap = pack.emissiveMap ?? null;
         this.material.metalnessMap = pack.metalnessMap ?? null;
+
+        this.material.needsUpdate = true;
     }
 }
