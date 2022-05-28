@@ -6,7 +6,7 @@ To ensure the best code quality possible, please follow the guidelines below.
 
 When you want to add a new feature, bug fix, or whatever that you think will be a good addition to the project, it's highly recommended that you stick to the workflow below:
 
-1. Create a new local branch from `origin/main`..=
+1. Create a new local branch from `origin/main`
 2. Select a proper name for your branch that reflects your contribution.
 3. Add your code.
 4. Push your code to a branch on the remote (origin) with the same name as your local branch.
