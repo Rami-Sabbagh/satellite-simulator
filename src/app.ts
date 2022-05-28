@@ -86,13 +86,17 @@ export default class Application {
 
         const properties = {
             color: this.world.planet.color.toArray(),
+            wireframe: this.world.planet.wireframe,
         };
 
         folder.addColor(properties, 'color').name('Color')
             .onChange((value: number[]) => this.world.planet.color.fromArray(value));
 
+        folder.add(properties, 'wireframe').name('Wireframe')
+            .onChange((value: boolean) => this.world.planet.wireframe = value);
+        
         //could change planet physics in addition of texture (presets)
-        const planet_selectors = {
+        const texturesOptions = {
             earth: () => {
                 this.world.planet.setTexture(this.singleton.texturePacks.earth);
             },
@@ -104,11 +108,10 @@ export default class Application {
             },
         };
 
-        const textures_folder = folder.addFolder('textures');
-        textures_folder.add( planet_selectors, 'earth').name('Earth Texture');
-        textures_folder.add( planet_selectors, 'mars').name('Mars Texture');
-        textures_folder.add( planet_selectors, 'jupiter').name('Jupiter Texture');
-
+        const texturesFolder = folder.addFolder('textures');
+        texturesFolder.add( texturesOptions, 'earth').name('Earth Texture');
+        texturesFolder.add( texturesOptions, 'mars').name('Mars Texture');
+        texturesFolder.add( texturesOptions, 'jupiter').name('Jupiter Texture');
     }
 
     private constructCameraGUI() {

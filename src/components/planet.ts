@@ -4,14 +4,10 @@ import SimulatedObject from 'components/simulated-object';
 import { Body, BodyType, ExertsForce } from 'physics/body';
 import { GRAVITATION_CONSTANT } from 'physics/constants';
 
-const geometry = new THREE.SphereGeometry(.5, 16, 16);
-
-// const texture = new THREE.TextureLoader().load('./earth.jpg');
+const geometry = new THREE.SphereGeometry(.5, 64, 64);
 
 export default class Planet extends SimulatedObject implements ExertsForce {
-    // public texture = new THREE.TextureLoader().load('./earth.jpg');
-
-    private material = new THREE.MeshStandardMaterial();
+    private readonly material = new THREE.MeshStandardMaterial();
 
     private mesh = new THREE.Mesh(geometry, this.material);
 
@@ -22,6 +18,14 @@ export default class Planet extends SimulatedObject implements ExertsForce {
 
     get color() {
         return this.material.color;
+    }
+
+    get wireframe() {
+        return this.material.wireframe;
+    }
+
+    set wireframe(value: boolean) {
+        this.material.wireframe = value;
     }
 
     exertForce(body: Body, force: THREE.Vector3): void {
