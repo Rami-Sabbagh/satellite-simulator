@@ -1,10 +1,5 @@
 import * as THREE from 'three';
 
-import SimulatedSpace from 'components/simulated-space';
-import Planet from 'components/planet';
-import {AxesHelper} from 'three';
-import * as fs from "fs";
-
 export default class Singleton {
 
     public texturePacks:any;
