@@ -1,9 +1,15 @@
 {
-    "extends": "eslint:recommended",
     "env": {
         "browser": true,
         "es6": true,
         "node": true
     },
-    "ignorePatterns": ["node_modules"]
+    "parser": "@typescript-eslint/parser",
+    "ignorePatterns": ["node_modules", "webpack.config.js"],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "root": true
 }
