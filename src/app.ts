@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import World from 'world';
-import Singleton from "./singleton";
+import Singleton from "./textures";
 
 /**
  * THREE.js Application.
