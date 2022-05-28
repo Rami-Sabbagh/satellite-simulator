@@ -1,36 +1,27 @@
 import * as THREE from 'three';
 
-export default class Singleton {
+import earthColorMap from 'assets/earth.jpg';
+import jupiterColorMap from 'assets/jupiter.jpg';
+import marsColorMap from 'assets/mars.jpg';
 
-    public texturePacks:any;
-
-    constructor() {
-        // let m ;
-        this.texturePacks = {
-            earth : {
-                colorMap : new THREE.TextureLoader().load('./earth_color.jpg') ,
-                bumpMap : new THREE.TextureLoader().load('./earth_bump.jpg') ,
-                aoMap : new THREE.TextureLoader().load('./earth_ao.jpg'),
-                emissiveMap : new THREE.TextureLoader().load('./earth_emissive.jpg'),
-                metalnessMap : new THREE.TextureLoader().load('./earth_metalness.jpg')
-
-            },
-            mars : {
-                colorMap : new THREE.TextureLoader().load('./mars_color.jpg'),
-                bumpMap : new THREE.TextureLoader().load('./mars_bumpMap.jpg'),
-                aoMap : new THREE.TextureLoader().load('./mars_aoMap.jpg'),
-                emissiveMap : new THREE.TextureLoader().load('./mars_emissiveMap.jpg'),
-                metalnessMap : new THREE.TextureLoader().load('./mars_metalnessMap.jpg')
-            },
-            jupiter : {
-                colorMap : new THREE.TextureLoader().load('./jupiter_color.jpg'),
-                bumpMap : new THREE.TextureLoader().load('./jupiter_bumpMap.jpg'),
-                aoMap : new THREE.TextureLoader().load('./jupiter_aoMap.jpg'),
-                emissiveMap : new THREE.TextureLoader().load('./jupiter_emissiveMap.jpg'),
-                metalnessMap : new THREE.TextureLoader().load('./jupiter_metalnessMap.jpg')
-            },
-        }
-    }
-
-
+export interface TexturePack {
+    colorMap: THREE.Texture,
+    bumpMap: THREE.Texture,
+    aoMap: THREE.Texture,
+    emissiveMap: THREE.Texture,
+    metalnessMap: THREE.Texture,
 }
+
+const loader = new THREE.TextureLoader();
+
+export const earth: Partial<TexturePack> = {
+    colorMap: loader.load(earthColorMap),
+};
+
+export const jupiter: Partial<TexturePack> = {
+    colorMap: loader.load(jupiterColorMap),
+};
+
+export const mars: Partial<TexturePack> = {
+    colorMap: loader.load(marsColorMap),
+};
