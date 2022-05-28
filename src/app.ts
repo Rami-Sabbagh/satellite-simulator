@@ -2,7 +2,7 @@ import GUI from 'lil-gui';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-import World from 'world';
+import World from 'components/world';
 import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
 
 /**
