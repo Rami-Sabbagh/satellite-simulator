@@ -36,7 +36,7 @@ export class Simulation {
             delta -= step;
 
             // calculate the applied forces for each body
-            this.calculateAppliedForces(step);
+            this.calculateAppliedForces();
 
             // integrate the acceleration into velocity
             this.integrateBodiesAcceleration(step);
@@ -46,7 +46,7 @@ export class Simulation {
         }
     }
 
-    protected calculateAppliedForces(step: number) {
+    protected calculateAppliedForces() {
         for (const body of this.bodies) {
             body.appliedForces.set(0, 0, 0);
 

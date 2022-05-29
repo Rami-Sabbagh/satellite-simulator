@@ -1,8 +1,9 @@
 import GUI from 'lil-gui';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import Stats from 'three/examples/jsm/libs/stats.module';
 
-import World from 'world';
+import World from 'components/world';
 import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
 
 /**
@@ -12,6 +13,7 @@ export default class Application {
     readonly renderer = new THREE.WebGLRenderer();
     readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
+    readonly stats = Stats();
 
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',
@@ -65,10 +67,15 @@ export default class Application {
         this.constructPlanetGUI();
         this.constructCreationGUI();
         this.constructCameraGUI();
+        this.constructStatsGUI();
+    }
+
+    private constructStatsGUI() {
+        this.container.appendChild(this.stats.dom);
     }
 
     private constructCreationGUI() {
-        const folder = this.gui.addFolder('Satellite Creation');
+        // const folder = this.gui.addFolder('Satellite Creation');
 
         // gui.add( this.orbitalElements, 'eccentricity').name('Eccentricity').min(0).max(1);
         // gui.add( this.orbitalElements, 'semiMajorAxis').name('Semi-Major Axis').min(0).max(5);
@@ -76,7 +83,6 @@ export default class Application {
         // gui.add( this.orbitalElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
-
     }
 
     private constructPlanetGUI() {
@@ -106,7 +112,6 @@ export default class Application {
 
         folder.add(properties, 'wireframe').name('Wireframe')
             .onChange((value: boolean) => this.world.planet.wireframe = value);
-        
     }
 
     private constructCameraGUI() {
@@ -148,11 +153,10 @@ export default class Application {
 
     private provideHotModulesReplacement() {
         if (module.hot) {
-            module.hot.accept('./world', () => {
+            module.hot.accept('components/world', () => {
                 this._world = new World();
             });
 
-            module.hot.addDisposeHandler(() => this.gui.destroy());
             module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
         }
     }
@@ -168,9 +172,13 @@ export default class Application {
         this.world.update();
         this.controls.update();
         this.renderer.render(this.world, this.camera);
+        this.stats.update();
     }
 
     destroy() {
+        this.gui.destroy();
+        this.stats.domElement.remove();
+        
         this.renderer.domElement.remove();
         this.renderer.setAnimationLoop(null);
 
