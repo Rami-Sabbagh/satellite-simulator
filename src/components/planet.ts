@@ -34,6 +34,7 @@ export default class Planet extends SimulatedObject implements ExertsForce {
     set texture(pack: Partial<TexturePack>) {
         this.material.map = pack.colorMap ?? null;
         this.material.bumpMap = pack.bumpMap ?? null;
+        this.material.bumpScale = pack.bumpScale ?? 0;
         this.material.aoMap = pack.aoMap ?? null;
         this.material.emissiveMap = pack.emissiveMap ?? null;
         this.material.metalnessMap = pack.metalnessMap ?? null;
