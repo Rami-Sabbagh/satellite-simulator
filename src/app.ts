@@ -157,7 +157,6 @@ export default class Application {
                 this._world = new World();
             });
 
-            module.hot.addDisposeHandler(() => this.gui.destroy());
             module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
         }
     }
@@ -177,10 +176,12 @@ export default class Application {
     }
 
     destroy() {
+        this.gui.destroy();
+        this.stats.domElement.remove();
+        
         this.renderer.domElement.remove();
         this.renderer.setAnimationLoop(null);
 
-        this.stats.domElement.remove();
         this.container.removeEventListener('resize', this.resizeCallback);
     }
 }
