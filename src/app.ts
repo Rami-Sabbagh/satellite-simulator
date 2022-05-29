@@ -3,28 +3,15 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import World from 'components/world';
-import {
-    earthTexture,
-    jupiterTexture,
-    marsTexture,
-    TexturePack,
-} from 'textures';
+import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
 
 /**
  * THREE.js Application.
  */
 export default class Application {
     readonly renderer = new THREE.WebGLRenderer();
-    readonly camera = new THREE.PerspectiveCamera(
-        75,
-        this.renderer.domElement.width / this.renderer.domElement.height,
-        0.1,
-        1000
-    );
-    readonly controls = new OrbitControls(
-        this.camera,
-        this.renderer.domElement
-    );
+    readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
+    readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',
@@ -33,9 +20,7 @@ export default class Application {
 
     private _world = new World();
 
-    get world() {
-        return this._world;
-    }
+    get world() { return this._world; }
 
     protected resizeCallback: () => void;
 
@@ -83,13 +68,15 @@ export default class Application {
     }
 
     private constructCreationGUI() {
-        // const folder = this.gui.addFolder('Satellite Creation');
+        const folder = this.gui.addFolder('Satellite Creation');
+
         // gui.add( this.orbitalElements, 'eccentricity').name('Eccentricity').min(0).max(1);
         // gui.add( this.orbitalElements, 'semiMajorAxis').name('Semi-Major Axis').min(0).max(5);
         // gui.add( this.orbitalElements, 'inclination').name('Inclination').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
+
     }
 
     private constructPlanetGUI() {
@@ -102,9 +89,7 @@ export default class Application {
             mars: marsTexture,
         };
 
-        const texturesOptions = Object.keys(textures).map(
-            (key) => `${key.charAt(0).toUpperCase()}${key.slice(1)}`
-        );
+        const texturesOptions = Object.keys(textures).map(key => `${key.charAt(0).toUpperCase()}${key.slice(1)}`);
 
         const properties = {
             color: this.world.planet.color.toArray(),
@@ -113,30 +98,15 @@ export default class Application {
         };
 
         // TODO: could change planet physics in addition of texture (presets).
-        folder
-            .add(properties, 'texture', texturesOptions)
-            .name('Texture')
-            .onChange(
-                (value: string) =>
-                    (this.world.planet.texture =
-                        textures[
-                            `${value.charAt(0).toLowerCase()}${value.slice(1)}`
-                        ])
-            );
+        folder.add(properties, 'texture', texturesOptions).name('Texture')
+            .onChange((value: string) => this.world.planet.texture = textures[`${value.charAt(0).toLowerCase()}${value.slice(1)}`]);
 
-        folder
-            .addColor(properties, 'color')
-            .name('Color')
-            .onChange((value: number[]) =>
-                this.world.planet.color.fromArray(value)
-            );
+        folder.addColor(properties, 'color').name('Color')
+            .onChange((value: number[]) => this.world.planet.color.fromArray(value));
 
-        folder
-            .add(properties, 'wireframe')
-            .name('Wireframe')
-            .onChange(
-                (value: boolean) => (this.world.planet.wireframe = value)
-            );
+        folder.add(properties, 'wireframe').name('Wireframe')
+            .onChange((value: boolean) => this.world.planet.wireframe = value);
+        
     }
 
     private constructCameraGUI() {
@@ -183,20 +153,14 @@ export default class Application {
             });
 
             module.hot.addDisposeHandler(() => this.gui.destroy());
-            module.hot.addDisposeHandler(() =>
-                window.removeEventListener('resize', this.resizeCallback)
-            );
+            module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
         }
     }
 
     protected updateResolution() {
-        this.renderer.setSize(
-            this.container.clientWidth,
-            this.container.clientHeight
-        );
+        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
 
-        this.camera.aspect =
-            this.renderer.domElement.width / this.renderer.domElement.height;
+        this.camera.aspect = this.renderer.domElement.width / this.renderer.domElement.height;
         this.camera.updateProjectionMatrix();
     }
 
