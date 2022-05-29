@@ -4,6 +4,7 @@ import SimulatedSpace from 'components/simulated-space';
 import Planet from 'components/planet';
 import { AxesHelper } from 'three';
 import Sun from './sun';
+
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
     protected simulatedSpace = new SimulatedSpace(1e-6);
