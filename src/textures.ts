@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import earthColorMap from 'assets/earth.jpg';
 import jupiterColorMap from 'assets/jupiter.jpg';
 import marsColorMap from 'assets/mars.jpg';
+import sunColorMap from 'assets/sun.jpg';
 
 export interface TexturePack {
     colorMap: THREE.Texture,
@@ -24,4 +25,8 @@ export const jupiterTexture: Partial<TexturePack> = {
 
 export const marsTexture: Partial<TexturePack> = {
     colorMap: loader.load(marsColorMap),
+};
+
+export const sunTexture: Partial<TexturePack> = {
+    colorMap: loader.load(sunColorMap),
 };
