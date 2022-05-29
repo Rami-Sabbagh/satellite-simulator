@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 
-import earthColorMap from 'assets/textures/earth-texture-maps/earth-color.jpg';
-import earthBumpMap from 'assets/textures/earth-texture-maps/earth-bump.jpg';
-import jupiterColorMap from 'assets/textures/jupiter-texture-maps/jupiter-color.jpg';
-import marsColorMap from 'assets/textures/mars-texture-maps/mars-color.jpg';
-import marsBumpMap from 'assets/textures/mars-texture-maps/mars-bump.jpg';
+import earthColorMap from 'assets/earth/color-map.jpg';
+import earthBumpMap from 'assets/earth/bump-map.jpg';
+import jupiterColorMap from 'assets/jupiter/color-map.jpg';
+import marsColorMap from 'assets/mars/color-map.jpg';
+import marsBumpMap from 'assets/mars/bump-map.jpg';
 
-import sunColorMap from 'assets/sun.jpg';
+import sunColorMap from 'assets/sun/color-map.jpg';
 
 export interface TexturePack {
     colorMap: THREE.Texture,
