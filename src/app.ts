@@ -180,6 +180,7 @@ export default class Application {
         this.renderer.domElement.remove();
         this.renderer.setAnimationLoop(null);
 
+        this.stats.domElement.remove();
         this.container.removeEventListener('resize', this.resizeCallback);
     }
 }
