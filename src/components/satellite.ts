@@ -1,8 +1,7 @@
 import * as THREE from 'three';
 
-import { Body, BodyType } from 'physics/body';
+import { BodyType } from 'physics/body';
 import SimulatedObject from 'components/simulated-object';
-import { calculateOrbitalElements, calculateStateVectors, OrbitalElements } from 'physics/kepler-math';
 
 const geometry = new THREE.SphereGeometry(.1, 4, 2);
 const material = new THREE.MeshBasicMaterial({
