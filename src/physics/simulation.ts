@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Body, BodyType, canExertForce, ExertsForce } from "./body";
+import { Body, BodyType, canExertForce, ExertsForce } from './body';
 
 const temporaryVector = new THREE.Vector3();
 
@@ -15,17 +15,14 @@ export class Simulation {
      */
     protected activeBodies: ExertsForce[] = [];
 
-    constructor(
-        public timeResolution = 1e-4,
-    ) {}
+    constructor(public timeResolution = 1e-4) {}
 
     add(body: Body) {
         this.bodies.push(body);
 
-        if (canExertForce(body))
-            this.activeBodies.push(body);
+        if (canExertForce(body)) this.activeBodies.push(body);
     }
-    
+
     /**
      * Run the simulation for a given amount of time.
      * @param delta in seconds.
@@ -36,7 +33,7 @@ export class Simulation {
             delta -= step;
 
             // calculate the applied forces for each body
-            this.calculateAppliedForces(step);
+            this.calculateAppliedForces();
 
             // integrate the acceleration into velocity
             this.integrateBodiesAcceleration(step);
@@ -46,7 +43,7 @@ export class Simulation {
         }
     }
 
-    protected calculateAppliedForces(step: number) {
+    protected calculateAppliedForces() {
         for (const body of this.bodies) {
             body.appliedForces.set(0, 0, 0);
 
@@ -67,7 +64,9 @@ export class Simulation {
             /**
              * (alias for the shared temporary vector).
              */
-            const acceleration = temporaryVector.copy(body.appliedForces).divideScalar(body.mass);
+            const acceleration = temporaryVector
+                .copy(body.appliedForces)
+                .divideScalar(body.mass);
 
             /**
              * (alias for the shared temporary vector).
@@ -86,7 +85,9 @@ export class Simulation {
             /**
              * (alias for the shared temporary vector).
              */
-            const displacement = temporaryVector.copy(body.velocity).multiplyScalar(step);
+            const displacement = temporaryVector
+                .copy(body.velocity)
+                .multiplyScalar(step);
 
             body.position.add(displacement);
         }
