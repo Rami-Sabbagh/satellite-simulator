@@ -75,6 +75,6 @@ const color_picker = {};
 
 ## TypeScript
 
-It's highly, highly recommended that you use proper types for everything that you write. They not only prevent possible bugs, but also adds intellisense support.
+It's highly, highly recommended that you use proper types for everything that you write. They not only prevent possible bugs, but also add intellisense support.
 
 If you think that the type that you want to write can be used in many different places, please put it in the `src/models` folder so others can use it.
