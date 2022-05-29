@@ -1,6 +1,7 @@
 import GUI from 'lil-gui';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
 import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
@@ -12,6 +13,7 @@ export default class Application {
     readonly renderer = new THREE.WebGLRenderer();
     readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
+    readonly stats = Stats();
 
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',
@@ -65,6 +67,11 @@ export default class Application {
         this.constructPlanetGUI();
         this.constructCreationGUI();
         this.constructCameraGUI();
+        this.constructStatsGUI();
+    }
+
+    private constructStatsGUI() {
+        this.container.appendChild(this.stats.dom);
     }
 
     private constructCreationGUI() {
@@ -76,7 +83,6 @@ export default class Application {
         // gui.add( this.orbitalElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
         // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
-
     }
 
     private constructPlanetGUI() {
@@ -106,7 +112,6 @@ export default class Application {
 
         folder.add(properties, 'wireframe').name('Wireframe')
             .onChange((value: boolean) => this.world.planet.wireframe = value);
-        
     }
 
     private constructCameraGUI() {
@@ -168,12 +173,14 @@ export default class Application {
         this.world.update();
         this.controls.update();
         this.renderer.render(this.world, this.camera);
+        this.stats.update();
     }
 
     destroy() {
         this.renderer.domElement.remove();
         this.renderer.setAnimationLoop(null);
 
+        this.stats.domElement.remove();
         this.container.removeEventListener('resize', this.resizeCallback);
     }
 }
