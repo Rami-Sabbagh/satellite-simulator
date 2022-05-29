@@ -1,4 +1,4 @@
-import { Euler, Matrix4, Quaternion, Vector3 } from 'three';
+import { Euler, Vector3 } from 'three';
 import { GRAVITATION_CONSTANT } from './constants';
 
 export interface StateVectors {

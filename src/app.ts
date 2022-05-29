@@ -75,7 +75,7 @@ export default class Application {
     }
 
     private constructCreationGUI() {
-        const folder = this.gui.addFolder('Satellite Creation');
+        // const folder = this.gui.addFolder('Satellite Creation');
 
         // gui.add( this.orbitalElements, 'eccentricity').name('Eccentricity').min(0).max(1);
         // gui.add( this.orbitalElements, 'semiMajorAxis').name('Semi-Major Axis').min(0).max(5);
