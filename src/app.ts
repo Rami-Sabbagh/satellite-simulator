@@ -1,10 +1,11 @@
 import GUI from 'lil-gui';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
-import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
+import {earthTexture, jupiterTexture, marsTexture, TexturePack} from 'textures';
+import InitialElements from "./physics/initial-elements";
 
 /**
  * THREE.js Application.
@@ -14,6 +15,7 @@ export default class Application {
     readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
     readonly stats = Stats();
+    readonly initialElements = new InitialElements();
 
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',
@@ -22,7 +24,9 @@ export default class Application {
 
     private _world = new World();
 
-    get world() { return this._world; }
+    get world() {
+        return this._world;
+    }
 
     protected resizeCallback: () => void;
 
@@ -75,14 +79,29 @@ export default class Application {
     }
 
     private constructCreationGUI() {
-        // const folder = this.gui.addFolder('Satellite Creation');
+        const folder = this.gui.addFolder('Satellite Creation');
+        this.world.launchVector.state = this.initialElements.calculateStateVectors()
 
-        // gui.add( this.orbitalElements, 'eccentricity').name('Eccentricity').min(0).max(1);
-        // gui.add( this.orbitalElements, 'semiMajorAxis').name('Semi-Major Axis').min(0).max(5);
-        // gui.add( this.orbitalElements, 'inclination').name('Inclination').min(0).max(Math.PI);
-        // gui.add( this.orbitalElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI);
-        // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
-        // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
+        folder.add(this.initialElements, 'inclination').name('Inclination').min(0).max(Math.PI)
+            .onChange((value: number) => {
+                this.initialElements.inclination = value;
+                this.world.launchVector.state = this.initialElements.calculateStateVectors()
+            });
+        folder.add(this.initialElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI * 2)
+            .onChange((value: number) => {
+                this.initialElements.trueAnomaly = value;
+                this.world.launchVector.state = this.initialElements.calculateStateVectors()
+            });
+        folder.add(this.initialElements, 'semiMajorAxis').name('Semi-Major Axis').min(this.world.planet.radius).max(this.world.planet.radius * 2)
+            .onChange((value: number) => {
+                this.initialElements.semiMajorAxis = value;
+                this.world.launchVector.state = this.initialElements.calculateStateVectors()
+            });
+        folder.add(this.initialElements, 'velocityValue').name('Initial Launch Velocity Value').min(0).max(5)
+            .onChange((value: number) => {
+                this.initialElements.velocityValue = value;
+                this.world.launchVector.state = this.initialElements.calculateStateVectors()
+            });
     }
 
     private constructPlanetGUI() {
@@ -178,7 +197,7 @@ export default class Application {
     destroy() {
         this.gui.destroy();
         this.stats.domElement.remove();
-        
+
         this.renderer.domElement.remove();
         this.renderer.setAnimationLoop(null);
 
