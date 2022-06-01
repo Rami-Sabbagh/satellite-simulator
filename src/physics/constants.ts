@@ -14,6 +14,19 @@ export const EARTH_RADIUS = 6.371e6;
 export const EARTH_DISTANCE = 1.496e11;
 
 /**
+ * Earth's natural moon's estimated mass.
+ */
+export const MOON_MASS = 7.34767309e22;
+/**
+ * Earth's natural moon's estimated radius.
+ */
+export const MOON_RADIUS = 1.737e6;
+/**
+ * Earth's natural moon's average distance from Earth.
+ */
+export const MOON_DISTANCE = 3.844e8;
+
+/**
  * Sun's estimated mass.
  */
 export const SUN_MASS = 1.989e30;
