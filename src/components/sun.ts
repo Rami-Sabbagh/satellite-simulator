@@ -6,6 +6,7 @@ const material = new THREE.MeshBasicMaterial();
 
 export default class Sun extends THREE.Object3D {
 	private mesh = new THREE.Mesh(geometry, material);
+	private light = new THREE.PointLight(0xffffff, 200_000, 0, 2);
 
 	constructor() {
 		super();
@@ -14,5 +15,6 @@ export default class Sun extends THREE.Object3D {
 		material.map = texture.colorMap ?? null;
 
 		this.add(this.mesh);
+		this.add(this.light);
 	}
 }

@@ -16,15 +16,9 @@ export default class World extends THREE.Scene {
     constructor() {
         super();
 
-        const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-        this.add(ambient);
-
-        const pointLight = new THREE.PointLight(0xffffff, 5000, 100, 2);
-        pointLight.position.set(1, 0, 50);
-        this.add(pointLight);
-
         this.add(new THREE.AxesHelper(.2));
         this.add(this.launchVector);
+        this.add(new THREE.AmbientLight(0xffffff, 0.5));
 
         const sun = new Sun();
         sun.position.set(1, 0, 200);
