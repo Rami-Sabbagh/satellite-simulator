@@ -1,11 +1,11 @@
 import GUI from 'lil-gui';
 import * as THREE from 'three';
-import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
-import {earthTexture, jupiterTexture, marsTexture, TexturePack} from 'textures';
-import InitialElements from "./physics/initial-elements";
+import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
+import { calculateStateVectorsManually, ManualElements } from 'physics/kepler-math';
 
 /**
  * THREE.js Application.
@@ -15,18 +15,24 @@ export default class Application {
     readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
     readonly stats = Stats();
-    readonly initialElements = new InitialElements();
 
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',
         width: 500,
     });
 
-    private _world = new World();
+    /**
+     * For a new satellite.
+     */
+    private spawnElements: ManualElements = {
+        inclination: 0,
+        trueAnomaly: 0,
+        semiMajorAxis: .7,
+        velocity: 1,
+    };
 
-    get world() {
-        return this._world;
-    }
+    private _world = new World();
+    get world() { return this._world; }
 
     protected resizeCallback: () => void;
 
@@ -80,28 +86,19 @@ export default class Application {
 
     private constructCreationGUI() {
         const folder = this.gui.addFolder('Satellite Creation');
-        this.world.launchVector.state = this.initialElements.calculateStateVectors()
+        this.world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
 
-        folder.add(this.initialElements, 'inclination').name('Inclination').min(0).max(Math.PI)
-            .onChange((value: number) => {
-                this.initialElements.inclination = value;
-                this.world.launchVector.state = this.initialElements.calculateStateVectors()
-            });
-        folder.add(this.initialElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI * 2)
-            .onChange((value: number) => {
-                this.initialElements.trueAnomaly = value;
-                this.world.launchVector.state = this.initialElements.calculateStateVectors()
-            });
-        folder.add(this.initialElements, 'semiMajorAxis').name('Semi-Major Axis').min(this.world.planet.radius).max(this.world.planet.radius * 2)
-            .onChange((value: number) => {
-                this.initialElements.semiMajorAxis = value;
-                this.world.launchVector.state = this.initialElements.calculateStateVectors()
-            });
-        folder.add(this.initialElements, 'velocityValue').name('Initial Launch Velocity Value').min(0).max(5)
-            .onChange((value: number) => {
-                this.initialElements.velocityValue = value;
-                this.world.launchVector.state = this.initialElements.calculateStateVectors()
-            });
+        const minRadius = this.world.planet.radius;
+        const maxRadius = this.world.planet.radius * 2;
+
+        folder.add(this.spawnElements, 'inclination').name('Inclination').min(0).max(Math.PI);
+        folder.add(this.spawnElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI * 2);
+        folder.add(this.spawnElements, 'semiMajorAxis').name('Semi-Major Axis').min(minRadius).max(maxRadius);
+        folder.add(this.spawnElements, 'velocity').name('Velocity').min(0).max(5);
+        
+        folder.onChange(() => {
+            this.world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
+        });
     }
 
     private constructPlanetGUI() {
@@ -173,7 +170,11 @@ export default class Application {
     private provideHotModulesReplacement() {
         if (module.hot) {
             module.hot.accept('components/world', () => {
+                const oldWorld = this._world;
                 this._world = new World();
+                
+                this._world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
+                this._world.planet.wireframe = oldWorld.planet.wireframe;
             });
 
             module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
