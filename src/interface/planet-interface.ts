@@ -15,7 +15,8 @@ const texturesOptions = Object.keys(textures).map(key => `${key.charAt(0).toUppe
 export default class PlanetInterface {
     protected readonly folder = this.gui.addFolder('Planet');
 
-    protected color = this.app.world.planet.color.toArray();
+    protected radius = this.app.world.planet.radius;
+    protected color = this.app.world.planet.color;
     protected wireframe = this.app.world.planet.wireframe;
     protected texture = texturesOptions[1];
     
@@ -23,6 +24,7 @@ export default class PlanetInterface {
         this.folder.open(false); // closed by default.
         
         this.folder.add(this, 'texture', texturesOptions).name('Texture');
+        this.folder.add(this, 'radius').name('Radius').min(.5).max(1);
         this.folder.addColor(this, 'color').name('Color');
         this.folder.add(this, 'wireframe').name('Wireframe');
 
@@ -40,7 +42,8 @@ export default class PlanetInterface {
         // TODO: could change planet physics in addition of texture (presets).
 
         this.app.world.planet.texture = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`];
-        this.app.world.planet.color.fromArray(this.color);
+        this.app.world.planet.radius = this.radius;
+        this.app.world.planet.color = this.color;
         this.app.world.planet.wireframe = this.wireframe;
     }
-}
+}   

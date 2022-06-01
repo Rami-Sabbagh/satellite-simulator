@@ -9,6 +9,7 @@ export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
     protected simulatedSpace = new SimulatedSpace(1e-6);
 
+    readonly sun = new Sun();
     readonly planet = new Planet();
 
     constructor() {
@@ -16,8 +17,8 @@ export default class World extends THREE.Scene {
 
         this.add(new THREE.AxesHelper(.2));
         this.add(new THREE.AmbientLight(0xffffff, 0.5));
-
-        this.add(new Sun());
+        
+        this.add(this.sun);
 
         this.simulatedSpace.addTo(this);
 
