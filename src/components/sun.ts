@@ -11,10 +11,12 @@ export default class Sun extends THREE.Object3D {
 	private mesh = new THREE.Mesh(geometry, material);
 	private light = new THREE.PointLight(0xffffff, 200_000, 0, 2);
 
-	constructor() {
+	constructor(distance = 200) {
 		super();
 
 		this.add(this.mesh);
 		this.add(this.light);
+
+		this.position.z = distance;
 	}
 }

@@ -20,9 +20,7 @@ export default class World extends THREE.Scene {
         this.add(this.launchVector);
         this.add(new THREE.AmbientLight(0xffffff, 0.5));
 
-        const sun = new Sun();
-        sun.position.set(1, 0, 200);
-        this.add(sun);
+        this.add(new Sun());
 
         this.simulatedSpace.addTo(this);
 
