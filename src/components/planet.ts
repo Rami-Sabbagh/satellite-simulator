@@ -32,7 +32,11 @@ export default class Planet extends SimulatedObject implements ExertsForce {
     }
 
     get color() {
-        return this.material.color;
+        return this.material.color.toArray();
+    }
+
+    set color(value: number[]) {
+        this.material.color.fromArray(value);
     }
 
     get wireframe() {
