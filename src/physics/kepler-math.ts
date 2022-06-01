@@ -15,6 +15,13 @@ export interface OrbitalElements {
     trueAnomaly: number,
 }
 
+export interface ManualElements {
+    semiMajorAxis: number,
+    inclination: number,
+    trueAnomaly: number,
+    velocity: number,
+}
+
 export function calculateOrbitalElements({ velocity, position }: StateVectors, mass: number): OrbitalElements {
     const specificAngularMomentum = new Vector3()
         .crossVectors(position, velocity);
@@ -61,6 +68,17 @@ export function calculateOrbitalElements({ velocity, position }: StateVectors, m
         argumentOfPeriapsis,
         trueAnomaly,
     };
+}
+
+export function calculateStateVectorsManually({
+    inclination, semiMajorAxis, trueAnomaly, velocity
+}: ManualElements): StateVectors {
+    const pane = new Euler(inclination, trueAnomaly, 0, "YXZ");
+
+    return {
+        position: new Vector3(semiMajorAxis, 0, 0).applyEuler(pane),
+        velocity: new Vector3(0, 0, velocity).applyEuler(pane),
+    }
 }
 
 export function calculateStateVectors({

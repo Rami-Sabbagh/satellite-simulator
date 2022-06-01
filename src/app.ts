@@ -5,6 +5,7 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
 import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
+import { calculateStateVectorsManually, ManualElements } from 'physics/kepler-math';
 
 /**
  * THREE.js Application.
@@ -20,8 +21,17 @@ export default class Application {
         width: 500,
     });
 
-    private _world = new World();
+    /**
+     * For a new satellite.
+     */
+    private spawnElements: ManualElements = {
+        inclination: 0,
+        trueAnomaly: 0,
+        semiMajorAxis: .7,
+        velocity: 1,
+    };
 
+    private _world = new World();
     get world() { return this._world; }
 
     protected resizeCallback: () => void;
@@ -75,14 +85,20 @@ export default class Application {
     }
 
     private constructCreationGUI() {
-        // const folder = this.gui.addFolder('Satellite Creation');
+        const folder = this.gui.addFolder('Satellite Creation');
+        this.world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
 
-        // gui.add( this.orbitalElements, 'eccentricity').name('Eccentricity').min(0).max(1);
-        // gui.add( this.orbitalElements, 'semiMajorAxis').name('Semi-Major Axis').min(0).max(5);
-        // gui.add( this.orbitalElements, 'inclination').name('Inclination').min(0).max(Math.PI);
-        // gui.add( this.orbitalElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI);
-        // gui.add( this.orbitalElements, 'argumentOfPeriapsis').name('Argument of Periapsis').min(0).max(Math.PI);
-        // gui.add( this.orbitalElements, 'longitudeOfAscendingNode').name('Longitude of Ascending Node').min(0).max(Math.PI);
+        const minRadius = this.world.planet.radius;
+        const maxRadius = this.world.planet.radius * 2;
+
+        folder.add(this.spawnElements, 'inclination').name('Inclination').min(0).max(Math.PI);
+        folder.add(this.spawnElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI * 2);
+        folder.add(this.spawnElements, 'semiMajorAxis').name('Semi-Major Axis').min(minRadius).max(maxRadius);
+        folder.add(this.spawnElements, 'velocity').name('Velocity').min(0).max(5);
+        
+        folder.onChange(() => {
+            this.world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
+        });
     }
 
     private constructPlanetGUI() {
@@ -154,7 +170,11 @@ export default class Application {
     private provideHotModulesReplacement() {
         if (module.hot) {
             module.hot.accept('components/world', () => {
+                const oldWorld = this._world;
                 this._world = new World();
+                
+                this._world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
+                this._world.planet.wireframe = oldWorld.planet.wireframe;
             });
 
             module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
@@ -178,7 +198,7 @@ export default class Application {
     destroy() {
         this.gui.destroy();
         this.stats.domElement.remove();
-        
+
         this.renderer.domElement.remove();
         this.renderer.setAnimationLoop(null);
 

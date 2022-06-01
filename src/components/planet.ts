@@ -7,14 +7,13 @@ import SimulatedObject from 'components/simulated-object';
 import { Body, BodyType, ExertsForce } from 'physics/body';
 import { GRAVITATION_CONSTANT } from 'physics/constants';
 
-const geometry = new THREE.SphereGeometry(.5, 64, 64);
-
 export default class Planet extends SimulatedObject implements ExertsForce {
+    private readonly geometry = new THREE.SphereGeometry(this.radius, 64, 64);
     private readonly material = new THREE.MeshStandardMaterial();
 
-    private mesh = new THREE.Mesh(geometry, this.material);
+    private mesh = new THREE.Mesh(this.geometry, this.material);
 
-    constructor() {
+    constructor(public readonly radius = 0.5) {
         super(BodyType.Static, 1_000_000);
         this.add(this.mesh);
     }
