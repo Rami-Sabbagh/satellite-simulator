@@ -2,16 +2,16 @@ import * as THREE from 'three';
 
 import SimulatedSpace from 'components/simulated-space';
 import Planet from 'components/planet';
-import { AxesHelper } from 'three';
+
 import Sun from './sun';
-import LaunchVector from "./launch-vector";
+import StateVectorsArrow from "./state-vectors-arrow";
 
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
     protected simulatedSpace = new SimulatedSpace(1e-6);
 
     readonly planet = new Planet();
-    readonly launchVector = new LaunchVector();
+    readonly launchVector = new StateVectorsArrow();
 
     constructor() {
         super();
@@ -23,7 +23,7 @@ export default class World extends THREE.Scene {
         pointLight.position.set(1, 0, 50);
         this.add(pointLight);
 
-        this.add(new AxesHelper(.2));
+        this.add(new THREE.AxesHelper(.2));
         this.add(this.launchVector);
 
         const sun = new Sun();
