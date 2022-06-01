@@ -1,8 +1,11 @@
-import { sunTexture } from 'textures';
 import * as THREE from 'three';
 
+import { sunTexture } from 'textures';
+
 const geometry = new THREE.SphereGeometry(50, 64, 64);
-const material = new THREE.MeshBasicMaterial();
+const material = new THREE.MeshBasicMaterial({
+	map: sunTexture.colorMap ?? null,
+});
 
 export default class Sun extends THREE.Object3D {
 	private mesh = new THREE.Mesh(geometry, material);
@@ -10,9 +13,6 @@ export default class Sun extends THREE.Object3D {
 
 	constructor() {
 		super();
-
-		const texture = sunTexture;
-		material.map = texture.colorMap ?? null;
 
 		this.add(this.mesh);
 		this.add(this.light);
