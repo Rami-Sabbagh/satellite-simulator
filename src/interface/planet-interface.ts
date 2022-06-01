@@ -16,6 +16,7 @@ export default class PlanetInterface {
     protected readonly folder = this.gui.addFolder('Planet');
 
     protected radius = this.app.world.planet.radius;
+    protected mass = this.app.world.planet.mass;
     protected color = this.app.world.planet.color;
     protected wireframe = this.app.world.planet.wireframe;
     protected texture = texturesOptions[1];
@@ -25,6 +26,9 @@ export default class PlanetInterface {
         
         this.folder.add(this, 'texture', texturesOptions).name('Texture');
         this.folder.add(this, 'radius').name('Radius').min(.5).max(1);
+        this.folder.add(this, 'mass').name('Mass')
+            .min(this.app.world.planet.mass)
+            .max(this.app.world.planet.mass * 100);
         this.folder.addColor(this, 'color').name('Color');
         this.folder.add(this, 'wireframe').name('Wireframe');
 
@@ -43,6 +47,7 @@ export default class PlanetInterface {
 
         this.app.world.planet.texture = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`];
         this.app.world.planet.radius = this.radius;
+        this.app.world.planet.mass = this.mass;
         this.app.world.planet.color = this.color;
         this.app.world.planet.wireframe = this.wireframe;
     }
