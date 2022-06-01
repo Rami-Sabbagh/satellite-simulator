@@ -1,12 +1,8 @@
-import GUI from 'lil-gui';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
-import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
-import { calculateStateVectorsManually, ManualElements } from 'physics/kepler-math';
-
 /**
  * THREE.js Application.
  */
@@ -16,23 +12,10 @@ export default class Application {
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
     readonly stats = Stats();
 
-    readonly gui = new GUI({
-        title: 'Satellites Simulator VI: Deluxe Edition',
-        width: 500,
-    });
-
-    /**
-     * For a new satellite.
-     */
-    private spawnElements: ManualElements = {
-        inclination: 0,
-        trueAnomaly: 0,
-        semiMajorAxis: .7,
-        velocity: 1,
-    };
-
     private _world = new World();
     get world() { return this._world; }
+
+    protected _statsVisible = false;
 
     protected resizeCallback: () => void;
 
@@ -47,11 +30,9 @@ export default class Application {
 
         container.appendChild(this.renderer.domElement);
         window.addEventListener('resize', this.resizeCallback);
+        if (module.hot) module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
 
         this.renderer.setAnimationLoop(this.render.bind(this));
-        this.provideHotModulesReplacement();
-
-        this.constructGUI();
     }
 
     /**
@@ -67,118 +48,19 @@ export default class Application {
         this.controls.update();
     }
 
+    get statsVisible() { return this._statsVisible; }
+    set statsVisible(value: boolean) {
+        if (this._statsVisible === value) return;
+        this._statsVisible = value;
+
+        if (value) this.container.appendChild(this.stats.dom);
+        else this.container.removeChild(this.stats.dom);
+    }
+
     private setupComponents() {
         this.renderer.physicallyCorrectLights = true;
         this.camera.position.z = 2;
         this.controls.enableDamping = true;
-    }
-
-    private constructGUI() {
-        this.constructPlanetGUI();
-        this.constructCreationGUI();
-        this.constructCameraGUI();
-        this.constructStatsGUI();
-    }
-
-    private constructStatsGUI() {
-        this.container.appendChild(this.stats.dom);
-    }
-
-    private constructCreationGUI() {
-        const folder = this.gui.addFolder('Satellite Creation');
-        this.world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
-
-        const minRadius = this.world.planet.radius;
-        const maxRadius = this.world.planet.radius * 2;
-
-        folder.add(this.spawnElements, 'inclination').name('Inclination').min(0).max(Math.PI);
-        folder.add(this.spawnElements, 'trueAnomaly').name('True Anomaly').min(0).max(Math.PI * 2);
-        folder.add(this.spawnElements, 'semiMajorAxis').name('Semi-Major Axis').min(minRadius).max(maxRadius);
-        folder.add(this.spawnElements, 'velocity').name('Velocity').min(0).max(5);
-        
-        folder.onChange(() => {
-            this.world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
-        });
-    }
-
-    private constructPlanetGUI() {
-        const folder = this.gui.addFolder('Planet');
-
-        const textures: Record<string, Partial<TexturePack>> = {
-            none: {},
-            earth: earthTexture,
-            jupiter: jupiterTexture,
-            mars: marsTexture,
-        };
-
-        const texturesOptions = Object.keys(textures).map(key => `${key.charAt(0).toUpperCase()}${key.slice(1)}`);
-
-        const properties = {
-            color: this.world.planet.color.toArray(),
-            wireframe: this.world.planet.wireframe,
-            texture: texturesOptions[0],
-        };
-
-        // TODO: could change planet physics in addition of texture (presets).
-        folder.add(properties, 'texture', texturesOptions).name('Texture')
-            .onChange((value: string) => this.world.planet.texture = textures[`${value.charAt(0).toLowerCase()}${value.slice(1)}`]);
-
-        folder.addColor(properties, 'color').name('Color')
-            .onChange((value: number[]) => this.world.planet.color.fromArray(value));
-
-        folder.add(properties, 'wireframe').name('Wireframe')
-            .onChange((value: boolean) => this.world.planet.wireframe = value);
-    }
-
-    private constructCameraGUI() {
-        const folder = this.gui.addFolder('Camera');
-        folder.open(false);
-
-        const actions = {
-            reset: () => {
-                this.controls.reset();
-                this.camera.position.z = 2;
-            },
-            lookAtOrigin: () => {
-                this.controls.target.set(0, 0, 0);
-                this.controls.update();
-            },
-            lookAtX: () => {
-                const distance = this.camera.position.length();
-                this.camera.position.set(distance, 0, 0);
-                this.controls.update();
-            },
-            lookAtY: () => {
-                const distance = this.camera.position.length();
-                this.camera.position.set(0, distance, 0);
-                this.controls.update();
-            },
-            lookAtZ: () => {
-                const distance = this.camera.position.length();
-                this.camera.position.set(0, 0, distance);
-                this.controls.update();
-            },
-        };
-
-        folder.add(actions, 'lookAtX').name('Look at X axis');
-        folder.add(actions, 'lookAtY').name('Look at Y axis');
-        folder.add(actions, 'lookAtZ').name('Look at Z axis');
-        folder.add(actions, 'lookAtOrigin').name('Look at origin (planet)');
-        folder.add(actions, 'reset').name('Reset');
-    }
-
-    private provideHotModulesReplacement() {
-        if (module.hot) {
-            module.hot.accept('components/world', () => {
-                const oldWorld = this._world;
-                this._world = new World();
-                
-                this._world.launchVector.state = calculateStateVectorsManually(this.spawnElements);
-                this._world.planet.wireframe = oldWorld.planet.wireframe;
-            });
-
-            module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
-        }
     }
 
     protected updateResolution() {
@@ -196,9 +78,7 @@ export default class Application {
     }
 
     destroy() {
-        this.gui.destroy();
-        this.stats.domElement.remove();
-
+        if (this._statsVisible) this.stats.domElement.remove();
         this.renderer.domElement.remove();
         this.renderer.setAnimationLoop(null);
 

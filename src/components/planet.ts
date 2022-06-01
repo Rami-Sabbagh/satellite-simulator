@@ -14,7 +14,7 @@ export default class Planet extends SimulatedObject implements ExertsForce {
 
     private mesh = new THREE.Mesh(this.geometry, this.material);
 
-    constructor(private _radius = 0.5) {
+    constructor(private _radius = .5) {
         super(BodyType.Static, 1_000_000);
         this.add(this.mesh);
     }
