@@ -3,12 +3,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
+import { EARTH_DISTANCE, EARTH_RADIUS } from 'physics/constants';
 /**
  * THREE.js Application.
  */
 export default class Application {
     readonly renderer = new THREE.WebGLRenderer();
-    readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, 1000);
+    readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, EARTH_DISTANCE * 2);
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
     readonly stats = Stats();
 
@@ -33,6 +34,8 @@ export default class Application {
         if (module.hot) module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
 
         this.renderer.setAnimationLoop(this.render.bind(this));
+
+        this.showStats = true;
     }
 
     /**
@@ -48,8 +51,8 @@ export default class Application {
         this.controls.update();
     }
 
-    get statsVisible() { return this._statsVisible; }
-    set statsVisible(value: boolean) {
+    get showStats() { return this._statsVisible; }
+    set showStats(value: boolean) {
         if (this._statsVisible === value) return;
         this._statsVisible = value;
 
@@ -59,7 +62,7 @@ export default class Application {
 
     private setupComponents() {
         this.renderer.physicallyCorrectLights = true;
-        this.camera.position.z = 2;
+        this.camera.position.z = EARTH_RADIUS * 4;
         this.controls.enableDamping = true;
     }
 

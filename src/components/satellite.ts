@@ -13,7 +13,7 @@ const mesh = new THREE.Mesh(geometry, material);
 
 export default class Satellite extends SimulatedObject {
     constructor() {
-        super(BodyType.Dynamic, 1);
+        super(BodyType.Dynamic, 10);
         this.add(mesh);
     }
 

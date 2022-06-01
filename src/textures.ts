@@ -7,6 +7,7 @@ import marsColorMap from 'assets/mars/color-map.jpg';
 import marsBumpMap from 'assets/mars/bump-map.jpg';
 
 import sunColorMap from 'assets/sun/color-map.jpg';
+import { EARTH_RADIUS } from 'physics/constants';
 
 export interface TexturePack {
     colorMap: THREE.Texture,
@@ -22,7 +23,7 @@ const loader = new THREE.TextureLoader();
 export const earthTexture: Partial<TexturePack> = {
     colorMap: loader.load(earthColorMap),
     bumpMap: loader.load(earthBumpMap),
-    bumpScale: 0.2,
+    bumpScale: EARTH_RADIUS / 50,
 };
 
 export const jupiterTexture: Partial<TexturePack> = {

@@ -12,6 +12,14 @@ export default class SimulatedSpace {
         this.simulation = new Simulation(timeResolution);
     }
 
+    get timeResolution() {
+        return this.simulation.timeResolution;
+    }
+
+    set timeResolution(value) {
+        this.simulation.timeResolution = value;
+    }
+
     add(body: SimulatedObject) {
         this.scene.add(body);
         this.simulation.add(body);

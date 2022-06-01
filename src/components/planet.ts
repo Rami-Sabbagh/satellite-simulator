@@ -5,7 +5,7 @@ import { TexturePack } from 'textures';
 import SimulatedObject from 'components/simulated-object';
 
 import { Body, BodyType, ExertsForce } from 'physics/body';
-import { GRAVITATION_CONSTANT } from 'physics/constants';
+import { EARTH_MASS, EARTH_RADIUS, GRAVITATION_CONSTANT } from 'physics/constants';
 
 export default class Planet extends SimulatedObject implements ExertsForce {
     private geometry = new THREE.SphereGeometry(this._radius, 64, 64);
@@ -14,8 +14,8 @@ export default class Planet extends SimulatedObject implements ExertsForce {
 
     private mesh = new THREE.Mesh(this.geometry, this.material);
 
-    constructor(private _radius = .5) {
-        super(BodyType.Static, 1_000_000);
+    constructor(private _radius = EARTH_RADIUS, mass = EARTH_MASS) {
+        super(BodyType.Static, mass);
         this.add(this.mesh);
     }
 

@@ -1,9 +1,7 @@
 import * as THREE from 'three';
 
 import { sunTexture } from 'textures';
-
-
-
+import { EARTH_DISTANCE, SUN_RADIUS } from 'physics/constants';
 
 export default class Sun extends THREE.Object3D {
 	protected geometry = new THREE.SphereGeometry(this._radius, 64, 64);
@@ -12,9 +10,9 @@ export default class Sun extends THREE.Object3D {
 	});
 	
 	protected mesh = new THREE.Mesh(this.geometry, this.material);
-	protected light = new THREE.PointLight(0xffffff, 200_000, 0, 2);
+	protected light = new THREE.PointLight(0xffffff, 2e23, 0, 2);
 
-	constructor(protected _radius = 50, distance = 200) {
+	constructor(protected _radius = SUN_RADIUS, distance = EARTH_DISTANCE) {
 		super();
 
 		this.add(this.mesh);

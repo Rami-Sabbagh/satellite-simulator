@@ -1,5 +1,6 @@
 import GUI from 'lil-gui';
 import type Application from 'app';
+import { EARTH_RADIUS } from 'physics/constants';
 
 export default class CameraInterface {
     protected readonly folder = this.gui.addFolder('Camera');
@@ -28,7 +29,7 @@ export default class CameraInterface {
 
     protected reset() {
         this.app.controls.reset();
-        this.app.camera.position.z = 2;
+        this.app.camera.position.z = EARTH_RADIUS * 4;
     }
 
     protected lookAtOrigin() {
