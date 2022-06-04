@@ -2,7 +2,6 @@ import GUI from 'lil-gui';
 import type Application from 'app';
 
 import { earthTexture, jupiterTexture, marsTexture, TexturePack } from 'textures';
-import { EARTH_RADIUS } from 'physics/constants';
 
 const textures: Record<string, Partial<TexturePack>> = {
     abstract: {},
