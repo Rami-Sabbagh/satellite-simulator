@@ -8,7 +8,9 @@ import { EARTH_DISTANCE, EARTH_RADIUS, SIMULATION_SCALE } from 'physics/constant
  * THREE.js Application.
  */
 export default class Application {
-    readonly renderer = new THREE.WebGLRenderer();
+    readonly renderer = new THREE.WebGLRenderer({
+        logarithmicDepthBuffer: true,
+    });
     readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, EARTH_DISTANCE * 1.2 * SIMULATION_SCALE);
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
     readonly stats = Stats();
