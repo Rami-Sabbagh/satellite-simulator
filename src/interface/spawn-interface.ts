@@ -28,9 +28,8 @@ function degreeView(record: Record<string, number>): typeof record {
 export default class SpawnInterface {
     protected folder = this.gui.addFolder('Satellite Creation');
 
-    options = {
-        preview: this.app.world.ghost.visible,
-    };
+    preview = this.app.world.ghost.visible;
+    mass = 10;
 
     manualFolder = this.folder.addFolder('• State Vectors');
 
@@ -76,7 +75,8 @@ export default class SpawnInterface {
         
         this.manualFolder.onChange(this.applyManual.bind(this));
 
-        this.folder.add(this.options, 'preview').name('Preview');
+        this.folder.add(this, 'preview').name('Preview');
+        this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
         this.folder.add(this.actions, 'spawn').name('Spawn Satellite');
         
         this.folder.onChange(this.apply.bind(this));
@@ -89,7 +89,7 @@ export default class SpawnInterface {
     }
 
     protected apply() {
-        this.app.world.ghost.visible = this.options.preview;
+        this.app.world.ghost.visible = this.preview;
         this.app.world.ghost.state = this.state;
     }
 
@@ -114,6 +114,6 @@ export default class SpawnInterface {
 
     protected spawn() {
         const {position, velocity} = this.state;
-        this.app.world.addSatellite(Satellite.spawn(position, velocity));
+        this.app.world.addSatellite(Satellite.spawn(position, velocity, this.mass));
     }
 }
