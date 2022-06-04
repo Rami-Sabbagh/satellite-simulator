@@ -41,7 +41,7 @@ export default class World extends THREE.Scene {
     }
 
     update() {
-        const dt = this.clock.getDelta();
+        const dt = this.clock.getDelta() % (1 / 30);
         this.simulatedSpace.run(dt * this.timescale);
 
         this.planet.rotateY(dt/this.planetPeriod * Math.PI * 2);
