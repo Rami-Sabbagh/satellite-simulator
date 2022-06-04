@@ -5,6 +5,7 @@ import Planet from 'components/planet';
 import Sun from 'components/sun';
 
 import { EARTH_RADIUS } from 'physics/constants';
+import GhostSatellite from './ghost-satellite';
 
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
@@ -12,6 +13,7 @@ export default class World extends THREE.Scene {
 
     readonly sun = new Sun();
     readonly planet = new Planet();
+    readonly ghost = new GhostSatellite();
 
     timescale = 1;
     planetPeriod = 24;
@@ -31,6 +33,7 @@ export default class World extends THREE.Scene {
         this.add(new THREE.AmbientLight(0xffffff, 0.5));
         
         this.add(this.sun);
+        this.add(this.ghost);
 
         this.simulatedSpace.addTo(this);
 
