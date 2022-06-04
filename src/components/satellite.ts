@@ -14,13 +14,13 @@ const material = new THREE.MeshBasicMaterial({
 export default class Satellite extends SimulatedObject {
     protected readonly mesh = new THREE.Mesh(geometry, material);
 
-    constructor() {
-        super(BodyType.Dynamic, 10);
+    constructor(mass = 10) {
+        super(BodyType.Dynamic, mass);
         this.add(this.mesh);
     }
 
-    static spawn(position: THREE.Vector3, velocity: THREE.Vector3): Satellite {
-        const satellite = new Satellite();
+    static spawn(position: THREE.Vector3, velocity: THREE.Vector3, mass = 10): Satellite {
+        const satellite = new Satellite(mass);
         satellite.position.copy(position);
         satellite.velocity.copy(velocity);
         return satellite;
