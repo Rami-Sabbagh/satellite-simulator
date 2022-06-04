@@ -16,7 +16,7 @@ export class Simulation {
     protected activeBodies: ExertsForce[] = [];
 
     constructor(
-        public timeResolution = 1e-4,
+        public timeResolution = 1e-2,
     ) {}
 
     add(body: Body) {

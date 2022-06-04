@@ -9,7 +9,7 @@ import GhostSatellite from './ghost-satellite';
 
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
-    protected simulatedSpace = new SimulatedSpace(1e-6);
+    protected simulatedSpace = new SimulatedSpace(1e-2);
 
     readonly sun = new Sun();
     readonly planet = new Planet();
