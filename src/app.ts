@@ -3,13 +3,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
-import { EARTH_DISTANCE, EARTH_RADIUS } from 'physics/constants';
+import { EARTH_DISTANCE, EARTH_RADIUS, SIMULATION_SCALE } from 'physics/constants';
 /**
  * THREE.js Application.
  */
 export default class Application {
     readonly renderer = new THREE.WebGLRenderer();
-    readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, EARTH_DISTANCE * 2);
+    readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, EARTH_DISTANCE * 1.2 * SIMULATION_SCALE);
     readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
     readonly stats = Stats();
 
@@ -62,8 +62,9 @@ export default class Application {
 
     private setupComponents() {
         this.renderer.physicallyCorrectLights = true;
-        this.camera.position.z = EARTH_RADIUS * 4;
+        this.camera.position.z = EARTH_RADIUS * 4 * SIMULATION_SCALE;
         this.controls.enableDamping = true;
+        this.world.scale.multiplyScalar(SIMULATION_SCALE);
     }
 
     protected updateResolution() {

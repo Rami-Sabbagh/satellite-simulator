@@ -1,5 +1,7 @@
 export const GRAVITATION_CONSTANT = 6.674e-11;
 
+export const SIMULATION_SCALE = 1e-3;
+
 /**
  * Earth's estimated mass.
  */

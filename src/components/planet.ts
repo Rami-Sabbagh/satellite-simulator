@@ -46,6 +46,14 @@ export default class Planet extends SimulatedObject implements ExertsForce {
     set wireframe(value: boolean) {
         this.material.wireframe = value;
     }
+
+    get bumpScale() {
+        return this.material.bumpScale;
+    }
+
+    set bumpScale(value: number) {
+        this.material.bumpScale = value;
+    }
     
     set texture(pack: Partial<TexturePack>) {
         this.material.map = pack.colorMap ?? null;
