@@ -31,7 +31,7 @@ export default class SpawnInterface {
         preview: this.app.world.ghost.visible,
     };
 
-    manualFolder = this.folder.addFolder('State Vectors');
+    manualFolder = this.folder.addFolder('• State Vectors');
 
     manual = {
         velocity: 2e6,
