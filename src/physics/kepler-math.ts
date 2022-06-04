@@ -15,7 +15,18 @@ export interface OrbitalElements {
     trueAnomaly: number,
 }
 
-export function calculateOrbitalElements({ velocity, position }: StateVectors, mass: number): OrbitalElements {
+function getDefaultElements(): OrbitalElements {
+    return {
+        eccentricity: 0,
+        semiMajorAxis: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 0,
+        trueAnomaly: 0
+    };
+}
+
+export function calculateOrbitalElements({ velocity, position }: StateVectors, mass: number, elements = getDefaultElements()): OrbitalElements {
     const specificAngularMomentum = new Vector3()
         .crossVectors(position, velocity);
 
@@ -53,13 +64,20 @@ export function calculateOrbitalElements({ velocity, position }: StateVectors, m
 
     const trueAnomaly = Math.acos(eccentricityVector.dot(position) / (eccentricity * position.length()));
 
+    elements.eccentricity = eccentricity;
+    elements.semiMajorAxis = semiMajorAxis;
+    elements.inclination = inclination;
+    elements.longitudeOfAscendingNode = longitudeOfAscendingNode;
+    elements.argumentOfPeriapsis = argumentOfPeriapsis;
+    elements.trueAnomaly = trueAnomaly;
+
+    return elements;
+}
+
+function getDefaultVectors(): StateVectors {
     return {
-        eccentricity,
-        semiMajorAxis,
-        inclination,
-        longitudeOfAscendingNode,
-        argumentOfPeriapsis,
-        trueAnomaly,
+        position: new Vector3(),
+        velocity: new Vector3(),
     };
 }
 
@@ -67,7 +85,7 @@ export function calculateStateVectors({
     eccentricity, semiMajorAxis,
     inclination, longitudeOfAscendingNode,
     argumentOfPeriapsis, trueAnomaly,
-}: OrbitalElements, mass: number): StateVectors {
+}: OrbitalElements, mass: number, state = getDefaultVectors()): StateVectors {
 
     const length = (semiMajorAxis * (1 - eccentricity * eccentricity)) / (1 + eccentricity * Math.cos(trueAnomaly));
 
@@ -77,11 +95,8 @@ export function calculateStateVectors({
 
     const pane = new Euler(inclination, longitudeOfAscendingNode, 0, "XYZ");
 
-    const position = new Vector3(Math.cos(argumentOfPeriapsis), 0, -Math.sin(argumentOfPeriapsis)).multiplyScalar(length);
-    const velocity = new Vector3(-Math.sin(argumentOfPeriapsis), 0, -Math.cos(argumentOfPeriapsis)).multiplyScalar(velocityLength);
+    state.position.set(Math.cos(argumentOfPeriapsis), 0, -Math.sin(argumentOfPeriapsis)).multiplyScalar(length).applyEuler(pane);
+    state.velocity.set(-Math.sin(argumentOfPeriapsis), 0, -Math.cos(argumentOfPeriapsis)).multiplyScalar(velocityLength).applyEuler(pane);
 
-    position.applyEuler(pane);
-    velocity.applyEuler(pane);
-
-    return { position, velocity };
+    return state;
 }
