@@ -5,7 +5,8 @@ import Planet from 'components/planet';
 import Sun from 'components/sun';
 
 import { EARTH_RADIUS } from 'physics/constants';
-import GhostSatellite from './ghost-satellite';
+import GhostSatellite from 'components/ghost-satellite';
+import Satellite from 'components/satellite';
 
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
@@ -14,6 +15,8 @@ export default class World extends THREE.Scene {
     readonly sun = new Sun();
     readonly planet = new Planet();
     readonly ghost = new GhostSatellite();
+
+    readonly satellites: Satellite[] = [];
 
     timescale = 1;
     planetPeriod = 24;
@@ -45,5 +48,10 @@ export default class World extends THREE.Scene {
         this.simulatedSpace.run(dt * this.timescale);
 
         this.planet.rotateY(dt/this.planetPeriod * Math.PI * 2);
+    }
+
+    addSatellite(satellite: Satellite) {
+        this.satellites.push(satellite);
+        this.simulatedSpace.add(satellite);
     }
 }

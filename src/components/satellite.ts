@@ -3,18 +3,20 @@ import * as THREE from 'three';
 import { BodyType } from 'physics/body';
 import SimulatedObject from 'components/simulated-object';
 
-const geometry = new THREE.SphereGeometry(.1, 4, 2);
+const geometry = new THREE.SphereGeometry(7e5, 4, 2);
 const material = new THREE.MeshBasicMaterial({
     color: 0x00ffff,
     wireframe: true,
 });
 
-const mesh = new THREE.Mesh(geometry, material);
+
 
 export default class Satellite extends SimulatedObject {
+    protected readonly mesh = new THREE.Mesh(geometry, material);
+
     constructor() {
         super(BodyType.Dynamic, 10);
-        this.add(mesh);
+        this.add(this.mesh);
     }
 
     static spawn(position: THREE.Vector3, velocity: THREE.Vector3): Satellite {

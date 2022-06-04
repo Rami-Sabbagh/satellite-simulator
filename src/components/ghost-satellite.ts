@@ -4,7 +4,7 @@ import { StateVectors } from 'physics/kepler-math';
 const geometry = new THREE.SphereGeometry(7e5, 4, 2);
 const material = new THREE.MeshBasicMaterial({
     opacity: .5,
-    color: 0x00ffff,
+    color: 0xff00ff,
     wireframe: true,
 });
 
