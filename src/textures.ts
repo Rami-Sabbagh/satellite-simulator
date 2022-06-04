@@ -22,7 +22,7 @@ const loader = new THREE.TextureLoader();
 export const earthTexture: Partial<TexturePack> = {
     colorMap: loader.load(earthColorMap),
     bumpMap: loader.load(earthBumpMap),
-    bumpScale: 250,
+    bumpScale: 250e3,
 };
 
 export const jupiterTexture: Partial<TexturePack> = {
@@ -32,7 +32,7 @@ export const jupiterTexture: Partial<TexturePack> = {
 export const marsTexture: Partial<TexturePack> = {
     colorMap: loader.load(marsColorMap),
     bumpMap: loader.load(marsBumpMap),
-    bumpScale: 600,
+    bumpScale: 600e3,
 };
 
 export const sunTexture: Partial<TexturePack> = {

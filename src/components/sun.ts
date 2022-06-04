@@ -10,7 +10,7 @@ export default class Sun extends THREE.Object3D {
 	});
 	
 	protected mesh = new THREE.Mesh(this.geometry, this.material);
-	protected light = new THREE.PointLight(0xffffff, 2 * Math.pow(10, 16.8), 0, 2);
+	protected light = new THREE.PointLight(0xffffff, 2 * Math.pow(10, 22.8), 0, 2);
 
 	constructor(protected _radius = SUN_RADIUS, distance = EARTH_DISTANCE) {
 		super();

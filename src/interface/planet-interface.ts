@@ -33,7 +33,7 @@ export default class PlanetInterface {
                 this.bumpScale = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`].bumpScale ?? 0;
                 this.folder.controllers.find(c => c.property === 'bumpScale')?.updateDisplay();
             });
-        this.folder.add(this, 'bumpScale').name('Bump Scale').min(1e2).max(1e3)
+        this.folder.add(this, 'bumpScale').name('Bump Scale').min(1e5).max(1e6)
             .onChange(() => this.app.world.planet.bumpScale = this.bumpScale);
         this.folder.add(this, 'radius').name('Radius').min(.5).max(1);
         this.folder.add(this, 'mass').name('Mass')

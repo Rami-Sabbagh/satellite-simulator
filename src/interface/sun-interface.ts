@@ -13,9 +13,12 @@ export default class SunInterface {
     constructor(protected readonly gui: GUI, protected app: Application) {
         this.folder.open(false); // closed by default.
 
+        const minIntensity = this.intensity - 2;
+        const maxIntensity = this.intensity + 1;
+
         this.folder.add(this, 'distance', 60, 1_000).name('Distance');
         this.folder.add(this, 'radius', 0, 1_000).name('Radius');
-        this.folder.add(this, 'intensity', 16, 18).name('Light Intensity');
+        this.folder.add(this, 'intensity', minIntensity, maxIntensity).name('Light Intensity');
         this.folder.addColor(this, 'color').name('Color');
         this.folder.add(this, 'wireframe').name('Wireframe');
 
