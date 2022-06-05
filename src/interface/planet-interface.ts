@@ -22,11 +22,11 @@ export default class PlanetInterface {
     protected wireframe = this.app.world.planet.wireframe;
     protected texture = texturesOptions[1];
     protected bumpScale = textures.earth.bumpScale ?? 0;
-    
+
     constructor(protected readonly gui: GUI, protected app: Application) {
         this.folder.open(false); // closed by default.
-        
-        this.folder.add(this, 'period').name('Period').min(1).max(24*10).step(6);
+
+        this.folder.add(this, 'period').name('Period').min(1).max(24 * 10).step(6);
         this.folder.add(this, 'texture', texturesOptions).name('Texture')
             .onChange(() => {
                 this.bumpScale = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`].bumpScale ?? 0;
@@ -34,7 +34,7 @@ export default class PlanetInterface {
             });
         this.folder.add(this, 'bumpScale').name('Bump Scale').min(1e5).max(1e6)
             .onChange(() => this.app.world.planet.bumpScale = this.bumpScale);
-        this.folder.add(this, 'radius').name('Radius').min(.5).max(1);
+        this.folder.add(this, 'radius').name('Radius').min(this.app.world.planet.radius * .5).max(this.app.world.planet.radius * 5);
         this.folder.add(this, 'mass').name('Mass')
             .min(this.app.world.planet.mass)
             .max(this.app.world.planet.mass * 100);
