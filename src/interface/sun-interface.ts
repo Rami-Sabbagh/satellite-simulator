@@ -16,8 +16,8 @@ export default class SunInterface {
         const minIntensity = this.intensity - 2;
         const maxIntensity = this.intensity + 1;
 
-        this.folder.add(this, 'distance', 60, 1_000).name('Distance');
-        this.folder.add(this, 'radius', 0, 1_000).name('Radius');
+        this.folder.add(this, 'distance', 60, this.app.world.sun.distance).name('Distance');
+        this.folder.add(this, 'radius', 0, this.app.world.sun.radius).name('Radius');
         this.folder.add(this, 'intensity', minIntensity, maxIntensity).name('Light Intensity');
         this.folder.addColor(this, 'color').name('Color');
         this.folder.add(this, 'wireframe').name('Wireframe');
