@@ -25,6 +25,11 @@ export default class SimulatedSpace {
         this.simulation.add(body);
     }
 
+    remove(body: SimulatedObject) {
+        this.scene.remove(body);
+        this.simulation.remove(body);
+    }
+
     /**
      * Run the simulation for a given amount of time.
      * @param delta in seconds.

@@ -7,6 +7,7 @@ import Sun from 'components/sun';
 import { EARTH_RADIUS } from 'physics/constants';
 import GhostSatellite from 'components/ghost-satellite';
 import Satellite from 'components/satellite';
+import _ from 'lodash';
 
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
@@ -53,5 +54,13 @@ export default class World extends THREE.Scene {
     addSatellite(satellite: Satellite) {
         this.satellites.push(satellite);
         this.simulatedSpace.add(satellite);
+
+        satellite.onDestruction.then(() => this.removeSatellite(satellite));
+    }
+
+    removeSatellite(satellite: Satellite) {
+        console.info('adios satellite');
+        _.remove(this.satellites, (obj) => obj === satellite);
+        this.simulatedSpace.remove(satellite);
     }
 }

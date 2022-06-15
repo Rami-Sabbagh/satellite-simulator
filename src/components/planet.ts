@@ -24,7 +24,7 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCollision(): void {}
 
-    get collisionRadiusSq() { return this.radius }
+    get collisionRadiusSq() { return this._radiusSq }
     
     get radius() {
         return this._radius;
