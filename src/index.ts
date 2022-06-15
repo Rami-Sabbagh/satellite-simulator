@@ -10,6 +10,9 @@ document.body.appendChild(container);
 let application = new Application(container);
 const userInterface = new Interface(application);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).application = application;
+
 if (module.hot) {
     module.hot.accept('./app', () => {
         const oldApplication = application;
@@ -17,6 +20,9 @@ if (module.hot) {
 
         application = new Application(container);
         application.restoreState(oldApplication);
+
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (window as any).application = application;
 
         userInterface.hotReplaceApplication(application);
     });
