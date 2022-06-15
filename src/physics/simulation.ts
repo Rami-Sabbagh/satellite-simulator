@@ -1,5 +1,6 @@
+import * as _ from 'lodash';
 import * as THREE from 'three';
-import { Body, BodyType, canExertForce, ExertsForce } from "./body";
+import { Body, BodyType, canExertForce, ExertsForce, isRigid, Rigid } from "./body";
 
 const temporaryVector = new THREE.Vector3();
 
@@ -14,6 +15,8 @@ export class Simulation {
      * Which can exert forces on other bodies.
      */
     protected activeBodies: ExertsForce[] = [];
+    
+    protected rigidBodies: Rigid[] = [];
 
     constructor(
         public timeResolution = 1e-2,
@@ -22,8 +25,16 @@ export class Simulation {
     add(body: Body) {
         this.bodies.push(body);
 
-        if (canExertForce(body))
-            this.activeBodies.push(body);
+        if (canExertForce(body)) this.activeBodies.push(body);
+        if (isRigid(body)) this.rigidBodies.push(body);
+    }
+
+    remove(body: Body) {
+        const filter = (other: Body) => other === body;
+
+        _.remove(this.bodies, filter);
+        _.remove(this.activeBodies, filter);
+        _.remove(this.rigidBodies, filter);
     }
     
     /**
@@ -43,6 +54,8 @@ export class Simulation {
 
             // integrate the velocity into displacement
             this.integrateBodiesVelocity(step);
+
+            this.checkCollisions();
         }
     }
 
@@ -89,6 +102,20 @@ export class Simulation {
             const displacement = temporaryVector.copy(body.velocity).multiplyScalar(step);
 
             body.position.add(displacement);
+        }
+    }
+
+    protected checkCollisions() {
+        for (const body of this.rigidBodies) {
+            for (const otherBody of this.rigidBodies) {
+                if (body === otherBody) continue;
+
+                const distanceSq = temporaryVector.subVectors(body.position, otherBody.position).lengthSq();
+                if (distanceSq <= body.collisionRadiusSq + otherBody.collisionRadiusSq) {
+                    body.onCollision();
+                    otherBody.onCollision();
+                }
+            }
         }
     }
 }

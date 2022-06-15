@@ -33,7 +33,7 @@ export interface Body {
 /**
  * Can apply forces to other bodies.
  */
-export interface ExertsForce {
+export interface ExertsForce extends Body {
     /**
      * Apply a force on every body in the simulation.
      *
@@ -46,7 +46,24 @@ export interface ExertsForce {
     exertForce(body: Body, force: THREE.Vector3): void;
 }
 
+export interface Rigid extends Body {
+    /**
+     * The radius of the collision sphere squared.
+     */
+    collisionRadiusSq: number;
+
+    /**
+     * Callback.
+     */
+    onCollision(): void;
+}
+
 // eslint-disable-next-line
 export function canExertForce(object: Object): object is ExertsForce {
     return "exertForce" in object;
+}
+
+// eslint-disable-next-line
+export function isRigid(object: Object): object is Rigid {
+    return "onCollision" in object;
 }
