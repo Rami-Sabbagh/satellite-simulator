@@ -34,8 +34,8 @@ export default class SpawnInterface {
     manualFolder = this.folder.addFolder('• State Vectors');
 
     manual = {
-        velocity: 2e5,
-        height: EARTH_RADIUS * 2,
+        velocity: 7000,
+        height: EARTH_RADIUS * 1.25,
 
         longitude: 0,
         latitude: 0,
@@ -46,7 +46,7 @@ export default class SpawnInterface {
 
     state: StateVectors = {
         position: new Vector3(this.manual.height, 0, 0),
-        velocity: new Vector3(),
+        velocity: new Vector3(0, 0, -this.manual.velocity),
     };
 
     kepler: OrbitalElements = {
