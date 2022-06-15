@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import { satelliteModel } from 'models';
 
-import { BodyType } from 'physics/body';
+import { BodyType, Rigid } from 'physics/body';
 import SimulatedObject from 'components/simulated-object';
 
 const geometry = new THREE.SphereGeometry(7e5, 4, 2);
@@ -11,7 +11,7 @@ const material = new THREE.MeshBasicMaterial({
     wireframe: true,
 });
 
-export default class Satellite extends SimulatedObject {
+export default class Satellite extends SimulatedObject implements Rigid {
     protected readonly mesh = new THREE.Mesh(geometry, material);
 
     constructor(mass = 10) {
@@ -25,6 +25,12 @@ export default class Satellite extends SimulatedObject {
             this.remove(this.mesh);
             this.add(model);
         });
+    }
+
+    collisionRadiusSq = 7e4;
+
+    onCollision(): void {
+        console.warn('SATELLITE BOOM');
     }
 
     static spawn(position: THREE.Vector3, velocity: THREE.Vector3, mass = 10): Satellite {

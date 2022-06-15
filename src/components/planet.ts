@@ -4,27 +4,35 @@ import { TexturePack } from 'textures';
 
 import SimulatedObject from 'components/simulated-object';
 
-import { Body, BodyType, ExertsForce } from 'physics/body';
+import { Body, BodyType, ExertsForce, Rigid } from 'physics/body';
 import { EARTH_MASS, EARTH_RADIUS, GRAVITATION_CONSTANT } from 'physics/constants';
 
-export default class Planet extends SimulatedObject implements ExertsForce {
+export default class Planet extends SimulatedObject implements ExertsForce, Rigid {
     private geometry = new THREE.SphereGeometry(this._radius, 64, 64);
 
     private readonly material = new THREE.MeshStandardMaterial();
 
     private mesh = new THREE.Mesh(this.geometry, this.material);
 
+    private _radiusSq = this._radius * this._radius;
+
     constructor(private _radius = EARTH_RADIUS, mass = EARTH_MASS) {
         super(BodyType.Static, mass);
         this.add(this.mesh);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onCollision(): void {}
+
+    get collisionRadiusSq() { return this.radius }
+    
     get radius() {
         return this._radius;
     }
 
     set radius(value: number) {
         this._radius = value;
+        this._radiusSq = value * value;
         
         this.geometry.dispose();
         this.geometry = new THREE.SphereGeometry(this._radius, 64, 64);
