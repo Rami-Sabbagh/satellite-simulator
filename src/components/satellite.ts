@@ -24,7 +24,7 @@ export default class Satellite extends SimulatedObject implements Rigid {
 
     constructor(mass = 10) {
         super(BodyType.Dynamic, mass);
-        // this.add(this.debugCollision);
+        this.add(this.debugCollision);
         this.add(this.mesh);
         
         satelliteModel.then(({ scene }) => {
