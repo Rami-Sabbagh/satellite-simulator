@@ -15,8 +15,8 @@ import skyboxPX from 'assets/skybox/px.png';
 import skyboxPY from 'assets/skybox/py.png';
 import skyboxPZ from 'assets/skybox/pz.png';
 
-import lensflareAlpha from 'assets/lensflare/lensflare0_alpha.png';
-import lensflare3 from 'assets/lensflare/lensflare3.png';
+import lensflareBase from 'assets/lensflare/lensflare0_alpha.png';
+import lensflareExtra from 'assets/lensflare/lensflare3.png';
 
 export interface TexturePack {
     colorMap: THREE.Texture,
@@ -59,5 +59,5 @@ export const skyBoxTexture = cubeLoader.load([
     skyboxNZ,
 ]);
 
-export const lensflareTexture = loader.load(lensflareAlpha);
-export const lensflare3Texture = loader.load(lensflare3);
+export const lensflareBaseTexture = loader.load(lensflareBase);
+export const lensflareExtraTexture = loader.load(lensflareExtra);
