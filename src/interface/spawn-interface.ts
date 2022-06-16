@@ -4,7 +4,7 @@ import type Application from 'app';
 import { Euler, Vector3 } from 'three';
 
 import { EARTH_RADIUS } from 'physics/constants';
-import { OrbitalElements, StateVectors } from 'physics/kepler-math';
+import { StateVectors } from 'physics/structures';
 import Satellite from 'components/satellite';
 
 const TO_DEGREE = 180 / Math.PI;
@@ -50,16 +50,7 @@ export default class SpawnInterface {
         position: new Vector3(this.manual.height, 0, 0),
         velocity: new Vector3(0, 0, -this.manual.velocity),
     };
-
-    kepler: OrbitalElements = {
-        eccentricity: 0,
-        semiMajorAxis: this.manual.height,
-        inclination: 0,
-        longitudeOfAscendingNode: 0,
-        argumentOfPeriapsis: 0,
-        trueAnomaly: 0,
-    };
-
+    
     actions = {
         spawn: this.spawn.bind(this),
     };

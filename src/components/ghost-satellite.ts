@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { StateVectors } from 'physics/kepler-math';
+import { StateVectors } from 'physics/structures';
 
 const geometry = new THREE.SphereGeometry(7e5, 4, 2);
 const material = new THREE.MeshBasicMaterial({
