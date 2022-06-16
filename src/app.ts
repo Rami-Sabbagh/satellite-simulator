@@ -4,7 +4,7 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
 import { EARTH_DISTANCE, EARTH_RADIUS, SIMULATION_SCALE } from 'physics/constants';
-import Toaster from 'interface/toast';
+import Toaster from 'interface/toaster';
 /**
  * THREE.js Application.
  */
