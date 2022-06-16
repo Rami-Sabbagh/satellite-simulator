@@ -7,6 +7,8 @@
 
 type ToastType = "danger" | "satellite-boom";
 
+import 'styles/toasts.css';
+
 export default class Toaster {
 	private toastContainer: HTMLElement;
 
