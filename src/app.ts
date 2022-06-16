@@ -40,6 +40,8 @@ export default class Application {
 
         this.renderer.setAnimationLoop(this.render.bind(this));
 
+        this.world.onSatelliteDestruction = (satellite) => this.toaster.toast(`${satellite.name} has collided and was destroyed!`, 'explosion');
+
         this.showStats = true;
     }
 
