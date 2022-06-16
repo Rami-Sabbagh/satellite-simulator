@@ -28,6 +28,8 @@ function degreeView(record: Record<string, number>): typeof record {
 export default class SpawnInterface {
     protected folder = this.gui.addFolder('Satellite Creation');
 
+    satelliteId = 1;
+
     preview = this.app.world.ghost.visible;
     mass = 10;
 
@@ -114,6 +116,10 @@ export default class SpawnInterface {
 
     protected spawn() {
         const {position, velocity} = this.state;
-        this.app.world.addSatellite(Satellite.spawn(position, velocity, this.mass));
+
+        const satellite = Satellite.spawn(position, velocity, this.mass);
+        satellite.name = `Satellite #${this.satelliteId++}`;
+
+        this.app.world.addSatellite(satellite);
     }
 }
