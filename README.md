@@ -66,3 +66,7 @@ yarn build
 ```
 
 The build can be then accessed at `/dist` and could be served as static page content.
+
+## Credits
+
+Icons are from: https://www.svgrepo.com/
