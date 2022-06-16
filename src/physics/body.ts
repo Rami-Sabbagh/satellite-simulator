@@ -50,7 +50,7 @@ export interface Rigid extends Body {
     /**
      * The radius of the collision sphere squared.
      */
-    collisionRadiusSq: number;
+    collisionRadius: number;
 
     /**
      * Callback.
