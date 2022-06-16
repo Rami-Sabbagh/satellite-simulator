@@ -4,7 +4,6 @@ import { satelliteModel } from 'models';
 
 import { BodyType, Rigid } from 'physics/body';
 import SimulatedObject from 'components/simulated-object';
-import DebugSphere from './debug-sphere';
 
 const geometry = new THREE.SphereGeometry(7e5, 4, 2);
 const material = new THREE.MeshBasicMaterial({
