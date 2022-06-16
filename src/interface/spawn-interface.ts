@@ -33,8 +33,6 @@ export default class SpawnInterface {
     preview = this.app.world.ghost.visible;
     mass = 10;
 
-    manualFolder = this.folder.addFolder('• State Vectors');
-
     manual = {
         velocity: 7000,
         height: EARTH_RADIUS * 1.25,
@@ -42,6 +40,7 @@ export default class SpawnInterface {
         longitude: 0,
         latitude: 0,
         inclination: 0,
+        theta: Math.PI / 2,
     };
 
     manualView = degreeView(this.manual);
@@ -50,26 +49,25 @@ export default class SpawnInterface {
         position: new Vector3(this.manual.height, 0, 0),
         velocity: new Vector3(0, 0, -this.manual.velocity),
     };
-    
+
     actions = {
         spawn: this.spawn.bind(this),
     };
 
     constructor(protected readonly gui: GUI, protected app: Application) {
         this.folder.open(false); // closed by default.
-        this.manualFolder.open(false); // closed by default.
-
-        this.manualFolder.add(this.manual, 'velocity').name('Velocity').min(2e0).max(2e6);
-        this.manualFolder.add(this.manual, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);
-        
-        this.manualFolder.add(this.manualView, 'longitude').name('Longitude').min(-180).max(180);
-        this.manualFolder.add(this.manualView, 'latitude').name('Latitude').min(-180).max(180);
-        this.manualFolder.add(this.manualView, 'inclination').name('Inclination').min(-180).max(180);
-        
-        this.manualFolder.onChange(this.applyManual.bind(this));
 
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
+
+        this.folder.add(this.manual, 'velocity').name('Velocity').min(1e3).max(1e5);
+        this.folder.add(this.manual, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);
+        
+        this.folder.add(this.manualView, 'longitude').name('Longitude').min(-180).max(180);
+        this.folder.add(this.manualView, 'latitude').name('Latitude').min(-180).max(180);
+        this.folder.add(this.manualView, 'inclination').name('Inclination').min(-180).max(180);
+        this.folder.add(this.manualView, 'theta').name('Theta').min(-180).max(180);
+
         this.folder.add(this.actions, 'spawn').name('Spawn Satellite');
         
         this.folder.onChange(this.apply.bind(this));
@@ -82,11 +80,6 @@ export default class SpawnInterface {
     }
 
     protected apply() {
-        this.app.world.ghost.visible = this.preview;
-        this.app.world.ghost.state = this.state;
-    }
-
-    protected applyManual() {
         tempEuler.set(
             this.manual.inclination,
             this.manual.longitude,
@@ -99,10 +92,12 @@ export default class SpawnInterface {
             .applyEuler(tempEuler);
 
         this.state.velocity
-            .set(0, 0, -this.manual.velocity)
+            .set(Math.cos(this.manual.theta), 0, Math.sin(this.manual.theta))
+            .multiplyScalar(-this.manual.velocity)
             .applyEuler(tempEuler);
         
         this.app.world.ghost.state = this.state;
+        this.app.world.ghost.visible = this.preview;
     }
 
     protected spawn() {
