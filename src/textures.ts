@@ -60,4 +60,4 @@ export const skyBoxTexture = cubeLoader.load([
 ]);
 
 export const lensflareTexture0 = loader.load(lensflare0);
-export const lensflareTextureAlpha = loader.load(lensflareAlpha);
+export const lensflareTexture = loader.load(lensflareAlpha);

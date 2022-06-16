@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare';
 
-import { lensflareTextureAlpha, sunTexture } from 'textures';
+import { lensflareTexture, sunTexture } from 'textures';
 import { EARTH_DISTANCE, SUN_RADIUS } from 'physics/constants';
 
 export default class Sun extends THREE.Object3D {
@@ -20,7 +20,7 @@ export default class Sun extends THREE.Object3D {
 		this.add(this.light);
 
 		const lensflare = new Lensflare();
-		lensflare.addElement(new LensflareElement(lensflareTextureAlpha, 1000, 0));
+		lensflare.addElement(new LensflareElement(lensflareTexture, 1000, 0));
 		this.light.add(lensflare);
 
 		this.position.z = distance;
