@@ -8,6 +8,11 @@ declare module "*.jpg" {
     export default url;
 }
 
+declare module "*.svg" {
+    const url: string;
+    export default url;
+}
+
 declare module "*.glb" {
     const url: string;
     export default url;
