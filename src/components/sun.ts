@@ -21,9 +21,9 @@ export default class Sun extends THREE.Object3D {
 
 		const lensflare = new Lensflare();
 		lensflare.addElement(new LensflareElement(lensflareBaseTexture, 700, 0, this.light.color));
-		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 60, 0.2, this.light.color));
-		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 70, 0.3, this.light.color));
-		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 120, 0.4, this.light.color));
+		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 60, 0.1, this.light.color));
+		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 70, 0.2, this.light.color));
+		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 120, 0.3, this.light.color));
 		this.light.add(lensflare);
 
 		this.position.z = distance;
