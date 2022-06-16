@@ -1,8 +1,9 @@
 /**
- * Reference URLs:
- * FLIP technique: https://aerotwist.com/blog/flip-your-animations/
- * Why FLIP is useful: https://www.joshwcomeau.com/react/animating-the-unanimatable/
- * Creating a toast component: https://web.dev/building-a-toast-component/
+ * ## Reference URLs:
+ * 
+ * - FLIP technique: https://aerotwist.com/blog/flip-your-animations/
+ * - Why FLIP is useful: https://www.joshwcomeau.com/react/animating-the-unanimatable/
+ * - Creating a toast component: https://web.dev/building-a-toast-component/
  */
 
 type ToastType = "danger" | "satellite-boom";
