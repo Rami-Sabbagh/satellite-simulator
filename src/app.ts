@@ -4,6 +4,7 @@ import Stats from 'three/examples/jsm/libs/stats.module';
 
 import World from 'components/world';
 import { EARTH_DISTANCE, EARTH_RADIUS, SIMULATION_SCALE } from 'physics/constants';
+import Toaster from 'interface/toaster';
 /**
  * THREE.js Application.
  */
@@ -22,6 +23,7 @@ export default class Application {
     protected _statsVisible = false;
 
     protected resizeCallback: () => void;
+    protected toaster = new Toaster();
 
     constructor(public readonly container: HTMLElement) {
         // configure application components.
