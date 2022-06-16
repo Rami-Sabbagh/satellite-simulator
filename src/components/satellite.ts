@@ -17,15 +17,12 @@ export default class Satellite extends SimulatedObject implements Rigid {
     
     collisionRadius = 7e5;
 
-    protected readonly debugCollision = new DebugSphere(this.collisionRadius);
-
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     private _onDestruction: ((value: unknown) => void) = () => {};
     public onDestruction = new Promise((resolve) => this._onDestruction = resolve);
 
     constructor(mass = 10) {
         super(BodyType.Dynamic, mass);
-        this.add(this.debugCollision);
         this.add(this.mesh);
         
         satelliteModel.then(({ scene }) => {
