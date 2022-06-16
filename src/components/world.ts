@@ -9,6 +9,8 @@ import GhostSatellite from 'components/ghost-satellite';
 import Satellite from 'components/satellite';
 import _ from 'lodash';
 
+export type SatelliteDestructionListener = (satellite: Satellite) => void;
+
 export default class World extends THREE.Scene {
     protected clock = new THREE.Clock();
     protected simulatedSpace = new SimulatedSpace(1e-2);
@@ -28,7 +30,9 @@ export default class World extends THREE.Scene {
 
     set timeResolution(value) {
         this.simulatedSpace.timeResolution = value;
-    } 
+    }
+
+    onSatelliteDestruction: SatelliteDestructionListener | undefined;
 
     constructor() {
         super();
@@ -55,7 +59,10 @@ export default class World extends THREE.Scene {
         this.satellites.push(satellite);
         this.simulatedSpace.add(satellite);
 
-        satellite.onDestruction.then(() => this.removeSatellite(satellite));
+        satellite.onDestruction.then(() => {
+            this.removeSatellite(satellite);
+            if (this.onSatelliteDestruction) this.onSatelliteDestruction(satellite);
+        });
     }
 
     removeSatellite(satellite: Satellite) {
