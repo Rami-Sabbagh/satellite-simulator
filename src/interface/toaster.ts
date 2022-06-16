@@ -6,7 +6,7 @@
  * - Creating a toast component: https://web.dev/building-a-toast-component/
  */
 
-type ToastType = "danger" | "satellite-boom";
+type ToastIcon = "alert" | "explosion";
 
 import 'styles/toaster.css';
 
@@ -28,7 +28,7 @@ export default class Toaster {
     /**
      * Creates a DOM node representing a toast.
      */
-    private createToast(text: string, type: ToastType) {
+    private createToast(text: string, type: ToastIcon) {
         const toast = document.createElement("output");
 
         toast.innerText = text;
@@ -73,7 +73,7 @@ export default class Toaster {
     /**
      * Displays a new toast on the screen.
      */
-    public async toast(text: string, type: ToastType = "danger") {
+    public async toast(text: string, type: ToastIcon = "alert") {
         const toast = this.createToast(text, type);
         this.addToast(toast);
 

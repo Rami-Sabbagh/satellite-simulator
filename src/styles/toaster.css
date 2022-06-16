@@ -41,21 +41,21 @@
     height: 30px;
 }
 
-.toast--danger {
+.toast--alert {
     background-color: firebrick;
     color: white;
 }
 
-.toast--danger::before {
+.toast--alert::before {
     content: url("../assets/icons/danger.svg");
 }
 
-.toast--satellite-boom {
+.toast--explosion {
 	background-color: rgb(69 113 161);
     color: white;
 }
 
-.toast--satellite-boom::before {
+.toast--explosion::before {
     content: url("../assets/icons/explosion.svg");
 }
 
