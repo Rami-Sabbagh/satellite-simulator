@@ -1,6 +1,7 @@
 import * as THREE from 'three';
+import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare';
 
-import { sunTexture } from 'textures';
+import { lensflareTextureAlpha, sunTexture } from 'textures';
 import { EARTH_DISTANCE, SUN_RADIUS } from 'physics/constants';
 
 export default class Sun extends THREE.Object3D {
@@ -8,7 +9,7 @@ export default class Sun extends THREE.Object3D {
 	protected readonly material = new THREE.MeshBasicMaterial({
 		map: sunTexture.colorMap ?? null,
 	});
-	
+
 	protected mesh = new THREE.Mesh(this.geometry, this.material);
 	protected light = new THREE.PointLight(0xffffff, 2 * Math.pow(10, 22.8), 0, 2);
 
@@ -17,6 +18,10 @@ export default class Sun extends THREE.Object3D {
 
 		this.add(this.mesh);
 		this.add(this.light);
+
+		const lensflare = new Lensflare();
+		lensflare.addElement(new LensflareElement(lensflareTextureAlpha, 1000, 0));
+		this.light.add(lensflare);
 
 		this.position.z = distance;
 	}
