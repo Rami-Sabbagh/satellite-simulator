@@ -1,5 +1,7 @@
 # satellite-simulator
 
+![Satellite Simulator's Logo](./src/assets/logos/logo-white.jpg "Satellite Simulator's Logo")
+
 A university physics project for simulating satellites in orbit.
 
 ## Installation instructions
