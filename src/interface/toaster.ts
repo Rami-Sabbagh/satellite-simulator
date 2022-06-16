@@ -23,17 +23,6 @@ export default class Toaster {
         this.toastContainer.classList.add('toast-container');
         this.toastContainer.style.setProperty('--duration', this.toastDuration);
         document.body.append(this.toastContainer);
-
-        window.addEventListener('click', () => {
-            this.toast('Adios satellite #1.', "satellite-boom");
-        });
-
-        window.addEventListener('keydown', (event) => {
-            // if key == 'a' then toast
-            if (event.key == 'a') {
-                this.toast("FPS is low. Stop adding new satellites.", "danger")
-            }
-        })
     }
 
     /**
