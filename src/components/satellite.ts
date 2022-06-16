@@ -15,8 +15,9 @@ const material = new THREE.MeshBasicMaterial({
 export default class Satellite extends SimulatedObject implements Rigid {
     protected readonly mesh = new THREE.Mesh(geometry, material);
     
-    collisionRadiusSq = Math.pow(7e5, 2);
-    protected readonly debugCollision = new DebugSphere(Math.sqrt(this.collisionRadiusSq));
+    collisionRadius = 7e5;
+
+    protected readonly debugCollision = new DebugSphere(this.collisionRadius);
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     private _onDestruction: ((value: unknown) => void) = () => {};

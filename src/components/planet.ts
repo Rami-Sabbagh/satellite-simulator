@@ -14,8 +14,6 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
 
     private mesh = new THREE.Mesh(this.geometry, this.material);
 
-    private _radiusSq = this._radius * this._radius;
-
     constructor(private _radius = EARTH_RADIUS, mass = EARTH_MASS) {
         super(BodyType.Static, mass);
         this.add(this.mesh);
@@ -24,7 +22,7 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onCollision(): void {}
 
-    get collisionRadiusSq() { return this._radiusSq }
+    get collisionRadius() { return this._radius }
     
     get radius() {
         return this._radius;
@@ -32,7 +30,6 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
 
     set radius(value: number) {
         this._radius = value;
-        this._radiusSq = value * value;
         
         this.geometry.dispose();
         this.geometry = new THREE.SphereGeometry(this._radius, 64, 64);

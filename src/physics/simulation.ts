@@ -110,8 +110,8 @@ export class Simulation {
             for (const otherBody of this.rigidBodies) {
                 if (body === otherBody) continue;
 
-                const distanceSq = temporaryVector.subVectors(body.position, otherBody.position).lengthSq();
-                if (distanceSq <= body.collisionRadiusSq + otherBody.collisionRadiusSq) {
+                const distance = temporaryVector.subVectors(body.position, otherBody.position).length();
+                if (distance <= body.collisionRadius + otherBody.collisionRadius) {
                     body.onCollision();
                     otherBody.onCollision();
                 }
