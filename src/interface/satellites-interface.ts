@@ -255,13 +255,26 @@ export default class SatellitesInterface {
 
     protected spawn() {
         this.nextSatelliteId++;
+
         this.spawnPosition.copy(this.satellite.position);
         this.spawnVelocity.copy(this.satellite.velocity);
-        
+
         this.app.world.addSatellite(this.satellite);
+        this.satellite.onDestruction(this.onSatelliteDestroyed.bind(this));
+
         this.satellite = this.newDraftSatellite();
 
         this.updateSatellitesList();
+        this.refreshInterface();
+    }
+
+    protected onSatelliteDestroyed(satellite: Satellite) {
+        this.updateSatellitesList();
+        if (this.satelliteId === -1) return;
+
+        if (this.satellite === satellite) this.selectedSatelliteOption = NEW_SATELLITE;
+        else if (this.app.world.satellites[this.satelliteId] !== this.satellite) this.satelliteId--;
+
         this.refreshInterface();
     }
 }
