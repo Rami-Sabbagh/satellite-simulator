@@ -1,26 +1,25 @@
-
 .toast-container {
-	position: fixed;
-	bottom: 20px;
-	left: 20px;
-	z-index: 100;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 100;
 
-	display: grid;
-	justify-items: start;
-	justify-content: center;
-	gap: 1rem;
+    display: grid;
+    justify-items: start;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .toast {
-	min-width: 25ch;
-	padding: 10px;
+    min-width: 25ch;
+    padding: 15px;
     padding-left: 55px;
-	font-size: 1.2rem;
+    font-size: 1.2rem;
 
-	border-radius: 5px;
-	background-color: rgb(135, 177, 222);
+    border-radius: 5px;
+    background-color: rgb(135, 177, 222);
 
-	will-change: transform;
+    will-change: transform;
     position: relative;
 
     /* 
@@ -28,15 +27,19 @@
         Note that the duration variable is set on the
         toast container using JavaScript.
      */
-	animation: fade-in 0.3s ease, slide-in 0.3s ease,
-		fade-out 0.3s ease var(--duration, 4s);
+    animation: fade-in 0.3s ease, slide-in 0.3s ease,
+        fade-out 0.3s ease var(--duration, 4s);
 }
 
 .toast::before {
-    content: "";
+    content: '';
     position: absolute;
 
+    top: 50%;
     left: 10px;
+
+    transform: translateY(-50%);
+
     width: 30px;
     height: 30px;
 }
@@ -47,40 +50,40 @@
 }
 
 .toast--alert::before {
-    content: url("../assets/icons/danger.svg");
+    content: url('../assets/icons/danger.svg');
 }
 
 .toast--explosion {
-	background-color: rgb(69 113 161);
+    background-color: rgb(69 113 161);
     color: white;
 }
 
 .toast--explosion::before {
-    content: url("../assets/icons/explosion.svg");
+    content: url('../assets/icons/explosion.svg');
 }
 
 @keyframes fade-in {
-	from {
-		opacity: 0;
-	}
+    from {
+        opacity: 0;
+    }
 
-	to {
-		opacity: 1;
-	}
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fade-out {
-	from {
-		opacity: 1;
-	}
+    from {
+        opacity: 1;
+    }
 
-	to {
-		opacity: 0;
-	}
+    to {
+        opacity: 0;
+    }
 }
 
 @keyframes slide-in {
-	from {
-		transform: translateY(5vh);
-	}
+    from {
+        transform: translateY(5vh);
+    }
 }
