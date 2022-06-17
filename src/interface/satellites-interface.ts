@@ -38,7 +38,17 @@ export default class SatellitesInterface {
      * | `id = -1` | new satellite.      |
      * | `id >= 0` | existing satellite. |
      */
-    satelliteId = -1;
+    _satelliteId = -1;
+
+    get satelliteId() {
+        return this._satelliteId;
+    }
+
+    set satelliteId(value) {
+        this._satelliteId = value;
+        this.satellite = (value === -1) ? this.newDraftSatellite() : this.app.world.satellites[value];
+        this.refreshInterface();
+    }
 
     protected readonly spawnPosition = new Vector3(EARTH_RADIUS * 1.25, 0, 0)
     protected readonly spawnVelocity = new Vector3(0, 0, -7e3);
@@ -133,6 +143,8 @@ export default class SatellitesInterface {
         if (!isCritical(this._theta)) this._inclination = tempSpherical.theta;
 
         if (Math.abs(this._inclination) < 1e-6) this._inclination = 0;
+
+        if (this.preview) this.app.world.ghost.state = this.satellite;
     }
 
     protected applyVelocity() {
@@ -176,13 +188,11 @@ export default class SatellitesInterface {
     actionBound = this.action.bind(this);
 
     get selectedSatelliteOption() {
-        return (this.satelliteId === -1) ? NEW_SATELLITE : `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
+        return (this.satelliteId === -1) ? NEW_SATELLITE : `${this.satelliteId}: ${this.satellite.name}`;
     }
 
     set selectedSatelliteOption(name: string) {
         this.satelliteId = (name === NEW_SATELLITE) ? -1 : parseInt(name.split(':')[0]);
-        this.satellite = (this.satelliteId === -1) ? this.newDraftSatellite() : this.app.world.satellites[this.satelliteId];
-        this.refreshInterface();
     }
 
     private satelliteController: Controller;
@@ -249,7 +259,7 @@ export default class SatellitesInterface {
         this.app.toaster.toast(`Satellite ${this.name ? `"${this.name}"` : `#${this.satelliteId}`} has been deleted.`, 'alert');
         this.app.world.removeSatellite(this.satellite);
 
-        this.selectedSatelliteOption = NEW_SATELLITE;
+        this.satelliteId = -1;
         this.updateSatellitesList();
     }
 
@@ -272,9 +282,7 @@ export default class SatellitesInterface {
         this.updateSatellitesList();
         if (this.satelliteId === -1) return;
 
-        if (this.satellite === satellite) this.selectedSatelliteOption = NEW_SATELLITE;
+        if (this.satellite === satellite) this.satelliteId = -1;
         else if (this.app.world.satellites[this.satelliteId] !== this.satellite) this.satelliteId--;
-
-        this.refreshInterface();
     }
 }
