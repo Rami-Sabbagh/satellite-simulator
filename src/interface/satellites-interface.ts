@@ -65,37 +65,21 @@ export default class SatellitesInterface {
     };
 
     get satellite() {
-        if (!this.app.world.satellites[this.satelliteId]) this.satelliteId = -1;
-        if (this.satelliteId === -1) return UNSELECTED;
-        return `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
+        return (this.satelliteId === -1) ? UNSELECTED : `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
     }
 
     set satellite(name: string) {
-        if (name === UNSELECTED) {
-            this.satelliteId = -1;
-            return;
-        }
-
-        this.satelliteId = Number.parseInt(name.split(':')[0]);
-        if (!this.app.world.satellites[this.satelliteId]) this.satelliteId = -1;
+        this.satelliteId = (name === UNSELECTED) ? -1 : parseInt(name.split(':')[0]);
     }
 
-    private readonly satelliteOptions = [UNSELECTED];
     private satelliteController: Controller;
-
-    updateSatellitesList() {
-        this.satelliteOptions.length = 1;
-        this.satelliteOptions.push(...this.app.world.satellites.map(({name},id) => `${id}: ${name}`));
-
-        this.satelliteController = this.satelliteController.options(this.satelliteOptions);
-    }
 
     constructor(protected readonly gui: GUI, protected app: Application) {
         // this.folder.open(false); // closed by default.
 
         // Had to use a folder, because then the controller is updated, it's placed at the end of the folder.
         // And so storing it in a folder alone would prevent it from being pushed to the end of the list.
-        this.satelliteController = this.folder.addFolder('').add(this, 'satellite', this.satelliteOptions).name('Satellite');
+        this.satelliteController = this.folder.addFolder('').add(this, 'satellite', [UNSELECTED]).name('Satellite');
         
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'name').name('Name');
@@ -140,6 +124,10 @@ export default class SatellitesInterface {
         
         this.app.world.ghost.state = this.state;
         this.app.world.ghost.visible = this.preview;
+    }
+
+    protected updateSatellitesList() {
+        this.satelliteController = this.satelliteController.options([UNSELECTED, ...this.app.world.satellites.map(({name},id) => `${id}: ${name}`)]);
     }
 
     protected spawn() {
