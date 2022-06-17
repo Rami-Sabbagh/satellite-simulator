@@ -173,9 +173,7 @@ export default class SatellitesInterface {
 
     preview = this.app.world.ghost.visible;
 
-    actions = {
-        spawn: this.spawn.bind(this),
-    };
+    actionBound = this.action.bind(this);
 
     get selectedSatelliteOption() {
         return (this.satelliteId === -1) ? NEW_SATELLITE : `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
@@ -188,6 +186,7 @@ export default class SatellitesInterface {
     }
 
     private satelliteController: Controller;
+    private actionController: Controller;
 
     constructor(protected readonly gui: GUI, protected app: Application) {
         // this.folder.open(false); // closed by default.
@@ -208,7 +207,7 @@ export default class SatellitesInterface {
         this.folder.add(this, 'inclination').name('Inclination').min(-180).max(180).listen();
         this.folder.add(this, 'theta').name('Theta').min(0).max(180).listen();
         
-        this.folder.add(this.actions, 'spawn').name('Spawn Satellite');
+        this.actionController = this.folder.add(this, 'actionBound').name('Spawn Satellite');
         
         
         this.folder.onChange(this.apply.bind(this));
@@ -237,7 +236,21 @@ export default class SatellitesInterface {
     }
 
     protected refreshInterface() {
+        this.actionController.name(this.satelliteId === -1 ? 'Spawn Satellite' : 'Delete Satellite');
         this.folder.controllersRecursive().forEach(controller => controller.updateDisplay());
+    }
+
+    protected action() {
+        if (this.satelliteId === -1) this.spawn();
+        else this.delete();
+    }
+
+    protected delete() {
+        this.app.toaster.toast(`Satellite ${this.name ? `"${this.name}"` : `#${this.satelliteId}`} has been deleted.`, 'alert');
+        this.app.world.removeSatellite(this.satellite);
+
+        this.selectedSatelliteOption = NEW_SATELLITE;
+        this.updateSatellitesList();
     }
 
     protected spawn() {
