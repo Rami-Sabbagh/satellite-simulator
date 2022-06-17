@@ -51,6 +51,7 @@ export default class SatellitesInterface {
 
     set name(value) {
         this.satellite.name = value;
+        if (this.satelliteId !== -1) this.updateSatellitesList();
     }
 
     get mass() {
@@ -176,12 +177,14 @@ export default class SatellitesInterface {
         spawn: this.spawn.bind(this),
     };
 
-    get satelliteOption() {
+    get selectedSatelliteOption() {
         return (this.satelliteId === -1) ? NEW_SATELLITE : `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
     }
 
-    set satelliteOption(name: string) {
+    set selectedSatelliteOption(name: string) {
         this.satelliteId = (name === NEW_SATELLITE) ? -1 : parseInt(name.split(':')[0]);
+        this.satellite = (this.satelliteId === -1) ? this.newDraftSatellite() : this.app.world.satellites[this.satelliteId];
+        this.refreshInterface();
     }
 
     private satelliteController: Controller;
@@ -191,7 +194,7 @@ export default class SatellitesInterface {
 
         // Had to use a folder, because then the controller is updated, it's placed at the end of the folder.
         // And so storing it in a folder alone would prevent it from being pushed to the end of the list.
-        this.satelliteController = this.folder.addFolder('').add(this, 'satelliteOption', [NEW_SATELLITE]).name('Satellite');
+        this.satelliteController = this.folder.addFolder('').add(this, 'selectedSatelliteOption', [NEW_SATELLITE]).name('Satellite');
         
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'name').name('Name');
@@ -219,7 +222,7 @@ export default class SatellitesInterface {
 
     protected newDraftSatellite() {
         const satellite = Satellite.spawn(this.spawnPosition, this.spawnVelocity);
-        satellite.name = `Satellite #${this.nextSatelliteId++}`;
+        satellite.name = `Satellite #${this.nextSatelliteId}`;
 
         return satellite;
     }
@@ -233,7 +236,12 @@ export default class SatellitesInterface {
         this.satelliteController = this.satelliteController.options([NEW_SATELLITE, ...this.app.world.satellites.map(({name},id) => `${id}: ${name}`)]);
     }
 
+    protected refreshInterface() {
+        this.folder.controllersRecursive().forEach(controller => controller.updateDisplay());
+    }
+
     protected spawn() {
+        this.nextSatelliteId++;
         this.spawnPosition.copy(this.satellite.position);
         this.spawnVelocity.copy(this.satellite.velocity);
         
@@ -241,6 +249,6 @@ export default class SatellitesInterface {
         this.satellite = this.newDraftSatellite();
 
         this.updateSatellitesList();
-        this.folder.controllersRecursive().forEach(controller => controller.updateDisplay());
+        this.refreshInterface();
     }
 }
