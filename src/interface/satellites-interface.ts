@@ -1,36 +1,37 @@
 import GUI, { Controller } from 'lil-gui';
 import type Application from 'app';
 
-import { Euler, Vector3 } from 'three';
+import { Euler, Spherical, Vector3 } from 'three';
 
 import { EARTH_RADIUS } from 'physics/constants';
-import { StateVectors } from 'physics/structures';
 import Satellite from 'components/satellite';
 
 const TO_DEGREE = 180 / Math.PI;
 const TO_RADIAN = Math.PI / 180;
 
 const tempEuler = new Euler();
+const tempSpherical = new Spherical();
+const tempVector = new Vector3();
 
-function degreeView(record: Record<string, number>): typeof record {
-    const descriptors: PropertyDescriptorMap = {};
-
-    for (const key in record) {
-        descriptors[key] = {
-            get() { return record[key] * TO_DEGREE; },
-            set(value: number) { record[key] = value * TO_RADIAN; }
-        };
-    }
-
-    return Object.defineProperties({}, descriptors);
+function fixAngle(radian: number): number {
+    return (radian < -Math.PI) ? (radian + Math.PI + Math.PI) : radian;
 }
 
-const UNSELECTED = '(new)';
+function criticalAngle(angle: number): boolean {
+    const critical = 1e-6, angle2 = Math.abs(angle);
+    return angle2 > Math.PI - critical || angle2 < critical;
+}
+
+/**
+ * The display name for creating a new satellite.
+ */
+const NEW_SATELLITE = '(new)';
 
 export default class SatellitesInterface {
     protected folder = this.gui.addFolder('Satellites');
 
     nextSatelliteId = 1;
+
     /**
      * |           |                     |
      * |-----------|---------------------|
@@ -39,37 +40,148 @@ export default class SatellitesInterface {
      */
     satelliteId = -1;
 
+    protected readonly spawnPosition = new Vector3(EARTH_RADIUS * 1.25, 0, 0)
+    protected readonly spawnVelocity = new Vector3(0, 0, -7e3);
+
+    satellite = this.newDraftSatellite();
+
+    get name() {
+        return this.satellite.name;
+    }
+
+    set name(value) {
+        this.satellite.name = value;
+    }
+
+    get mass() {
+        return this.satellite.mass;
+    }
+
+    set mass(value) {
+        this.satellite.mass = value;
+    }
+
+    _calculatedPosition = new Vector3();
+    _height = 0;
+    _longitude = 0;
+    _latitude = 0;
+
+    protected updatePosition() {
+        if (this._calculatedPosition.equals(this.satellite.position)) return; // doesn't need updating.
+
+        this._calculatedPosition.copy(this.satellite.position);
+        this._height = this._calculatedPosition.length();
+
+        tempSpherical.setFromVector3(this._calculatedPosition);
+        this._latitude = Math.PI / 2 - tempSpherical.phi;
+        if (!criticalAngle(this._latitude + Math.PI / 2)) this._longitude = fixAngle(tempSpherical.theta - Math.PI / 2);
+    }
+
+    protected applyPosition() {
+        tempEuler.set(0, this._longitude, this._latitude, 'YZX');
+        this.satellite.position.set(this._height, 0, 0).applyEuler(tempEuler);
+        this.applyVelocity();
+    }
+
+    get height() {
+        this.updatePosition();
+        return this._height;
+    }
+
+    set height(value) {
+        this.satellite.position.normalize().multiplyScalar(value);
+    }
+
+    get longitude() {
+        this.updatePosition();
+        return this._longitude * TO_DEGREE;
+    }
+
+    set longitude(value) {
+        this._longitude = value * TO_RADIAN;
+        this.applyPosition();
+    }
+
+    get latitude() {
+        this.updatePosition();
+        return this._latitude * TO_DEGREE;
+    }
+
+    set latitude(value) {
+        this._latitude = value * TO_RADIAN;
+        this.applyPosition();
+    }
+
+    _calculatedVelocity = new Vector3();
+    _velocity = 0;
+    _inclination = 0;
+    _theta = 90 * TO_RADIAN;
+
+    protected updateVelocity() {
+        if (this._calculatedVelocity.equals(this.satellite.velocity)) return; // doesn't need updating.
+        
+        this._calculatedVelocity.copy(this.satellite.velocity);
+        this._velocity = this._calculatedVelocity.length();
+        
+        this.updatePosition();
+        tempEuler.set(Math.PI, -this._longitude, -this._latitude - Math.PI / 2, 'XZY'); // undo the orbital pane.
+        tempVector.copy(this._calculatedVelocity).applyEuler(tempEuler);
+        
+        tempSpherical.setFromVector3(tempVector);
+        this._theta = Math.PI-tempSpherical.phi;
+        if (!criticalAngle(this._theta)) this._inclination = tempSpherical.theta;
+
+        if (Math.abs(this._inclination) < 1e-6) this._inclination = 0;
+    }
+
+    protected applyVelocity() {
+        tempEuler.set(this._inclination, this._longitude, this._latitude, 'YZX');
+        this.satellite.velocity
+            .set(Math.cos(this._theta), 0, Math.sin(this._theta))
+            .multiplyScalar(-this._velocity).applyEuler(tempEuler);
+    }
+
+    get velocity() {
+        this.updateVelocity();
+        return this._velocity;
+    }
+
+    set velocity(value) {
+        this.satellite.velocity.normalize().multiplyScalar(value);
+    }
+
+    get inclination() {
+        this.updateVelocity();
+        return this._inclination * TO_DEGREE;
+    }
+
+    set inclination(value) {
+        this._inclination = value * TO_RADIAN;
+        this.applyVelocity();
+    }
+
+    get theta() {
+        this.updateVelocity();
+        return this._theta * TO_DEGREE;
+    }
+
+    set theta(value) {
+        this._theta = value * TO_RADIAN;
+        this.applyVelocity();
+    }
+
     preview = this.app.world.ghost.visible;
-    name = `Satellite #${this.nextSatelliteId++}`;
-
-    mass = 10;
-    velocity = 7000;
-    height = EARTH_RADIUS * 1.25;
-
-    angles = {
-        longitude: 0,
-        latitude: 0,
-        inclination: 0,
-        theta: Math.PI / 2,
-    };
-
-    anglesDegree = degreeView(this.angles);
-
-    state: StateVectors = {
-        position: new Vector3(this.height, 0, 0),
-        velocity: new Vector3(0, 0, -this.velocity),
-    };
 
     actions = {
         spawn: this.spawn.bind(this),
     };
 
-    get satellite() {
-        return (this.satelliteId === -1) ? UNSELECTED : `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
+    get satelliteOption() {
+        return (this.satelliteId === -1) ? NEW_SATELLITE : `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
     }
 
-    set satellite(name: string) {
-        this.satelliteId = (name === UNSELECTED) ? -1 : parseInt(name.split(':')[0]);
+    set satelliteOption(name: string) {
+        this.satelliteId = (name === NEW_SATELLITE) ? -1 : parseInt(name.split(':')[0]);
     }
 
     private satelliteController: Controller;
@@ -79,7 +191,7 @@ export default class SatellitesInterface {
 
         // Had to use a folder, because then the controller is updated, it's placed at the end of the folder.
         // And so storing it in a folder alone would prevent it from being pushed to the end of the list.
-        this.satelliteController = this.folder.addFolder('').add(this, 'satellite', [UNSELECTED]).name('Satellite');
+        this.satelliteController = this.folder.addFolder('').add(this, 'satelliteOption', [NEW_SATELLITE]).name('Satellite');
         
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'name').name('Name');
@@ -88,10 +200,10 @@ export default class SatellitesInterface {
         this.folder.add(this, 'velocity').name('Velocity').min(1e3).max(1e5);
         this.folder.add(this, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);
         
-        this.folder.add(this.anglesDegree, 'longitude').name('Longitude').min(-180).max(180);
-        this.folder.add(this.anglesDegree, 'latitude').name('Latitude').min(-180).max(180);
-        this.folder.add(this.anglesDegree, 'inclination').name('Inclination').min(-180).max(180);
-        this.folder.add(this.anglesDegree, 'theta').name('Theta').min(-180).max(180);
+        this.folder.add(this, 'longitude').name('Longitude').min(-180).max(180).listen();
+        this.folder.add(this, 'latitude').name('Latitude').min(-90).max(90).listen();
+        this.folder.add(this, 'inclination').name('Inclination').min(-180).max(180).listen();
+        this.folder.add(this, 'theta').name('Theta').min(0).max(180).listen();
         
         this.folder.add(this.actions, 'spawn').name('Spawn Satellite');
         
@@ -105,39 +217,28 @@ export default class SatellitesInterface {
         this.apply();
     }
 
+    protected newDraftSatellite() {
+        const satellite = Satellite.spawn(this.spawnPosition, this.spawnVelocity);
+        satellite.name = `Satellite #${this.nextSatelliteId++}`;
+
+        return satellite;
+    }
+
     protected apply() {
-        tempEuler.set(
-            this.angles.inclination,
-            this.angles.longitude,
-            this.angles.latitude,
-            'YZX'
-        );
-
-        this.state.position
-            .set(this.height, 0, 0)
-            .applyEuler(tempEuler);
-
-        this.state.velocity
-            .set(Math.cos(this.angles.theta), 0, Math.sin(this.angles.theta))
-            .multiplyScalar(-this.velocity)
-            .applyEuler(tempEuler);
-        
-        this.app.world.ghost.state = this.state;
+        this.app.world.ghost.state = this.satellite; // _POLYMORPHISM_.
         this.app.world.ghost.visible = this.preview;
     }
 
     protected updateSatellitesList() {
-        this.satelliteController = this.satelliteController.options([UNSELECTED, ...this.app.world.satellites.map(({name},id) => `${id}: ${name}`)]);
+        this.satelliteController = this.satelliteController.options([NEW_SATELLITE, ...this.app.world.satellites.map(({name},id) => `${id}: ${name}`)]);
     }
 
     protected spawn() {
-        const {position, velocity} = this.state;
-
-        const satellite = Satellite.spawn(position, velocity, this.mass);
-        satellite.name = this.name;
-
-        this.name = `Satellite #${this.nextSatelliteId++}`;
-        this.app.world.addSatellite(satellite);
+        this.spawnPosition.copy(this.satellite.position);
+        this.spawnVelocity.copy(this.satellite.velocity);
+        
+        this.app.world.addSatellite(this.satellite);
+        this.satellite = this.newDraftSatellite();
 
         this.updateSatellitesList();
         this.folder.controllersRecursive().forEach(controller => controller.updateDisplay());
