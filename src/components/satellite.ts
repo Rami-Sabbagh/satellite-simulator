@@ -13,21 +13,21 @@ const material = new THREE.MeshBasicMaterial({
 
 export default class Satellite extends SimulatedObject implements Rigid {
     protected readonly mesh = new THREE.Mesh(geometry, material);
-    
+
     collisionRadius = 7e5;
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    private _onDestruction: ((value: unknown) => void) = () => {};
+    private _onDestruction: ((value: unknown) => void) = () => { };
     public onDestruction = new Promise((resolve) => this._onDestruction = resolve);
 
     constructor(mass = 10) {
         super(BodyType.Dynamic, mass);
         this.add(this.mesh);
-        
+
         satelliteModel.then(({ scene }) => {
             const model = scene.clone(true);
             model.scale.multiplyScalar(7e4);
-            
+
             this.remove(this.mesh);
             this.add(model);
         });
