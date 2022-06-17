@@ -1,6 +1,7 @@
 import * as THREE from 'three';
+import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare';
 
-import { sunTexture } from 'textures';
+import { lensflareBaseTexture, lensflareExtraTexture, sunTexture } from 'textures';
 import { EARTH_DISTANCE, SUN_RADIUS } from 'physics/constants';
 
 export default class Sun extends THREE.Object3D {
@@ -8,7 +9,7 @@ export default class Sun extends THREE.Object3D {
 	protected readonly material = new THREE.MeshBasicMaterial({
 		map: sunTexture.colorMap ?? null,
 	});
-	
+
 	protected mesh = new THREE.Mesh(this.geometry, this.material);
 	protected light = new THREE.PointLight(0xffffff, 2 * Math.pow(10, 22.8), 0, 2);
 
@@ -17,6 +18,8 @@ export default class Sun extends THREE.Object3D {
 
 		this.add(this.mesh);
 		this.add(this.light);
+
+		this.lensflareScaler = 1; // initialize the lensflare.
 
 		this.position.z = distance;
 	}
@@ -64,5 +67,14 @@ export default class Sun extends THREE.Object3D {
 	set color(value: number[]) {
 		this.light.color.fromArray(value);
 		this.material.color.fromArray(value);
+	}
+	set lensflareScaler(value: number) {
+		this.light.clear();
+		const lensflare = new Lensflare();
+		lensflare.addElement(new LensflareElement(lensflareBaseTexture, 700 * value, 0, this.light.color));
+		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 60 * value, 0.1, this.light.color));
+		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 70 * value, 0.2, this.light.color));
+		lensflare.addElement(new LensflareElement(lensflareExtraTexture, 120 * value, 0.3, this.light.color));
+		this.light.add(lensflare);
 	}
 }
