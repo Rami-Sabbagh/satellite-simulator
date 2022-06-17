@@ -17,7 +17,7 @@ function fixAngle(radian: number): number {
     return (radian < -Math.PI) ? (radian + Math.PI + Math.PI) : radian;
 }
 
-function criticalAngle(angle: number): boolean {
+function isCritical(angle: number): boolean {
     const critical = 1e-6, angle2 = Math.abs(angle);
     return angle2 > Math.PI - critical || angle2 < critical;
 }
@@ -74,7 +74,7 @@ export default class SatellitesInterface {
 
         tempSpherical.setFromVector3(this._calculatedPosition);
         this._latitude = Math.PI / 2 - tempSpherical.phi;
-        if (!criticalAngle(this._latitude + Math.PI / 2)) this._longitude = fixAngle(tempSpherical.theta - Math.PI / 2);
+        if (!isCritical(this._latitude + Math.PI / 2)) this._longitude = fixAngle(tempSpherical.theta - Math.PI / 2);
     }
 
     protected applyPosition() {
@@ -129,7 +129,7 @@ export default class SatellitesInterface {
         
         tempSpherical.setFromVector3(tempVector);
         this._theta = Math.PI-tempSpherical.phi;
-        if (!criticalAngle(this._theta)) this._inclination = tempSpherical.theta;
+        if (!isCritical(this._theta)) this._inclination = tempSpherical.theta;
 
         if (Math.abs(this._inclination) < 1e-6) this._inclination = 0;
     }
