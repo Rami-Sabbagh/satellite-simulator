@@ -56,6 +56,10 @@ export default class World extends THREE.Scene {
         this.simulatedSpace.run(dt * this.timescale);
 
         this.planet.rotateY(dt / this.planetPeriod * Math.PI * 2);
+
+        this.satellites.forEach((satellite) => {
+            satellite.lookAt(this.planet.position);
+        })
     }
 
     addSatellite(satellite: Satellite) {
