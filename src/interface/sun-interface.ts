@@ -22,7 +22,7 @@ export default class SunInterface {
         this.folder.add(this, 'intensity', minIntensity, maxIntensity).name('Light Intensity');
         this.folder.addColor(this, 'color').name('Color');
         this.folder.add(this, 'wireframe').name('Wireframe');
-        this.folder.add(this, 'lensflareScale').name('Lensflare').min(0.01).max(30).step(0.01);
+        this.folder.add(this, 'lensflareScale').name('Lensflare').min(0.1).max(30).step(0.1);
         this.folder.onChange(this.apply.bind(this));
 
         this.apply();
