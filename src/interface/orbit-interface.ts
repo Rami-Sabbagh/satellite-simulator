@@ -25,8 +25,8 @@ function degreeView(record: Record<string, number>): typeof record {
     return Object.defineProperties({}, descriptors);
 }
 
-export default class SpawnInterface {
-    protected folder = this.gui.addFolder('Satellite Creation');
+export default class OrbitInterface {
+    protected folder = this.gui.addFolder('Satellites');
 
     satelliteId = 1;
 

@@ -6,7 +6,7 @@ import type Application from 'app';
 import SimulationInterface from './simulation-interface';
 import CameraInterface from './camera-interface';
 import PlanetInterface from './planet-interface';
-import SpawnInterface from './spawn-interface';
+import OrbitInterface from './orbit-interface';
 import SunInterface from './sun-interface';
 import GUIInterface from './gui-styles-interface';
 export default class Interface {
@@ -18,7 +18,7 @@ export default class Interface {
     protected readonly simulation: SimulationInterface;
     protected readonly sun: SunInterface;
     protected readonly planet: PlanetInterface;
-    protected readonly spawn: SpawnInterface;
+    protected readonly orbit: OrbitInterface;
     protected readonly camera: CameraInterface;
     protected readonly guiStyles: GUIInterface
 
@@ -26,7 +26,7 @@ export default class Interface {
         this.simulation = new SimulationInterface(this.gui, app);
         this.sun = new SunInterface(this.gui, app);
         this.planet = new PlanetInterface(this.gui, app);
-        this.spawn = new SpawnInterface(this.gui, app);
+        this.orbit = new OrbitInterface(this.gui, app);
         this.camera = new CameraInterface(this.gui, app);
         this.guiStyles = new GUIInterface(this.gui, app);
     }
@@ -36,7 +36,7 @@ export default class Interface {
         this.sun.hotReplaceApplication(app);
         this.camera.hotReplaceApplication(app);
         this.planet.hotReplaceApplication(app);
-        this.spawn.hotReplaceApplication(app);
+        this.orbit.hotReplaceApplication(app);
     }
 
     destroy() {
