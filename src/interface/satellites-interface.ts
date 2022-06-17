@@ -27,7 +27,7 @@ function degreeView(record: Record<string, number>): typeof record {
 
 const UNSELECTED = '(new)';
 
-export default class OrbitInterface {
+export default class SatellitesInterface {
     protected folder = this.gui.addFolder('Satellites');
 
     nextSatelliteId = 1;
