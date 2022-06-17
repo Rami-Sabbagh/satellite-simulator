@@ -1,4 +1,4 @@
-import GUI from 'lil-gui';
+import GUI, { Controller } from 'lil-gui';
 import type Application from 'app';
 
 import { Euler, Vector3 } from 'three';
@@ -25,10 +25,19 @@ function degreeView(record: Record<string, number>): typeof record {
     return Object.defineProperties({}, descriptors);
 }
 
+const UNSELECTED = '(new)';
+
 export default class OrbitInterface {
     protected folder = this.gui.addFolder('Satellites');
 
     nextSatelliteId = 1;
+    /**
+     * |           |                     |
+     * |-----------|---------------------|
+     * | `id = -1` | new satellite.      |
+     * | `id >= 0` | existing satellite. |
+     */
+    satelliteId = -1;
 
     preview = this.app.world.ghost.visible;
     name = `Satellite #${this.nextSatelliteId++}`;
@@ -55,13 +64,43 @@ export default class OrbitInterface {
         spawn: this.spawn.bind(this),
     };
 
+    get satellite() {
+        if (!this.app.world.satellites[this.satelliteId]) this.satelliteId = -1;
+        if (this.satelliteId === -1) return UNSELECTED;
+        return `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
+    }
+
+    set satellite(name: string) {
+        if (name === UNSELECTED) {
+            this.satelliteId = -1;
+            return;
+        }
+
+        this.satelliteId = Number.parseInt(name.split(':')[0]);
+        if (!this.app.world.satellites[this.satelliteId]) this.satelliteId = -1;
+    }
+
+    private readonly satelliteOptions = [UNSELECTED];
+    private satelliteController: Controller;
+
+    updateSatellitesList() {
+        this.satelliteOptions.length = 1;
+        this.satelliteOptions.push(...this.app.world.satellites.map(({name},id) => `${id}: ${name}`));
+
+        this.satelliteController = this.satelliteController.options(this.satelliteOptions);
+    }
+
     constructor(protected readonly gui: GUI, protected app: Application) {
         // this.folder.open(false); // closed by default.
 
+        // Had to use a folder, because then the controller is updated, it's placed at the end of the folder.
+        // And so storing it in a folder alone would prevent it from being pushed to the end of the list.
+        this.satelliteController = this.folder.addFolder('').add(this, 'satellite', this.satelliteOptions).name('Satellite');
+        
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'name').name('Name');
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
-
+        
         this.folder.add(this, 'velocity').name('Velocity').min(1e3).max(1e5);
         this.folder.add(this, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);
         
@@ -69,8 +108,9 @@ export default class OrbitInterface {
         this.folder.add(this.anglesDegree, 'latitude').name('Latitude').min(-180).max(180);
         this.folder.add(this.anglesDegree, 'inclination').name('Inclination').min(-180).max(180);
         this.folder.add(this.anglesDegree, 'theta').name('Theta').min(-180).max(180);
-
+        
         this.folder.add(this.actions, 'spawn').name('Spawn Satellite');
+        
         
         this.folder.onChange(this.apply.bind(this));
         this.apply();
@@ -107,10 +147,11 @@ export default class OrbitInterface {
 
         const satellite = Satellite.spawn(position, velocity, this.mass);
         satellite.name = this.name;
-        
-        this.name = `Satellite #${this.nextSatelliteId++}`;
-        this.folder.controllersRecursive().forEach(controller => controller.updateDisplay());
 
+        this.name = `Satellite #${this.nextSatelliteId++}`;
         this.app.world.addSatellite(satellite);
+
+        this.updateSatellitesList();
+        this.folder.controllersRecursive().forEach(controller => controller.updateDisplay());
     }
 }
