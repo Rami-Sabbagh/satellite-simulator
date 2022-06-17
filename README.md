@@ -1,5 +1,7 @@
 # satellite-simulator
 
+![Satellite Simulator's Logo](./src/assets/logos/logo-white.jpg "Satellite Simulator's Logo")
+
 A university physics project for simulating satellites in orbit.
 
 ## Installation instructions
@@ -64,3 +66,7 @@ yarn build
 ```
 
 The build can be then accessed at `/dist` and could be served as static page content.
+
+## Credits
+
+Icons are from: https://www.svgrepo.com/

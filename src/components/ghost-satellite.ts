@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { StateVectors } from 'physics/kepler-math';
+import { StateVectors } from 'physics/structures';
 
 const geometry = new THREE.SphereGeometry(7e5, 4, 2);
 const material = new THREE.MeshBasicMaterial({
@@ -30,7 +30,7 @@ export default class GhostSatellite extends THREE.Object3D {
     set state({ position, velocity }: StateVectors) {
         this.body.position.copy(position);
 
-        this.velocityArrow.setLength(velocity.length());
+        this.velocityArrow.setLength(velocity.length() * 2e2);
         this.velocityArrow.setDirection(tempVector.copy(velocity).normalize());
         this.velocityArrow.position.copy(position);
 
