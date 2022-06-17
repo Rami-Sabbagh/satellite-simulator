@@ -9,6 +9,7 @@ import GhostSatellite from 'components/ghost-satellite';
 import Satellite from 'components/satellite';
 import _ from 'lodash';
 import { skyBoxTexture } from 'textures';
+import { simulatedObjectLookAt } from 'interface/utilities';
 
 export type SatelliteDestructionListener = (satellite: Satellite) => void;
 
@@ -58,7 +59,7 @@ export default class World extends THREE.Scene {
         this.planet.rotateY(dt / this.planetPeriod * Math.PI * 2);
 
         this.satellites.forEach((satellite) => {
-            satellite.lookat(this.planet.position.x, this.planet.position.y, this.planet.position.z);
+            simulatedObjectLookAt(satellite, this.planet.position.x, this.planet.position.y, this.planet.position.z);
         })
     }
 
