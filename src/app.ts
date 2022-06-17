@@ -23,7 +23,7 @@ export default class Application {
     protected _statsVisible = false;
 
     protected resizeCallback: () => void;
-    protected toaster = new Toaster();
+    toaster = new Toaster();
 
     constructor(public readonly container: HTMLElement) {
         // configure application components.
