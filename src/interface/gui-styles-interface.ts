@@ -36,7 +36,7 @@ export default class GUIInterface {
             .add(this.properties, 'spacing')
             .name('Spacing')
             .min(4)
-            .max(10)
+            .max(20)
             .step(1);
 
         this.updateGUIStyles(this.properties);
