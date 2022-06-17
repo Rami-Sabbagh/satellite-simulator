@@ -11,11 +11,6 @@ const material = new THREE.MeshBasicMaterial({
     wireframe: true,
 });
 
-const _q1 = new THREE.Quaternion();
-const _m1 = new THREE.Matrix4();
-const _target = new THREE.Vector3();
-const _position = new THREE.Vector3();
-
 export default class Satellite extends SimulatedObject implements Rigid {
     protected readonly mesh = new THREE.Mesh(geometry, material);
 
@@ -47,26 +42,5 @@ export default class Satellite extends SimulatedObject implements Rigid {
         satellite.position.copy(position);
         satellite.velocity.copy(velocity);
         return satellite;
-    }
-
-    // Modified version of THREE.Object3D.lookAt
-    lookat(x: number, y: number, z: number) {
-        _target.set(x, y, z);
-
-        const parent = this.parent;
-
-        this.updateWorldMatrix(true, false);
-
-        _position.setFromMatrixPosition(this.matrixWorld);
-
-        _m1.lookAt(_target, _position, this.velocity);
-
-        this.quaternion.setFromRotationMatrix(_m1);
-
-        if (parent) {
-            _m1.extractRotation(parent.matrixWorld);
-            _q1.setFromRotationMatrix(_m1);
-            this.quaternion.premultiply(_q1.invert());
-        }
     }
 }
