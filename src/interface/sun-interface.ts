@@ -9,7 +9,7 @@ export default class SunInterface {
     protected radius = this.app.world.sun.radius;
     protected color = this.app.world.sun.color;
     protected wireframe = this.app.world.sun.wireframe;
-    protected lensflareScale:number=1;
+    protected lensflareScale = 1;
 
     constructor(protected readonly gui: GUI, protected app: Application) {
         this.folder.open(false); // closed by default.
