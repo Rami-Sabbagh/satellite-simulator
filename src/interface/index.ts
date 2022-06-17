@@ -8,6 +8,7 @@ import CameraInterface from './camera-interface';
 import PlanetInterface from './planet-interface';
 import SpawnInterface from './spawn-interface';
 import SunInterface from './sun-interface';
+import GUIInterface from './gui-styles-interface';
 export default class Interface {
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',
@@ -19,6 +20,7 @@ export default class Interface {
     protected readonly planet: PlanetInterface;
     protected readonly spawn: SpawnInterface;
     protected readonly camera: CameraInterface;
+    protected readonly guiStyles: GUIInterface
 
     constructor(protected app: Application) {
         this.simulation = new SimulationInterface(this.gui, app);
@@ -26,6 +28,7 @@ export default class Interface {
         this.planet = new PlanetInterface(this.gui, app);
         this.spawn = new SpawnInterface(this.gui, app);
         this.camera = new CameraInterface(this.gui, app);
+        this.guiStyles = new GUIInterface(this.gui, app);
     }
 
     hotReplaceApplication(app: Application) {
