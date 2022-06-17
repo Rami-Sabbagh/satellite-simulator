@@ -28,26 +28,27 @@ function degreeView(record: Record<string, number>): typeof record {
 export default class OrbitInterface {
     protected folder = this.gui.addFolder('Satellites');
 
-    satelliteId = 1;
+    nextSatelliteId = 1;
 
     preview = this.app.world.ghost.visible;
+    name = `Satellite #${this.nextSatelliteId++}`;
+
     mass = 10;
+    velocity = 7000;
+    height = EARTH_RADIUS * 1.25;
 
-    manual = {
-        velocity: 7000,
-        height: EARTH_RADIUS * 1.25,
-
+    angles = {
         longitude: 0,
         latitude: 0,
         inclination: 0,
         theta: Math.PI / 2,
     };
 
-    manualView = degreeView(this.manual);
+    anglesDegree = degreeView(this.angles);
 
     state: StateVectors = {
-        position: new Vector3(this.manual.height, 0, 0),
-        velocity: new Vector3(0, 0, -this.manual.velocity),
+        position: new Vector3(this.height, 0, 0),
+        velocity: new Vector3(0, 0, -this.velocity),
     };
 
     actions = {
@@ -55,18 +56,19 @@ export default class OrbitInterface {
     };
 
     constructor(protected readonly gui: GUI, protected app: Application) {
-        this.folder.open(false); // closed by default.
+        // this.folder.open(false); // closed by default.
 
         this.folder.add(this, 'preview').name('Preview');
+        this.folder.add(this, 'name').name('Name');
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
 
-        this.folder.add(this.manual, 'velocity').name('Velocity').min(1e3).max(1e5);
-        this.folder.add(this.manual, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);
+        this.folder.add(this, 'velocity').name('Velocity').min(1e3).max(1e5);
+        this.folder.add(this, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);
         
-        this.folder.add(this.manualView, 'longitude').name('Longitude').min(-180).max(180);
-        this.folder.add(this.manualView, 'latitude').name('Latitude').min(-180).max(180);
-        this.folder.add(this.manualView, 'inclination').name('Inclination').min(-180).max(180);
-        this.folder.add(this.manualView, 'theta').name('Theta').min(-180).max(180);
+        this.folder.add(this.anglesDegree, 'longitude').name('Longitude').min(-180).max(180);
+        this.folder.add(this.anglesDegree, 'latitude').name('Latitude').min(-180).max(180);
+        this.folder.add(this.anglesDegree, 'inclination').name('Inclination').min(-180).max(180);
+        this.folder.add(this.anglesDegree, 'theta').name('Theta').min(-180).max(180);
 
         this.folder.add(this.actions, 'spawn').name('Spawn Satellite');
         
@@ -81,19 +83,19 @@ export default class OrbitInterface {
 
     protected apply() {
         tempEuler.set(
-            this.manual.inclination,
-            this.manual.longitude,
-            this.manual.latitude,
+            this.angles.inclination,
+            this.angles.longitude,
+            this.angles.latitude,
             'YZX'
         );
 
         this.state.position
-            .set(this.manual.height, 0, 0)
+            .set(this.height, 0, 0)
             .applyEuler(tempEuler);
 
         this.state.velocity
-            .set(Math.cos(this.manual.theta), 0, Math.sin(this.manual.theta))
-            .multiplyScalar(-this.manual.velocity)
+            .set(Math.cos(this.angles.theta), 0, Math.sin(this.angles.theta))
+            .multiplyScalar(-this.velocity)
             .applyEuler(tempEuler);
         
         this.app.world.ghost.state = this.state;
@@ -104,7 +106,10 @@ export default class OrbitInterface {
         const {position, velocity} = this.state;
 
         const satellite = Satellite.spawn(position, velocity, this.mass);
-        satellite.name = `Satellite #${this.satelliteId++}`;
+        satellite.name = this.name;
+        
+        this.name = `Satellite #${this.nextSatelliteId++}`;
+        this.folder.controllersRecursive().forEach(controller => controller.updateDisplay());
 
         this.app.world.addSatellite(satellite);
     }
