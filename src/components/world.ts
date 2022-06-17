@@ -58,7 +58,7 @@ export default class World extends THREE.Scene {
         this.planet.rotateY(dt / this.planetPeriod * Math.PI * 2);
 
         this.satellites.forEach((satellite) => {
-            satellite.lookAt(this.planet.position);
+            satellite.lookat(this.planet.position.x, this.planet.position.y, this.planet.position.z);
         })
     }
 
