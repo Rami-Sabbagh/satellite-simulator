@@ -11,23 +11,10 @@ const material = new THREE.MeshBasicMaterial({
     wireframe: true,
 });
 
-let _object3DId = 0;
-
-const _v1 = /*@__PURE__*/ new THREE.Vector3();
-const _q1 = /*@__PURE__*/ new THREE.Quaternion();
-const _m1 = /*@__PURE__*/ new THREE.Matrix4();
-const _target = /*@__PURE__*/ new THREE.Vector3();
-
-const _position = /*@__PURE__*/ new THREE.Vector3();
-const _scale = /*@__PURE__*/ new THREE.Vector3();
-const _quaternion = /*@__PURE__*/ new THREE.Quaternion();
-
-const _xAxis = /*@__PURE__*/ new THREE.Vector3(1, 0, 0);
-const _yAxis = /*@__PURE__*/ new THREE.Vector3(0, 1, 0);
-const _zAxis = /*@__PURE__*/ new THREE.Vector3(0, 0, 1);
-
-const _addedEvent = { type: 'added' };
-const _removedEvent = { type: 'removed' };
+const _q1 = new THREE.Quaternion();
+const _m1 = new THREE.Matrix4();
+const _target = new THREE.Vector3();
+const _position = new THREE.Vector3();
 
 export default class Satellite extends SimulatedObject implements Rigid {
     protected readonly mesh = new THREE.Mesh(geometry, material);
