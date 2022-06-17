@@ -260,7 +260,7 @@ export default class SatellitesInterface {
         this.spawnVelocity.copy(this.satellite.velocity);
 
         this.app.world.addSatellite(this.satellite);
-        this.satellite.onDestruction(this.onSatelliteDestroyed.bind(this));
+        this.satellite.addDestructionListener(this.onSatelliteDestroyed.bind(this));
 
         this.satellite = this.newDraftSatellite();
 

@@ -37,7 +37,7 @@ export default class Satellite extends SimulatedObject implements Rigid {
         this.destructionListeners.forEach((listener) => listener(this));
     }
 
-    onDestruction(listener: DestructionListener) {
+    addDestructionListener(listener: DestructionListener) {
         this.destructionListeners.push(listener);
     }
 

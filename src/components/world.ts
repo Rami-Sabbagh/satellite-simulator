@@ -64,7 +64,7 @@ export default class World extends THREE.Scene {
         this.satellites.push(satellite);
         this.simulatedSpace.add(satellite);
 
-        satellite.onDestruction((satellite) => {
+        satellite.addDestructionListener((satellite) => {
             this.removeSatellite(satellite);
             if (this.onSatelliteDestruction) this.onSatelliteDestruction(satellite);
         });
