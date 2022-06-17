@@ -71,7 +71,6 @@ export default class World extends THREE.Scene {
     }
 
     removeSatellite(satellite: Satellite) {
-        console.info('adios satellite');
         _.remove(this.satellites, (obj) => obj === satellite);
         this.simulatedSpace.remove(satellite);
     }
