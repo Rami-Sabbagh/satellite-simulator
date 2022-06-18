@@ -11,14 +11,14 @@ const material = new THREE.MeshBasicMaterial({
     wireframe: true,
 });
 
+type DestructionListener = (satellite: Satellite) => void;
+
 export default class Satellite extends SimulatedObject implements Rigid {
     protected readonly mesh = new THREE.Mesh(geometry, material);
 
     collisionRadius = 7e5;
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    private _onDestruction: ((value: unknown) => void) = () => { };
-    public onDestruction = new Promise((resolve) => this._onDestruction = resolve);
+    private readonly destructionListeners: DestructionListener[] = [];
 
     constructor(mass = 10) {
         super(BodyType.Dynamic, mass);
@@ -34,7 +34,11 @@ export default class Satellite extends SimulatedObject implements Rigid {
     }
 
     onCollision(): void {
-        this._onDestruction(undefined);
+        this.destructionListeners.forEach((listener) => listener(this));
+    }
+
+    addDestructionListener(listener: DestructionListener) {
+        this.destructionListeners.push(listener);
     }
 
     static spawn(position: THREE.Vector3, velocity: THREE.Vector3, mass = 10): Satellite {
