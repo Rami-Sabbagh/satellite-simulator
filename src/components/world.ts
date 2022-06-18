@@ -23,7 +23,7 @@ export default class World extends THREE.Scene {
     readonly satellites: Satellite[] = [];
 
     timescale = 1;
-    planetPeriod = 24;
+    planetPeriod = 24 * 3_600;
 
     get timeResolution() {
         return this.simulatedSpace.timeResolution
