@@ -9,10 +9,10 @@ import { EARTH_MASS, EARTH_RADIUS, GRAVITATION_CONSTANT } from 'physics/constant
 
 export default class Planet extends SimulatedObject implements ExertsForce, Rigid {
     private geometry = new THREE.SphereGeometry(this._radius, 64, 64);
-
     private readonly material = new THREE.MeshStandardMaterial();
-
     private mesh = new THREE.Mesh(this.geometry, this.material);
+
+    planetPeriod = 24 * 3_600;
 
     constructor(private _radius = EARTH_RADIUS, mass = EARTH_MASS) {
         super(BodyType.Static, mass);
@@ -81,4 +81,7 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
         // the force is now calculated properly and ready to use.
     }
 
+    update(dt: number) {
+        this.rotateY(dt / this.planetPeriod * Math.PI * 2);
+    }
 }
