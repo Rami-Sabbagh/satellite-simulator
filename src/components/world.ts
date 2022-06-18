@@ -23,7 +23,7 @@ export default class World extends THREE.Scene {
     readonly satellites: Satellite[] = [];
 
     timescale = 1;
-    planetPeriod = 24;
+    planetPeriod = 24 * 3_600;
 
     get timeResolution() {
         return this.simulatedSpace.timeResolution
@@ -49,11 +49,13 @@ export default class World extends THREE.Scene {
         this.simulatedSpace.add(this.planet);
 
         this.background = skyBoxTexture;
+
+        this.planet.rotateY(Math.PI * -0.7);
     }
 
     update() {
-        const dt = this.clock.getDelta() % (1 / 30);
-        this.simulatedSpace.run(dt * this.timescale);
+        const dt = this.clock.getDelta() % (1 / 30) * this.timescale;
+        this.simulatedSpace.run(dt);
 
         this.planet.rotateY(dt / this.planetPeriod * Math.PI * 2);
 
