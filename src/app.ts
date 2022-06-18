@@ -25,6 +25,17 @@ export default class Application {
     protected resizeCallback: () => void;
     toaster = new Toaster();
 
+    _followedObject: THREE.Object3D | undefined;
+
+    get followedObject() {
+        return this._followedObject;
+    }
+
+    set followedObject(object) {
+        this._followedObject = object;
+        this.camera.position.normalize().multiplyScalar(object ? 1e7 : EARTH_RADIUS * 4);
+    }
+
     constructor(public readonly container: HTMLElement) {
         // configure application components.
         this.setupComponents();
@@ -83,9 +94,21 @@ export default class Application {
 
     protected render() {
         this.world.update();
+        this.followObject();
         this.controls.update();
+
         this.renderer.render(this.world, this.camera);
         this.stats.update();
+    }
+
+    protected followObject() {
+        if (!this.followedObject) return;
+
+        const cameraDistance = Math.min(Math.max(this.camera.position.distanceTo(this.followedObject.position), 0.75e7), 2e7);
+        const objectDistance = this.followedObject.position.length();
+        this.camera.position.copy(this.followedObject.position).multiplyScalar((cameraDistance + objectDistance) / objectDistance);
+        this.camera.lookAt(this.followedObject.position);
+        this.controls.target.copy(this.followedObject.position);
     }
 
     destroy() {

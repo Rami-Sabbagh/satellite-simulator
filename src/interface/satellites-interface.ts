@@ -38,7 +38,18 @@ export default class SatellitesInterface {
      * | `id = -1` | new satellite.      |
      * | `id >= 0` | existing satellite. |
      */
-    satelliteId = -1;
+    _satelliteId = -1;
+
+    get satelliteId() {
+        return this._satelliteId;
+    }
+
+    set satelliteId(value) {
+        this._satelliteId = value;
+        this.satellite = (value === -1) ? this.newDraftSatellite() : this.app.world.satellites[value];
+        if (this.follow) this.follow = true; // trigger it to update the followed satellite
+        this.refreshInterface();
+    }
 
     protected readonly spawnPosition = new Vector3(EARTH_RADIUS * 1.25, 0, 0)
     protected readonly spawnVelocity = new Vector3(0, 0, -7e3);
@@ -133,6 +144,8 @@ export default class SatellitesInterface {
         if (!isCritical(this._theta)) this._inclination = tempSpherical.theta;
 
         if (Math.abs(this._inclination) < 1e-6) this._inclination = 0;
+
+        if (this.preview) this.app.world.ghost.state = this.satellite;
     }
 
     protected applyVelocity() {
@@ -173,16 +186,22 @@ export default class SatellitesInterface {
 
     preview = this.app.world.ghost.visible;
 
+    get follow() {
+        return this.app.followedObject !== undefined;
+    }
+
+    set follow(value) {
+        this.app.followedObject = value ? this.satellite : undefined;
+    }
+
     actionBound = this.action.bind(this);
 
     get selectedSatelliteOption() {
-        return (this.satelliteId === -1) ? NEW_SATELLITE : `${this.satelliteId}: ${this.app.world.satellites[this.satelliteId].name}`;
+        return (this.satelliteId === -1) ? NEW_SATELLITE : `${this.satelliteId}: ${this.satellite.name}`;
     }
 
     set selectedSatelliteOption(name: string) {
         this.satelliteId = (name === NEW_SATELLITE) ? -1 : parseInt(name.split(':')[0]);
-        this.satellite = (this.satelliteId === -1) ? this.newDraftSatellite() : this.app.world.satellites[this.satelliteId];
-        this.refreshInterface();
     }
 
     private satelliteController: Controller;
@@ -196,6 +215,7 @@ export default class SatellitesInterface {
         this.satelliteController = this.folder.addFolder('').add(this, 'selectedSatelliteOption', [NEW_SATELLITE]).name('Satellite');
         
         this.folder.add(this, 'preview').name('Preview');
+        this.folder.add(this, 'follow').name('Follow');
         this.folder.add(this, 'name').name('Name');
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
         
@@ -249,19 +269,28 @@ export default class SatellitesInterface {
         this.app.toaster.toast(`Satellite ${this.name ? `"${this.name}"` : `#${this.satelliteId}`} has been deleted.`, 'alert');
         this.app.world.removeSatellite(this.satellite);
 
-        this.selectedSatelliteOption = NEW_SATELLITE;
+        this.satelliteId = -1;
         this.updateSatellitesList();
     }
 
     protected spawn() {
         this.nextSatelliteId++;
+
         this.spawnPosition.copy(this.satellite.position);
         this.spawnVelocity.copy(this.satellite.velocity);
-        
+
         this.app.world.addSatellite(this.satellite);
-        this.satellite = this.newDraftSatellite();
+        this.satellite.addDestructionListener(this.onSatelliteDestroyed.bind(this));
 
         this.updateSatellitesList();
-        this.refreshInterface();
+        this.satelliteId = -1;
+    }
+
+    protected onSatelliteDestroyed(satellite: Satellite) {
+        this.updateSatellitesList();
+        if (this.satelliteId === -1) return;
+
+        if (this.satellite === satellite) this.satelliteId = -1;
+        else if (this.app.world.satellites[this.satelliteId] !== this.satellite) this.satelliteId--;
     }
 }
