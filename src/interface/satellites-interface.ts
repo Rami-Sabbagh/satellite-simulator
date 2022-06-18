@@ -191,6 +191,7 @@ export default class SatellitesInterface {
     set scale(value) {
         this._scale = value;
         this.satellite.scale.set(value, value, value);
+        this.satellite.collisionRadius=7e5*value;
     }
     preview = this.app.world.ghost.visible;
 
