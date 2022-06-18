@@ -132,16 +132,16 @@ export default class SatellitesInterface {
 
     protected updateVelocity() {
         if (this._calculatedVelocity.equals(this.satellite.velocity)) return; // doesn't need updating.
-        
+
         this._calculatedVelocity.copy(this.satellite.velocity);
         this._velocity = this._calculatedVelocity.length();
-        
+
         this.updatePosition();
         tempEuler.set(Math.PI, -this._longitude, -this._latitude - Math.PI / 2, 'XZY'); // undo the orbital pane.
         tempVector.copy(this._calculatedVelocity).applyEuler(tempEuler);
-        
+
         tempSpherical.setFromVector3(tempVector);
-        this._theta = Math.PI-tempSpherical.phi;
+        this._theta = Math.PI - tempSpherical.phi;
         if (!isCritical(this._theta)) this._inclination = tempSpherical.theta;
 
         if (Math.abs(this._inclination) < 1e-6) this._inclination = 0;
@@ -191,6 +191,7 @@ export default class SatellitesInterface {
     set scale(value) {
         this._scale = value;
         this.satellite.scale.set(value, value, value);
+        this.satellite.collisionRadius = Satellite.defaultCollisionRadius * value;
     }
     preview = this.app.world.ghost.visible;
 
@@ -221,24 +222,24 @@ export default class SatellitesInterface {
         // Had to use a folder, because then the controller is updated, it's placed at the end of the folder.
         // And so storing it in a folder alone would prevent it from being pushed to the end of the list.
         this.satelliteController = this.folder.addFolder('').add(this, 'selectedSatelliteOption', [NEW_SATELLITE]).name('Satellite');
-        
+
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'follow').name('Follow');
         this.folder.add(this, 'name').name('Name');
         this.folder.add(this, 'scale').name('Scale').min(0.000001).max(1).step(0.0001);
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
-        
+
         this.folder.add(this, 'velocity').name('Velocity').min(1e3).max(1e5);
         this.folder.add(this, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);
-        
+
         this.folder.add(this, 'longitude').name('Longitude').min(-180).max(180).listen();
         this.folder.add(this, 'latitude').name('Latitude').min(-90).max(90).listen();
         this.folder.add(this, 'inclination').name('Inclination').min(-180).max(180).listen();
         this.folder.add(this, 'theta').name('Theta').min(0).max(180).listen();
-        
+
         this.actionController = this.folder.add(this, 'actionBound').name('Spawn Satellite');
-        
-        
+
+
         this.folder.onChange(this.apply.bind(this));
         this.apply();
     }
@@ -261,7 +262,7 @@ export default class SatellitesInterface {
     }
 
     protected updateSatellitesList() {
-        this.satelliteController = this.satelliteController.options([NEW_SATELLITE, ...this.app.world.satellites.map(({name},id) => `${id}: ${name}`)]);
+        this.satelliteController = this.satelliteController.options([NEW_SATELLITE, ...this.app.world.satellites.map(({ name }, id) => `${id}: ${name}`)]);
     }
 
     protected refreshInterface() {
