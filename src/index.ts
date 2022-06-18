@@ -1,4 +1,6 @@
 import 'styles/index.css';
+import 'preloader';
+
 import Application from 'app';
 import Interface from 'interface';
 

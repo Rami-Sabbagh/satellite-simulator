@@ -5,7 +5,6 @@ import earthBumpMap from 'assets/earth/bump-map.jpg';
 import jupiterColorMap from 'assets/jupiter/color-map.jpg';
 import marsColorMap from 'assets/mars/color-map.jpg';
 import marsBumpMap from 'assets/mars/bump-map.jpg';
-
 import sunColorMap from 'assets/sun/color-map.jpg';
 
 import skyboxNX from 'assets/skybox/nx.jpg';
