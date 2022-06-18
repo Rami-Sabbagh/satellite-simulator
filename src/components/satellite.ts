@@ -18,7 +18,7 @@ export default class Satellite extends SimulatedObject implements Rigid {
 
     protected readonly mesh = new THREE.Mesh(geometry, material);
 
-    static defaultCollisionRadius = 7e5;
+    static readonly defaultCollisionRadius = 7e5;
 
     collisionRadius = Satellite.defaultCollisionRadius;
 
