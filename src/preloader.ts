@@ -7,7 +7,7 @@ const preloader = document.querySelector("#preloader") as HTMLElement;
 const downloadInfo = document.querySelector(".download-info") as HTMLElement;
 const itemsCount = document.querySelector(".items-count") as HTMLElement;
 
-export const loadingManager = new THREE.LoadingManager();
+const loadingManager = THREE.DefaultLoadingManager;
 
 loadingManager.onLoad = () => {
     downloadInfo.innerText = "Loading complete";

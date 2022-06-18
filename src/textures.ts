@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { loadingManager } from './loading-manager';
 
 import earthColorMap from 'assets/earth/color-map.jpg';
 import earthBumpMap from 'assets/earth/bump-map.jpg';
@@ -27,8 +26,8 @@ export interface TexturePack {
     metalnessMap: THREE.Texture,
 }
 
-const loader = new THREE.TextureLoader(loadingManager);
-const cubeLoader = new THREE.CubeTextureLoader(loadingManager);
+const loader = new THREE.TextureLoader();
+const cubeLoader = new THREE.CubeTextureLoader();
 
 export const earthTexture: Partial<TexturePack> = {
     colorMap: loader.load(earthColorMap),
