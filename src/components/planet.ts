@@ -12,7 +12,7 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
     private readonly material = new THREE.MeshStandardMaterial();
     private mesh = new THREE.Mesh(this.geometry, this.material);
 
-    planetPeriod = 24 * 3_600;
+    period = 24 * 3_600;
 
     constructor(private _radius = EARTH_RADIUS, mass = EARTH_MASS) {
         super(BodyType.Static, mass);
@@ -82,6 +82,6 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
     }
 
     update(dt: number) {
-        this.rotateY(dt / this.planetPeriod * Math.PI * 2);
+        this.rotateY(dt / this.period * Math.PI * 2);
     }
 }
