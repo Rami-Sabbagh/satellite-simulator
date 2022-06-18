@@ -33,11 +33,12 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
-        assetModuleFilename: '[name][hash][ext]'
+        assetModuleFilename: '[name][hash][ext]',
     },
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
+            favicon: "./favicon.ico"
         }),
     ],
     /** @type {import('webpack-dev-server').Configuration}  */
