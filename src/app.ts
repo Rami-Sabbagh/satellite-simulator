@@ -6,6 +6,7 @@ import World from 'components/world';
 import { EARTH_DISTANCE, EARTH_RADIUS, SIMULATION_SCALE } from 'physics/constants';
 import Toaster from 'interface/toaster';
 import { Vector2, Vector3 } from 'three';
+const CAMERA_FOLLOWING_FACTOR = 3000000;
 /**
  * THREE.js Application.
  */
@@ -105,12 +106,9 @@ export default class Application {
     protected followObject() {
         if (!this.followedObject) return;
 
-        //const cameraDistance = Math.min(Math.max(this.camera.position.distanceTo(this.followedObject.position), 0.75e7), 2e7);
-        //const objectDistance = this.followedObject.position.length();
-        //this.camera.position.copy(this.followedObject.position).multiplyScalar((cameraDistance + objectDistance) / objectDistance);
         const height = this.followedObject.position.clone().sub(this.world.planet.position);
-        this.camera.position.set(height.x, height.y, height.z).multiplyScalar(this.followedObject.scale.x*3);
-        
+        this.camera.position.set(height.x, height.y, height.z).
+            add(height.clone().normalize().multiplyScalar(this.followedObject.scale.x * CAMERA_FOLLOWING_FACTOR));
         this.camera.lookAt(this.followedObject.position);
         this.controls.target.copy(this.followedObject.position);
     }

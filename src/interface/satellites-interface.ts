@@ -225,7 +225,7 @@ export default class SatellitesInterface {
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'follow').name('Follow');
         this.folder.add(this, 'name').name('Name');
-        this.folder.add(this, 'scale').name('Scale').min(0.0001).max(1).step(0.0001);
+        this.folder.add(this, 'scale').name('Scale').min(0.000001).max(1).step(0.0001);
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
         
         this.folder.add(this, 'velocity').name('Velocity').min(1e3).max(1e5);
