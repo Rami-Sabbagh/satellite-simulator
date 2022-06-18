@@ -22,6 +22,7 @@ export default class World extends THREE.Scene {
 
     readonly satellites: Satellite[] = [];
 
+    paused = false;
     timescale = 1;
     planetPeriod = 24 * 3_600;
 
@@ -54,6 +55,8 @@ export default class World extends THREE.Scene {
     }
 
     update() {
+        if (this.paused) return;
+        
         const dt = this.clock.getDelta() % (1 / 30) * this.timescale;
         this.simulatedSpace.run(dt);
 
