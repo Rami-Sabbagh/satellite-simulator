@@ -21,7 +21,7 @@ export default class GhostSatellite extends THREE.Object3D {
 
         this.add(this.positionArrow);
         this.add(this.velocityArrow);
-        this.add(this.body);
+        // this.add(this.body);
 
         this.visible = false; // invisible by default.
         // this.positionArrow.visible = false;
