@@ -8,12 +8,12 @@ import marsBumpMap from 'assets/mars/bump-map.jpg';
 
 import sunColorMap from 'assets/sun/color-map.jpg';
 
-import skyboxNX from 'assets/skybox/nx.png';
-import skyboxNY from 'assets/skybox/ny.png';
-import skyboxNZ from 'assets/skybox/nz.png';
-import skyboxPX from 'assets/skybox/px.png';
-import skyboxPY from 'assets/skybox/py.png';
-import skyboxPZ from 'assets/skybox/pz.png';
+import skyboxNX from 'assets/skybox/nx.jpg';
+import skyboxNY from 'assets/skybox/ny.jpg';
+import skyboxNZ from 'assets/skybox/nz.jpg';
+import skyboxPX from 'assets/skybox/px.jpg';
+import skyboxPY from 'assets/skybox/py.jpg';
+import skyboxPZ from 'assets/skybox/pz.jpg';
 
 import lensflareBase from 'assets/lensflare/lensflare0_alpha.png';
 import lensflareExtra from 'assets/lensflare/lensflare3.png';
