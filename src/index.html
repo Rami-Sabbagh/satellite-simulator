@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            /* 
+                Please do not remove this stylesheet, as it includes
+                critical CSS needed for the preloader to display correctly and 
+                as fast as possible.
+            */
+            html,
+            body {
+                width: 100%;
+                height: 100%;
+
+                padding: 0;
+                margin: 0;
+
+                overflow: hidden;
+                font-family: Poppins;
+            }
+
+            #preloader {
+                width: 100%;
+                height: 100%;
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                
+                position: absolute;
+                z-index: 2000;
+
+                color: #fff;
+                background-color: #000;
+
+                opacity: 1;
+                transition: opacity 1.5s ease-in;
+            }
+
+            #preloader.fade-out {
+                opacity: 0;
+            }
+
+            .download-info {
+                font-size: 1.2rem;
+                color: white;
+
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+            }
+
+
+            .moon {
+                animation: orbit 1s infinite linear;
+            }
+
+            @keyframes orbit {
+                from {
+                    transform: rotate(360deg);
+                }
+
+                to {
+                    transform: rotate(0);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="preloader">
+            <h1>Satellite Simulator VI - Deluxe Edition</h1>
+            
+            <svg viewBox="0 0 160 160" width="200" height="200">
+                <style>
+                    circle { fill: url(#bottom)}
+                    .mask { fill: url(#top)}
+                </style>
+                <defs>
+                    <!-- These gradient values are hardcoded as... duck. Please don't edit them -->
+                    <linearGradient id="bottom">
+                      <stop offset="6%" stop-color="#bdc3c7"></stop>
+                      <stop offset="70%" stop-color="#2c3e50"></stop>
+                    </linearGradient>
+
+                    <linearGradient id="top">
+                        <stop offset="0%" stop-color="#bdc3c7"></stop>
+                        <stop offset="75%" stop-color="#2c3e50"></stop>
+                      </linearGradient>
+                  </defs>
+
+                <circle cx="80" cy="80" r="50" fill="#757575"></circle>
+               
+                <g transform=" matrix(0.866, -0.5, 0.25, 0.433, 80, 80)">
+                    <path class="moon" d="M 0,70 A 65,70 0 0,0 65,0 5,5 0 0,1 75,0 75,70 0 0,1 0,70Z" fill="#fff"></path>
+                </g>
+                <path class="mask" d="M 50,0 A 50,50 0 0,0 -50,0Z" transform="matrix(0.866, -0.5, 0.5, 0.866, 80, 80)"></path>
+            </svg>
+            <div class="download-info">Loading main bundle...</div>
+            <div class="items-count"></div>
+        </div>
+    </body>
+</html>

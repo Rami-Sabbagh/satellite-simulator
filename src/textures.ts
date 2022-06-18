@@ -1,11 +1,11 @@
 import * as THREE from 'three';
+import { loadingManager } from './loading-manager';
 
 import earthColorMap from 'assets/earth/color-map.jpg';
 import earthBumpMap from 'assets/earth/bump-map.jpg';
 import jupiterColorMap from 'assets/jupiter/color-map.jpg';
 import marsColorMap from 'assets/mars/color-map.jpg';
 import marsBumpMap from 'assets/mars/bump-map.jpg';
-
 import sunColorMap from 'assets/sun/color-map.jpg';
 
 import skyboxNX from 'assets/skybox/nx.png';
@@ -27,8 +27,8 @@ export interface TexturePack {
     metalnessMap: THREE.Texture,
 }
 
-const loader = new THREE.TextureLoader();
-const cubeLoader = new THREE.CubeTextureLoader();
+const loader = new THREE.TextureLoader(loadingManager);
+const cubeLoader = new THREE.CubeTextureLoader(loadingManager);
 
 export const earthTexture: Partial<TexturePack> = {
     colorMap: loader.load(earthColorMap),
