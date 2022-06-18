@@ -26,8 +26,6 @@ export default class SimulationInterface {
     protected apply() {
         this.app.world.timeResolution = Math.pow(10, this.resolution);
         this.app.world.timescale = this.timescale;
-        if (this.paused) {
-            this.app.world.timescale = 0;
-        }
+        this.app.world.paused = this.paused;
     }
 }
