@@ -24,7 +24,6 @@ export default class World extends THREE.Scene {
 
     paused = false;
     timescale = 1;
-    planetPeriod = 24 * 3_600;
 
     get timeResolution() {
         return this.simulatedSpace.timeResolution
@@ -58,10 +57,9 @@ export default class World extends THREE.Scene {
         if (this.paused) return;
         
         const dt = this.clock.getDelta() % (1 / 30) * this.timescale;
+
         this.simulatedSpace.run(dt);
-
-        this.planet.rotateY(dt / this.planetPeriod * Math.PI * 2);
-
+        this.planet.update(dt);
         this.satellites.forEach((satellite) => satellite.lookAt(this.planet.position));
     }
 

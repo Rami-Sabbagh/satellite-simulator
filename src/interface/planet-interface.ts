@@ -15,7 +15,7 @@ const texturesOptions = Object.keys(textures).map(key => `${key.charAt(0).toUppe
 export default class PlanetInterface {
     protected readonly folder = this.gui.addFolder('Planet');
 
-    protected period = this.app.world.planetPeriod;
+    protected period = this.app.world.planet.period;
     protected radius = this.app.world.planet.radius;
     protected mass = this.app.world.planet.mass;
     protected color = this.app.world.planet.color;
@@ -54,7 +54,7 @@ export default class PlanetInterface {
     protected apply() {
         // TODO: could change planet physics in addition of texture (presets).
 
-        this.app.world.planetPeriod = this.period;
+        this.app.world.planet.period = this.period;
         this.app.world.planet.texture = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`];
         this.app.world.planet.radius = this.radius;
         this.app.world.planet.mass = this.mass;

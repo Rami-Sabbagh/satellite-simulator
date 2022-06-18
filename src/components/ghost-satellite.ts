@@ -9,7 +9,12 @@ const material = new THREE.MeshBasicMaterial({
 });
 
 const tempVector = new THREE.Vector3();
-
+/**
+ * This is the invisible satellite that appears when the user
+ * checks the `preview` box. This satellite has helper axes
+ * which show the user where the satellite will orbit according
+ * to the parameters he chooses from the gui.
+ */
 export default class GhostSatellite extends THREE.Object3D {
     protected positionArrow = new THREE.ArrowHelper(undefined, undefined, undefined, 0xff0000, .05, .01);
     protected velocityArrow = new THREE.ArrowHelper(undefined, undefined, undefined, 0xffff00, .1, .05);

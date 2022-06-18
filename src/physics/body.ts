@@ -48,7 +48,7 @@ export interface ExertsForce extends Body {
 
 export interface Rigid extends Body {
     /**
-     * The radius of the collision sphere squared.
+     * The radius of the collision sphere.
      */
     collisionRadius: number;
 
