@@ -26,7 +26,7 @@ export default class PlanetInterface {
     constructor(protected readonly gui: GUI, protected app: Application) {
         this.folder.open(false); // closed by default.
 
-        this.folder.add(this, 'period').name('Period').min(1).max(24 * 10).step(6);
+        this.folder.add(this, 'period').name('Period').min(1).max(this.app.world.planet.period * 2).step(6);
         this.folder.add(this, 'texture', texturesOptions).name('Texture')
             .onChange(() => {
                 this.bumpScale = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`].bumpScale ?? 0;
