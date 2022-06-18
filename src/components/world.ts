@@ -49,6 +49,8 @@ export default class World extends THREE.Scene {
         this.simulatedSpace.add(this.planet);
 
         this.background = skyBoxTexture;
+
+        this.planet.rotateY(Math.PI * -0.7);
     }
 
     update() {
