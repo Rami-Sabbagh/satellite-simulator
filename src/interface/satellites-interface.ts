@@ -47,6 +47,7 @@ export default class SatellitesInterface {
     set satelliteId(value) {
         this._satelliteId = value;
         this.satellite = (value === -1) ? this.newDraftSatellite() : this.app.world.satellites[value];
+        if (this.follow) this.follow = true; // trigger it to update the followed satellite
         this.refreshInterface();
     }
 
@@ -185,6 +186,14 @@ export default class SatellitesInterface {
 
     preview = this.app.world.ghost.visible;
 
+    get follow() {
+        return this.app.followedObject !== undefined;
+    }
+
+    set follow(value) {
+        this.app.followedObject = value ? this.satellite : undefined;
+    }
+
     actionBound = this.action.bind(this);
 
     get selectedSatelliteOption() {
@@ -206,6 +215,7 @@ export default class SatellitesInterface {
         this.satelliteController = this.folder.addFolder('').add(this, 'selectedSatelliteOption', [NEW_SATELLITE]).name('Satellite');
         
         this.folder.add(this, 'preview').name('Preview');
+        this.folder.add(this, 'follow').name('Follow');
         this.folder.add(this, 'name').name('Name');
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
         
@@ -272,10 +282,8 @@ export default class SatellitesInterface {
         this.app.world.addSatellite(this.satellite);
         this.satellite.addDestructionListener(this.onSatelliteDestroyed.bind(this));
 
-        this.satellite = this.newDraftSatellite();
-
         this.updateSatellitesList();
-        this.refreshInterface();
+        this.satelliteId = -1;
     }
 
     protected onSatelliteDestroyed(satellite: Satellite) {
