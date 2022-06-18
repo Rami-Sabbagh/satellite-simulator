@@ -128,6 +128,7 @@ export default class SatellitesInterface {
     _velocity = 0;
     _inclination = 0;
     _theta = 90 * TO_RADIAN;
+    _scale = 1;
 
     protected updateVelocity() {
         if (this._calculatedVelocity.equals(this.satellite.velocity)) return; // doesn't need updating.
@@ -184,6 +185,13 @@ export default class SatellitesInterface {
         this.applyVelocity();
     }
 
+    get scale() {
+        return this._scale;
+    }
+    set scale(value) {
+        this._scale = value;
+        this.satellite.scale.set(value, value, value);
+    }
     preview = this.app.world.ghost.visible;
 
     get follow() {
@@ -217,6 +225,7 @@ export default class SatellitesInterface {
         this.folder.add(this, 'preview').name('Preview');
         this.folder.add(this, 'follow').name('Follow');
         this.folder.add(this, 'name').name('Name');
+        this.folder.add(this, 'scale').name('Scale').min(0.000001).max(1).step(0.0001);
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
         
         this.folder.add(this, 'velocity').name('Velocity').min(1e3).max(1e5);

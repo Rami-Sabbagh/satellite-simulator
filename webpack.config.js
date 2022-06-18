@@ -33,11 +33,11 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
+        assetModuleFilename: '[name][hash][ext]'
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Satellites Simulator',
-            favicon: "./favicon.ico"
+            template: './src/index.html',
         }),
     ],
     /** @type {import('webpack-dev-server').Configuration}  */
