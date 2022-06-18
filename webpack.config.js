@@ -38,8 +38,6 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            title: 'Satellites Simulator',
-            favicon: "./favicon.ico"
         }),
     ],
     /** @type {import('webpack-dev-server').Configuration}  */
