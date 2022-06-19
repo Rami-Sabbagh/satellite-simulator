@@ -73,6 +73,22 @@ export default class SatellitesInterface {
         this.satellite.mass = value;
     }
 
+    get shape() {
+        return this.satellite.shape;
+    }
+
+    set shape(value) {
+        this.satellite.shape = value;
+    }
+
+    get faceArea() {
+        return this.satellite.faceArea;
+    }
+
+    set faceArea(value) {
+        this.satellite.faceArea = value;
+    }
+
     _calculatedPosition = new Vector3();
     _height = 0;
     _longitude = 0;
@@ -228,6 +244,9 @@ export default class SatellitesInterface {
         this.folder.add(this, 'name').name('Name');
         this.folder.add(this, 'scale').name('Scale').min(0.000001).max(1).step(0.0001);
         this.folder.add(this, 'mass').name('Mass').min(1).max(1e6);
+
+        this.folder.add(this, 'shape').name('Shape').min(0).max(1);
+        this.folder.add(this, 'faceArea').name('Face Area').min(1).max(1e4);
 
         this.folder.add(this, 'velocity').name('Velocity').min(1e3).max(1e5);
         this.folder.add(this, 'height').name('Height').min(EARTH_RADIUS * 1.25).max(EARTH_RADIUS * 10);

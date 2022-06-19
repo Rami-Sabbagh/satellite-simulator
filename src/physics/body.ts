@@ -12,6 +12,13 @@ export const enum BodyType {
     Static = "static",
 }
 
+export enum BodyShape {
+    sphere = 0.5,
+    cylinder = 0.82,
+    cube = 1.05,
+    plate = 1.28,
+}
+
 /**
  * A body which exists and _may_ move in space and time.
  */
@@ -28,6 +35,9 @@ export interface Body {
     velocity: THREE.Vector3;
 
     appliedForces: THREE.Vector3;
+
+    faceArea: number;
+    shape: BodyShape | number;
 }
 
 /**

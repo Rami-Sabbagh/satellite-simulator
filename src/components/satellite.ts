@@ -2,7 +2,7 @@ import * as THREE from 'three';
 
 import { satelliteModel } from 'models';
 
-import { Body, BodyType, Rigid } from 'physics/body';
+import { BodyType, Rigid } from 'physics/body';
 import SimulatedObject from 'components/simulated-object';
 
 const geometry = new THREE.SphereGeometry(7e5, 4, 2);
@@ -14,8 +14,6 @@ const material = new THREE.MeshBasicMaterial({
 type DestructionListener = (satellite: Satellite) => void;
 
 export default class Satellite extends SimulatedObject implements Rigid {
-    private _type = 'satellite';
-
     protected readonly mesh = new THREE.Mesh(geometry, material);
 
     static readonly defaultCollisionRadius = 7e5;
@@ -25,7 +23,7 @@ export default class Satellite extends SimulatedObject implements Rigid {
     private readonly destructionListeners: DestructionListener[] = [];
 
     constructor(mass = 10) {
-        super(BodyType.Dynamic, mass);
+        super(BodyType.Dynamic, mass, 100);
         this.add(this.mesh);
 
         satelliteModel.then(({ scene }) => {
@@ -50,9 +48,5 @@ export default class Satellite extends SimulatedObject implements Rigid {
         satellite.position.copy(position);
         satellite.velocity.copy(velocity);
         return satellite;
-    }
-
-    static isSatellite(body: Body): body is Satellite {
-        return (body as Satellite)._type === 'satellite';
     }
 }

@@ -29,6 +29,9 @@ export default class PlanetInterface {
     protected wireframe = this.app.world.planet.wireframe;
     protected texture = texturesOptions[1];
     protected bumpScale = textures.earth.bumpScale ?? 0;
+    protected atmosphereDensity = this.app.world.planet.atmosphereDensity;
+    protected atmosphereHeight = this.app.world.planet.atmosphereHeight;
+    protected atmosphereVisible = this.app.world.planet.atmosphereVisible;
 
     constructor(protected readonly gui: GUI, protected app: Application) {
         this.folder.open(false); // closed by default.
@@ -45,6 +48,11 @@ export default class PlanetInterface {
         this.folder.add(this, 'mass').name('Mass')
             .min(this.app.world.planet.mass)
             .max(this.app.world.planet.mass * 100);
+
+        this.folder.add(this, 'atmosphereVisible').name('Show Atmosphere');
+        this.folder.add(this, 'atmosphereDensity').name('Atmosphere Density').min(this.atmosphereDensity / 20).max(this.atmosphereDensity * 10);
+        this.folder.add(this, 'atmosphereHeight').name('Atmosphere Height').min(this.atmosphereHeight / 10).max(this.atmosphereHeight * 4);
+
         this.folder.addColor(this, 'color').name('Color');
         this.folder.add(this, 'wireframe').name('Wireframe');
 
@@ -66,5 +74,8 @@ export default class PlanetInterface {
         this.app.world.planet.mass = this.mass;
         this.app.world.planet.color = this.color;
         this.app.world.planet.wireframe = this.wireframe;
+        this.app.world.planet.atmosphereDensity = this.atmosphereDensity;
+        this.app.world.planet.atmosphereHeight = this.atmosphereHeight;
+        this.app.world.planet.atmosphereVisible = this.atmosphereVisible;
     }
 }   

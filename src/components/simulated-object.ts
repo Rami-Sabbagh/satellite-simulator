@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Body, BodyType } from '../physics/body';
+import { Body, BodyShape, BodyType } from '../physics/body';
 
 const _quaternion = new THREE.Quaternion();
 const _matrix = new THREE.Matrix4();
@@ -20,6 +20,8 @@ export default class SimulatedObject extends THREE.Object3D implements Body {
     constructor(
         private readonly _physicsType: BodyType,
         private _mass: number,
+        public faceArea: number = 0,
+        public shape: BodyShape | number = BodyShape.sphere,
     ) {
         super();
     }
