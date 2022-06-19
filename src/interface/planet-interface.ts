@@ -33,7 +33,7 @@ export default class PlanetInterface {
     constructor(protected readonly gui: GUI, protected app: Application) {
         this.folder.open(false); // closed by default.
 
-        this.folder.add(this, 'period').name('Period').min(1).max(48).step(6);
+        this.folder.add(this, 'period').name('Period').min(1).max(48).step(1);
         this.folder.add(this, 'texture', texturesOptions).name('Texture')
             .onChange(() => {
                 this.bumpScale = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`].bumpScale ?? 0;
@@ -61,7 +61,6 @@ export default class PlanetInterface {
     protected apply() {
         // TODO: could change planet physics in addition of texture (presets).
 
-        this.app.world.planet.period = this.period;
         this.app.world.planet.texture = textures[`${this.texture.charAt(0).toLowerCase()}${this.texture.slice(1)}`];
         this.app.world.planet.radius = this.radius;
         this.app.world.planet.mass = this.mass;
