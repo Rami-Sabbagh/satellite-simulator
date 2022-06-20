@@ -7,7 +7,7 @@ import Sun from 'components/sun';
 import { EARTH_RADIUS } from 'physics/constants';
 import GhostSatellite from 'components/ghost-satellite';
 import Satellite from 'components/satellite';
-import _ from 'lodash';
+import { remove as _remove } from 'lodash';
 import { skyBoxTexture } from 'textures';
 
 export type SatelliteDestructionListener = (satellite: Satellite) => void;
@@ -74,7 +74,7 @@ export default class World extends THREE.Scene {
     }
 
     removeSatellite(satellite: Satellite) {
-        _.remove(this.satellites, (obj) => obj === satellite);
+        _remove(this.satellites, (obj) => obj === satellite);
         this.simulatedSpace.remove(satellite);
     }
 }

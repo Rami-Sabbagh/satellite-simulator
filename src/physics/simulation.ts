@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { remove as _remove } from 'lodash';
 import * as THREE from 'three';
 import { Body, BodyType, canExertForce, ExertsForce, isRigid, Rigid } from "./body";
 
@@ -12,10 +12,13 @@ export class Simulation {
     protected bodies: Body[] = [];
 
     /**
-     * Which can exert forces on other bodies.
+     * Bodies which can exert forces on other bodies.
      */
     protected activeBodies: ExertsForce[] = [];
     
+    /**
+     * Bodies which can collide into other bodies.
+     */
     protected rigidBodies: Rigid[] = [];
 
     constructor(
@@ -32,9 +35,9 @@ export class Simulation {
     remove(body: Body) {
         const filter = (other: Body) => other === body;
 
-        _.remove(this.bodies, filter);
-        _.remove(this.activeBodies, filter);
-        _.remove(this.rigidBodies, filter);
+        _remove(this.bodies, filter);
+        _remove(this.activeBodies, filter);
+        _remove(this.rigidBodies, filter);
     }
     
     /**
