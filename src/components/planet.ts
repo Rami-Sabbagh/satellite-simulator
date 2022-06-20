@@ -23,7 +23,7 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
     });
     private readonly atmosphere = new THREE.Mesh(this.atmosphereGeometry, this.atmosphereMaterial);
 
-    private _atmosphereHeight = EARTH_RADIUS * 0.3;
+    private _atmosphereHeight = EARTH_RADIUS * 0.15;
     private _atmosphereDensity = 1.29e-10;
 
     period = 24 * 3_600;
