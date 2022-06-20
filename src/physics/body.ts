@@ -68,12 +68,11 @@ export interface Rigid extends Body {
     onCollision(): void;
 }
 
-// eslint-disable-next-line
+
 export function canExertForce(object: Object): object is ExertsForce {
     return "exertForce" in object;
 }
 
-// eslint-disable-next-line
 export function isRigid(object: Object): object is Rigid {
     return "onCollision" in object;
 }

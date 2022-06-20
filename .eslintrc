@@ -11,5 +11,15 @@
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
     ],
-    "root": true
+    "root": true,
+    "rules": {
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "types": {
+                    "Object": false
+                }
+            }
+        ]
+    }
 }
