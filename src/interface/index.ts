@@ -1,6 +1,4 @@
 import GUI from 'lil-gui';
-
-
 import type Application from 'app';
 
 import SimulationInterface from './simulation-interface';
@@ -9,6 +7,7 @@ import PlanetInterface from './planet-interface';
 import SatellitesInterface from './satellites-interface';
 import SunInterface from './sun-interface';
 import GUIInterface from './gui-styles-interface';
+
 export default class Interface {
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',

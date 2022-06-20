@@ -11,6 +11,9 @@ const material = new THREE.MeshBasicMaterial({
     wireframe: true,
 });
 
+/**
+ * A callback that will be called when the satellite collides with another body.
+ */
 type DestructionListener = (satellite: Satellite) => void;
 
 export default class Satellite extends SimulatedObject implements Rigid {
@@ -20,6 +23,10 @@ export default class Satellite extends SimulatedObject implements Rigid {
 
     collisionRadius = Satellite.defaultCollisionRadius;
 
+    /**
+     * A an array of subscribers that will be notified
+     * when the satellite is destroyed.
+     */
     private readonly destructionListeners: DestructionListener[] = [];
 
     constructor(mass = 10) {
