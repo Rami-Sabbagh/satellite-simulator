@@ -1,12 +1,12 @@
 /**
  * ## Reference URLs:
- * 
+ *
  * - FLIP technique: https://aerotwist.com/blog/flip-your-animations/
  * - Why FLIP is useful: https://www.joshwcomeau.com/react/animating-the-unanimatable/
  * - Creating a toast component: https://web.dev/building-a-toast-component/
  */
 
-type ToastIcon = "alert" | "explosion";
+type ToastIcon = 'alert' | 'explosion';
 
 import 'styles/toaster.css';
 
@@ -16,7 +16,7 @@ export default class Toaster {
     /**
      * How long the toast stays in the page before removing it.
      */
-    private toastDuration = "4s";
+    private toastDuration = '4s';
 
     constructor() {
         this.toastContainer = document.createElement('section');
@@ -29,7 +29,7 @@ export default class Toaster {
      * Creates a DOM node representing a toast.
      */
     private createToast(text: string, type: ToastIcon) {
-        const toast = document.createElement("output");
+        const toast = document.createElement('output');
 
         toast.innerText = text;
         toast.classList.add('toast');
@@ -73,18 +73,14 @@ export default class Toaster {
     /**
      * Displays a new toast on the screen.
      */
-    public async toast(text: string, type: ToastIcon = "alert") {
+    public async toast(text: string, type: ToastIcon = 'alert') {
         const toast = this.createToast(text, type);
         this.addToast(toast);
 
-        // eslint-disable-next-line no-async-promise-executor
-        return new Promise(async (resolve) => {
-            // Wait until all CSS animations are done then remove it from the DOM.
-            await Promise.allSettled(
-                toast.getAnimations().map((animation) => animation.finished)
-            );
-            this.toastContainer.removeChild(toast);
-            resolve(undefined);
-        });
+        // Wait until all CSS animations are done then remove it from the DOM.
+        await Promise.allSettled(
+            toast.getAnimations().map((animation) => animation.finished)
+        );
+        this.toastContainer.removeChild(toast);
     }
 }
