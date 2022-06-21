@@ -1,6 +1,7 @@
 import { remove as _remove } from 'lodash';
 import * as THREE from 'three';
 import { Body, BodyType, canExertForce, ExertsForce, isRigid, Rigid } from "./body";
+import { sphereCollidesWithSphere } from './collision';
 
 const temporaryVector = new THREE.Vector3();
 
@@ -113,8 +114,7 @@ export class Simulation {
             for (const otherBody of this.rigidBodies) {
                 if (body === otherBody) continue;
 
-                const distance = temporaryVector.subVectors(body.position, otherBody.position).length();
-                if (distance <= body.collisionRadius + otherBody.collisionRadius) {
+                if (sphereCollidesWithSphere(body, otherBody)) {
                     body.onCollision();
                     otherBody.onCollision();
                 }
