@@ -15,8 +15,8 @@ export default class SimulatedObject extends THREE.Object3D implements Body {
         this._mass = value;
     }
     
-    velocity = new THREE.Vector3();
-    appliedForces = new THREE.Vector3();
+    public velocity = new THREE.Vector3();
+    public appliedForces = new THREE.Vector3();
 
     constructor(
         private readonly _physicsType: BodyType,

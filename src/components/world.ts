@@ -22,8 +22,8 @@ export default class World extends THREE.Scene {
 
     readonly satellites: Satellite[] = [];
 
-    paused = false;
-    timescale = 1;
+    public paused = false;
+    public timescale = 1;
 
     get timeResolution() {
         return this.simulatedSpace.timeResolution
@@ -56,6 +56,11 @@ export default class World extends THREE.Scene {
     update() {
         if (this.paused) return;
         
+        /**
+         * The (% (1 / 30)) trick is to prevent prevent frames
+         * from taking more than 1 / 30 seconds to render,
+         * regardlessof the actual time needed to render them on the hardware.         
+         */ 
         const dt = this.clock.getDelta() % (1 / 30) * this.timescale;
 
         this.simulatedSpace.run(dt);

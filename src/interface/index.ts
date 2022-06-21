@@ -14,6 +14,11 @@ export default class Interface {
         width: 500,
     });
 
+    /**
+     * This file is fishy... Adding a new folder requires us to add
+     * code to three different places in this file. Maybe we could
+     * have an array of folders and loop over them for instantiation/HMR?
+     */
     protected readonly simulation: SimulationInterface;
     protected readonly sun: SunInterface;
     protected readonly planet: PlanetInterface;

@@ -27,6 +27,7 @@ function isCritical(angle: number): boolean {
  */
 const NEW_SATELLITE = '(new)';
 
+// RAMI THIS CLASS IS TOO CHONKY
 export default class SatellitesInterface {
     protected folder = this.gui.addFolder('Satellites');
 
