@@ -5,8 +5,6 @@ const path = require('path');
 
 /** @type {import('webpack').Configuration} */
 module.exports = {
-    mode: 'development',
-    devtool: 'eval-source-map',
     entry: './src/index.ts',
     module: {
         rules: [
@@ -30,7 +28,7 @@ module.exports = {
         modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].[contenthash].js',
         path: path.resolve(__dirname, 'dist'),
         clean: true,
         assetModuleFilename: '[name][hash][ext]',
@@ -38,16 +36,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            favicon: "./favicon.ico"
+            favicon: './favicon.ico',
         }),
-    ],
-    /** @type {import('webpack-dev-server').Configuration}  */
-    devServer: {
-        static: {
-            directory: path.join(__dirname, 'dist'),
-        },
-        compress: true,
-        port: 9000,
-        hot: true,
-    },
-}
+    ]
+};
