@@ -1,4 +1,4 @@
-# satellite-simulator
+# Satellite Simulator VI - Deluxe Edition
 
 ![Satellite Simulator's Logo](./src/assets/logos/logo-white.jpg "Satellite Simulator's Logo")
 
