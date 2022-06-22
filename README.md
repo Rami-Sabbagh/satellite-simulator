@@ -80,6 +80,8 @@ The build can be then accessed at `/dist` and could be served as static page con
 
 Icons are from: https://www.svgrepo.com/
 
+[Satellite](https://sketchfab.com/3d-models/satellite-90c8fafa35c84e3b90601dd3ac8d202f) 3D model, under [Creative Commons Attribution](https://creativecommons.org/licenses/by/4.0/), was modified by [RedDeadAlice](https://github.com/RedDeadAlice).
+
 ## Developed by
 
 - [Rami Sabbagh](https://rami-sabbagh.github.io/) ([rami.sab07@gmail.com](mailto:rami.sab07@gmail.com)).
