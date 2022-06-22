@@ -5,7 +5,7 @@
         "node": true
     },
     "parser": "@typescript-eslint/parser",
-    "ignorePatterns": ["node_modules", "webpack.*.js"],
+    "ignorePatterns": ["node_modules", "webpack.*.js", "dist"],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",

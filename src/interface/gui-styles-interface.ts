@@ -73,8 +73,11 @@ export default class GUIInterface {
         this.app = app;
     }
 
-    onChange(event: any) {
-        this.updateGUIStyles({ [event.property]: event.value });
+    onChange({ property, value }: {
+        property: string;
+        value: number;
+    }) {
+        this.updateGUIStyles({ [property]: value });
         localStorage.setItem('guiproperties', JSON.stringify(this.properties));
     }
 }
