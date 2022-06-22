@@ -1,6 +1,4 @@
 import GUI from 'lil-gui';
-
-
 import type Application from 'app';
 
 import SimulationInterface from './simulation-interface';
@@ -9,12 +7,18 @@ import PlanetInterface from './planet-interface';
 import SatellitesInterface from './satellites-interface';
 import SunInterface from './sun-interface';
 import GUIInterface from './gui-styles-interface';
+
 export default class Interface {
     readonly gui = new GUI({
         title: 'Satellites Simulator VI: Deluxe Edition',
         width: 500,
     });
 
+    /**
+     * This file is fishy... Adding a new folder requires us to add
+     * code to three different places in this file. Maybe we could
+     * have an array of folders and loop over them for instantiation/HMR?
+     */
     protected readonly simulation: SimulationInterface;
     protected readonly sun: SunInterface;
     protected readonly planet: PlanetInterface;

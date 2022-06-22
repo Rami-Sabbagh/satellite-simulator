@@ -9,37 +9,39 @@ import Toaster from 'interface/toaster';
  * THREE.js Application.
  */
 export default class Application {
-    readonly renderer = new THREE.WebGLRenderer({
+    public readonly renderer = new THREE.WebGLRenderer({
         antialias: true,
         logarithmicDepthBuffer: true,
     });
-    readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, EARTH_DISTANCE * 1.2 * SIMULATION_SCALE);
-    readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
-    readonly stats = Stats();
+    public readonly camera = new THREE.PerspectiveCamera(75, this.renderer.domElement.width / this.renderer.domElement.height, 0.1, EARTH_DISTANCE * 1.2 * SIMULATION_SCALE);
+    public readonly controls = new OrbitControls(this.camera, this.renderer.domElement);
+    public readonly stats = Stats();
 
-    private _world = new World();
+    public readonly toaster = new Toaster();
+    protected resizeCallback: () => void;
+
+    protected _world = new World();
     get world() { return this._world; }
 
     protected _statsVisible = false;
+    get showStats() { return this._statsVisible; }
+    set showStats(value: boolean) {
+        if (this._statsVisible === value) return;
+        this._statsVisible = value;
 
-    protected resizeCallback: () => void;
-    toaster = new Toaster();
-
-    _followedObject: THREE.Object3D | undefined;
-
-    get followedObject() {
-        return this._followedObject;
+        if (value) this.container.appendChild(this.stats.dom);
+        else this.container.removeChild(this.stats.dom);
     }
 
+    protected _followedObject: THREE.Object3D | undefined;
+    get followedObject() { return this._followedObject; }
     set followedObject(object) {
         this._followedObject = object;
         this.camera.position.normalize().multiplyScalar(object ? 1e7 : EARTH_RADIUS * 4);
     }
 
     constructor(public readonly container: HTMLElement) {
-        // configure application components.
         this.setupComponents();
-
         this.updateResolution();
 
         // integrate with the browser DOM.
@@ -50,9 +52,7 @@ export default class Application {
         if (module.hot) module.hot.addDisposeHandler(() => window.removeEventListener('resize', this.resizeCallback));
 
         this.renderer.setAnimationLoop(this.render.bind(this));
-
         this.world.onSatelliteDestruction = (satellite) => this.toaster.toast(`${satellite.name} has collided and was destroyed!`, 'explosion');
-
         this.showStats = true;
     }
 
@@ -69,15 +69,9 @@ export default class Application {
         this.controls.update();
     }
 
-    get showStats() { return this._statsVisible; }
-    set showStats(value: boolean) {
-        if (this._statsVisible === value) return;
-        this._statsVisible = value;
-
-        if (value) this.container.appendChild(this.stats.dom);
-        else this.container.removeChild(this.stats.dom);
-    }
-
+    /**
+     * Configures the application's components
+     */
     private setupComponents() {
         this.renderer.physicallyCorrectLights = true;
         this.camera.position.z = EARTH_RADIUS * 4 * SIMULATION_SCALE;

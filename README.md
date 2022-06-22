@@ -29,6 +29,13 @@ yarn start
 
 6. A browser page should automatically open with the project running in it.
 
+## Tech stack
+
+-   Three.js
+-   TypeScript
+-   Husky and ESLint
+-   Webpack
+
 ## Development Server
 
 It's a webserver provided by [webpack](http://webpack.js.org/) that serves the project while being built in realtime and stored in memory.
