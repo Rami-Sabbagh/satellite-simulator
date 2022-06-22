@@ -84,4 +84,4 @@ Icons are from: https://www.svgrepo.com/
 - Hasan Mothaffar ([hasan.mozafar@gmail.com](mailto:hasan.mozafar@gmail.com)).
 - Yaman Qassas ([yaman102011@gmail.com](mailto:yaman102011@gmail.com)).
 - Edward Karra ([edwardkarra@gmail.com](mailto:edwardkarra@gmail.com)).
-- [ReadDeadAlice](https://codeberg.org/RedDeadAlice).
+- [RedDeadAlice](https://github.com/RedDeadAlice).
