@@ -2,6 +2,8 @@
 
 ![Satellite Simulator's Logo](./src/assets/logos/logo-white.jpg "Satellite Simulator's Logo")
 
+[![CodeFactor](https://www.codefactor.io/repository/github/rami-sabbagh/satellite-simulator/badge)](https://www.codefactor.io/repository/github/rami-sabbagh/satellite-simulator)
+
 A university physics project for simulating satellites in orbit.
 
 ## Installation instructions
