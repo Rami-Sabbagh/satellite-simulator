@@ -70,3 +70,11 @@ The build can be then accessed at `/dist` and could be served as static page con
 ## Credits
 
 Icons are from: https://www.svgrepo.com/
+
+## Developed by
+
+- [Rami Sabbagh](https://rami-sabbagh.github.io/) ([rami.sab07@gmail.com](mailto:rami.sab07@gmail.com)).
+- Hasan Mothaffar ([hasan.mozafar@gmail.com](mailto:hasan.mozafar@gmail.com)).
+- Yaman Qassas ([yaman102011@gmail.com](mailto:yaman102011@gmail.com)).
+- Edward Karra ([edwardkarra@gmail.com](mailto:edwardkarra@gmail.com)).
+- [ReadDeadAlice](https://codeberg.org/RedDeadAlice).
