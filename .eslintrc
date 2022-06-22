@@ -5,11 +5,21 @@
         "node": true
     },
     "parser": "@typescript-eslint/parser",
-    "ignorePatterns": ["node_modules", "webpack.config.js"],
+    "ignorePatterns": ["node_modules", "webpack.*.js"],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
         "plugin:@typescript-eslint/recommended"
     ],
-    "root": true
+    "root": true,
+    "rules": {
+        "@typescript-eslint/ban-types": [
+            "error",
+            {
+                "types": {
+                    "Object": false
+                }
+            }
+        ]
+    }
 }

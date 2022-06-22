@@ -26,7 +26,7 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
     private _atmosphereHeight = EARTH_RADIUS * 0.15;
     private _atmosphereDensity = 1.29e-10;
 
-    period = 24 * 3_600;
+    public period = 24 * 3_600;
 
     constructor(private _radius = EARTH_RADIUS, mass = EARTH_MASS) {
         super(BodyType.Static, mass);
@@ -129,13 +129,11 @@ export default class Planet extends SimulatedObject implements ExertsForce, Rigi
     }
 
     protected exertGravityForce(body: Body, force: THREE.Vector3) {
-        // set the temporary vector to be the distance vector between the 2 objects.
         tempVector.subVectors(this.position, body.position);
 
         const distanceSq = tempVector.lengthSq();
         tempVector.normalize().multiplyScalar((GRAVITATION_CONSTANT * this.mass * body.mass) / distanceSq);
 
-        // the force is now calculated properly and ready to use.
         force.add(tempVector);
     }
 
