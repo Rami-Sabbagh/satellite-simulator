@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+// Reference: https://codepen.io/Xanmia/pen/nqyMgJ
 
 export default class CollisionParticles extends THREE.Object3D {
     private geometry = new THREE.BufferGeometry();
