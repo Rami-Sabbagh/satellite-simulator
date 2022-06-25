@@ -1,14 +1,15 @@
 import * as THREE from 'three';
 
-import SimulatedSpace from 'components/simulated-space';
 import Planet from 'components/planet';
+import SimulatedSpace from 'components/simulated-space';
 import Sun from 'components/sun';
 
-import { EARTH_RADIUS } from 'physics/constants';
 import GhostSatellite from 'components/ghost-satellite';
 import Satellite from 'components/satellite';
 import { remove as _remove } from 'lodash';
+import { EARTH_RADIUS } from 'physics/constants';
 import { skyBoxTexture } from 'textures';
+import CollisionSphere from './collision-sphere';
 
 export type SatelliteDestructionListener = (satellite: Satellite) => void;
 
@@ -24,6 +25,7 @@ export default class World extends THREE.Scene {
 
     public paused = false;
     public timescale = 1;
+    private collisionSpheres: CollisionSphere[] = [];
 
     get timeResolution() {
         return this.simulatedSpace.timeResolution
@@ -55,17 +57,27 @@ export default class World extends THREE.Scene {
 
     update() {
         if (this.paused) return;
-        
+
         /**
          * The (% (1 / 30)) trick is to prevent prevent frames
          * from taking more than 1 / 30 seconds to render,
-         * regardlessof the actual time needed to render them on the hardware.         
-         */ 
-        const dt = this.clock.getDelta() % (1 / 30) * this.timescale;
+         * regardlessof the actual time needed to render them on the hardware.
+         */
+        const dt = (this.clock.getDelta() % (1 / 30)) * this.timescale;
 
         this.simulatedSpace.run(dt);
         this.planet.update(dt);
-        this.satellites.forEach((satellite) => satellite.lookAt(this.planet.position));
+        this.satellites.forEach((satellite) => {
+            satellite.lookAt(this.planet.position);
+        });
+
+        this.collisionSpheres.forEach((collision) => {
+            collision.update(dt);
+            if (collision.isDone()) {
+                _remove(this.collisionSpheres, (obj) => obj === collision);
+                this.remove(collision);
+            }
+        });
     }
 
     addSatellite(satellite: Satellite) {
@@ -73,8 +85,13 @@ export default class World extends THREE.Scene {
         this.simulatedSpace.add(satellite);
 
         satellite.addDestructionListener((satellite) => {
+            const collisionSphere = new CollisionSphere(satellite.position);
+            this.collisionSpheres.push(collisionSphere);
+            this.add(collisionSphere);
+
             this.removeSatellite(satellite);
-            if (this.onSatelliteDestruction) this.onSatelliteDestruction(satellite);
+            if (this.onSatelliteDestruction)
+                this.onSatelliteDestruction(satellite);
         });
     }
 
