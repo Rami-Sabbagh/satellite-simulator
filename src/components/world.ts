@@ -9,7 +9,7 @@ import Satellite from 'components/satellite';
 import { remove as _remove } from 'lodash';
 import { EARTH_RADIUS } from 'physics/constants';
 import { skyBoxTexture } from 'textures';
-import CollisionSphere from './collision-sphere';
+import CollisionParticles from './collision-particles';
 
 export type SatelliteDestructionListener = (satellite: Satellite) => void;
 
@@ -25,7 +25,7 @@ export default class World extends THREE.Scene {
 
     public paused = false;
     public timescale = 1;
-    private collisionSpheres: CollisionSphere[] = [];
+    private collisions: CollisionParticles[] = [];
 
     get timeResolution() {
         return this.simulatedSpace.timeResolution
@@ -71,10 +71,10 @@ export default class World extends THREE.Scene {
             satellite.lookAt(this.planet.position);
         });
 
-        this.collisionSpheres.forEach((collision) => {
+        this.collisions.forEach((collision) => {
             collision.update(dt);
             if (collision.isDone()) {
-                _remove(this.collisionSpheres, (obj) => obj === collision);
+                _remove(this.collisions, (obj) => obj === collision);
                 this.remove(collision);
             }
         });
@@ -85,9 +85,9 @@ export default class World extends THREE.Scene {
         this.simulatedSpace.add(satellite);
 
         satellite.addDestructionListener((satellite) => {
-            const collisionSphere = new CollisionSphere(satellite.position);
-            this.collisionSpheres.push(collisionSphere);
-            this.add(collisionSphere);
+            const collisionParticles = new CollisionParticles(satellite.position);
+            this.collisions.push(collisionParticles);
+            this.add(collisionParticles);
 
             this.removeSatellite(satellite);
             if (this.onSatelliteDestruction)
