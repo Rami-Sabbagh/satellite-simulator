@@ -4,12 +4,13 @@ import Planet from 'components/planet';
 import SimulatedSpace from 'components/simulated-space';
 import Sun from 'components/sun';
 
-import GhostSatellite from 'components/ghost-satellite';
 import Satellite from 'components/satellite';
+import GhostSatellite from 'components/ghost-satellite';
+import CollisionParticles from 'components/collision-particles';
+
 import { remove as _remove } from 'lodash';
 import { EARTH_RADIUS } from 'physics/constants';
 import { skyBoxTexture } from 'textures';
-import CollisionParticles from './collision-particles';
 
 export type SatelliteDestructionListener = (satellite: Satellite) => void;
 
@@ -69,6 +70,7 @@ export default class World extends THREE.Scene {
         this.planet.update(dt);
         this.satellites.forEach((satellite) => {
             satellite.lookAt(this.planet.position);
+            satellite.update();
         });
 
         this.collisions.forEach((collision) => {
@@ -83,6 +85,7 @@ export default class World extends THREE.Scene {
     addSatellite(satellite: Satellite) {
         this.satellites.push(satellite);
         this.simulatedSpace.add(satellite);
+        this.add(satellite.trail);
 
         satellite.addDestructionListener((satellite) => {
             const collisionParticles = new CollisionParticles(satellite.position);
@@ -96,6 +99,7 @@ export default class World extends THREE.Scene {
     }
 
     removeSatellite(satellite: Satellite) {
+        this.remove(satellite.trail);
         _remove(this.satellites, (obj) => obj === satellite);
         this.simulatedSpace.remove(satellite);
     }
