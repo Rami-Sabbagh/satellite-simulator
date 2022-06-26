@@ -4,6 +4,7 @@ import { satelliteModel } from 'models';
 
 import { BodyType, Rigid } from 'physics/body';
 import SimulatedObject from 'components/simulated-object';
+import Trail from 'components/trail';
 
 const geometry = new THREE.SphereGeometry(7e5, 4, 2);
 const material = new THREE.MeshBasicMaterial({
@@ -21,12 +22,13 @@ export default class Satellite extends SimulatedObject implements Rigid {
 
     static readonly defaultCollisionRadius = 7e5;
     public collisionRadius = Satellite.defaultCollisionRadius;
-
     /**
      * A an array of subscribers that will be notified
      * when the satellite is destroyed.
      */
     private readonly destructionListeners: DestructionListener[] = [];
+
+    public trail = new Trail(this);
 
     constructor(mass = 10) {
         super(BodyType.Dynamic, mass, 100);
@@ -54,5 +56,9 @@ export default class Satellite extends SimulatedObject implements Rigid {
         satellite.position.copy(position);
         satellite.velocity.copy(velocity);
         return satellite;
+    }
+
+    update() {
+        this.trail.update();
     }
 }
