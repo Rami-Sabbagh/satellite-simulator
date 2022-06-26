@@ -6,6 +6,8 @@ export default class CollisionParticles extends THREE.Object3D {
     private material = new THREE.PointsMaterial({
         color: 0xffbb11,
         size: 0.2e6,
+        transparent: true,
+        opacity: 1
 
     });
     private mesh = new THREE.Points(this.geometry, this.material);
