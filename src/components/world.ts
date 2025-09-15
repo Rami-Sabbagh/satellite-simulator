@@ -1,13 +1,15 @@
 import * as THREE from 'three';
 
-import SimulatedSpace from 'components/simulated-space';
 import Planet from 'components/planet';
+import SimulatedSpace from 'components/simulated-space';
 import Sun from 'components/sun';
 
-import { EARTH_RADIUS } from 'physics/constants';
-import GhostSatellite from 'components/ghost-satellite';
 import Satellite from 'components/satellite';
+import GhostSatellite from 'components/ghost-satellite';
+import CollisionParticles from 'components/collision-particles';
+
 import { remove as _remove } from 'lodash';
+import { EARTH_RADIUS } from 'physics/constants';
 import { skyBoxTexture } from 'textures';
 
 export type SatelliteDestructionListener = (satellite: Satellite) => void;
@@ -24,6 +26,7 @@ export default class World extends THREE.Scene {
 
     public paused = false;
     public timescale = 1;
+    private collisions: CollisionParticles[] = [];
 
     get timeResolution() {
         return this.simulatedSpace.timeResolution
@@ -55,30 +58,48 @@ export default class World extends THREE.Scene {
 
     update() {
         if (this.paused) return;
-        
+
         /**
          * The (% (1 / 30)) trick is to prevent prevent frames
          * from taking more than 1 / 30 seconds to render,
-         * regardlessof the actual time needed to render them on the hardware.         
-         */ 
-        const dt = this.clock.getDelta() % (1 / 30) * this.timescale;
+         * regardlessof the actual time needed to render them on the hardware.
+         */
+        const dt = (this.clock.getDelta() % (1 / 30)) * this.timescale;
 
         this.simulatedSpace.run(dt);
         this.planet.update(dt);
-        this.satellites.forEach((satellite) => satellite.lookAt(this.planet.position));
+        this.satellites.forEach((satellite) => {
+            satellite.lookAt(this.planet.position);
+            satellite.update();
+        });
+
+        this.collisions.forEach((collision) => {
+            collision.update(dt);
+            if (collision.isDone()) {
+                _remove(this.collisions, (obj) => obj === collision);
+                this.remove(collision);
+            }
+        });
     }
 
     addSatellite(satellite: Satellite) {
         this.satellites.push(satellite);
         this.simulatedSpace.add(satellite);
+        this.add(satellite.trail);
 
         satellite.addDestructionListener((satellite) => {
+            const collisionParticles = new CollisionParticles(satellite.position);
+            this.collisions.push(collisionParticles);
+            this.add(collisionParticles);
+
             this.removeSatellite(satellite);
-            if (this.onSatelliteDestruction) this.onSatelliteDestruction(satellite);
+            if (this.onSatelliteDestruction)
+                this.onSatelliteDestruction(satellite);
         });
     }
 
     removeSatellite(satellite: Satellite) {
+        this.remove(satellite.trail);
         _remove(this.satellites, (obj) => obj === satellite);
         this.simulatedSpace.remove(satellite);
     }
